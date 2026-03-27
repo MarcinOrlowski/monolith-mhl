@@ -1,0 +1,18 @@
+# IDE
+/.idea
+/.vscode
+
+# TMP files
+*.bak
+*~
+*.swp
+*.kate-swp
+*.tmp
+
+/release
+/build
+/*.deb
+/*.deb.sig
+/tmp/
+
+/*.zip

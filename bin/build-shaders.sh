@@ -12,6 +12,7 @@ set -e
 QSB="${QSB:-/usr/lib/qt6/bin/qsb}"
 SHADER_DIRS=(
     "src/contents/ui/effects/rainbow-waves/shaders"
+    "src/contents/ui/effects/lava-lamp/shaders"
     "src/contents/ui/filters/shaders"
 )
 

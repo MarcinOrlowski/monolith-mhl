@@ -1,0 +1,27 @@
+{
+  "KPackageStructure": "Plasma/Wallpaper",
+  "KPlugin": {
+    "Id": "com.marcinorlowski.monolithmhl",
+    "Name": "Monolith MHL",
+    "Description": "Hub for beautiful animated wallpapers for Plasma 6",
+    "Version": "1.0.0",
+    "Authors": [
+      {
+        "Name": "Marcin Orlowski",
+        "Email": "mail@marcinOrlowski.com"
+      }
+    ],
+    "License": "MIT",
+    "Website": "https://github.com/marcinorlowski/monolith-mhl/",
+    "BugReportUrl": "https://github.com/marcinorlowski/monolith-mhl/issues",
+    "Icon": "preferences-desktop-wallpaper"
+  },
+  "Keywords": [
+    "plasma6",
+    "wallpaper",
+    "animation",
+    "mhl"
+  ],
+  "X-Plasma-API-Minimum-Version": "6.0",
+  "X-KDE-ParentApp": "org.kde.plasmashell"
+}

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<kcfg xmlns="http://www.kde.org/standards/kcfg/1.0"
+      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:schemaLocation="http://www.kde.org/standards/kcfg/1.0
+      http://www.kde.org/standards/kcfg/1.0/kcfg.xsd">
+  <kcfgfile name=""/>
+
+  <group name="General">
+    <!-- Active effect selector -->
+    <entry name="ActiveEffect" type="String"><default>rainbow-waves</default></entry>
+
+    <!-- Per-effect settings stored as JSON blobs (defaults in effect code) -->
+    <entry name="EffectRainbowWavesSettings" type="String"><default>{}</default></entry>
+
+    <!-- Post-filter processing order: comma-separated filter IDs -->
+    <!-- Filter processing order: comma-separated string IDs -->
+    <entry name="FilterOrder" type="String"><default>pixelate,chromatic,color-grading,hue-shift,rgb-offset,crt,blur,scanlines</default></entry>
+
+    <!-- Per-filter settings stored as JSON blobs (defaults in config.qml) -->
+    <entry name="FilterPixelateSettings" type="String"><default>{}</default></entry>
+    <entry name="FilterScanlinesSettings" type="String"><default>{}</default></entry>
+    <entry name="FilterChromaticSettings" type="String"><default>{}</default></entry>
+    <entry name="FilterColorGradingSettings" type="String"><default>{}</default></entry>
+    <entry name="FilterHueShiftSettings" type="String"><default>{}</default></entry>
+    <entry name="FilterRgbOffsetSettings" type="String"><default>{}</default></entry>
+    <entry name="FilterBlurSettings" type="String"><default>{}</default></entry>
+    <entry name="FilterCrtSettings" type="String"><default>{}</default></entry>
+  </group>
+
+</kcfg>

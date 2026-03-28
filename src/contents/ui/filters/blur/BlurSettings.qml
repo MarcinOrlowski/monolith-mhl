@@ -20,7 +20,7 @@ Kirigami.FormLayout {
     RowLayout {
         Kirigami.FormData.label: i18n("Radius:")
         QtControls2.SpinBox {
-            from: 1; to: 30; stepSize: 1
+            from: 2; to: 30; stepSize: 1
             value: filterConfig._radius
             onValueModified: filterConfig._radius = value
             textFromValue: function(value) { return value + " px" }

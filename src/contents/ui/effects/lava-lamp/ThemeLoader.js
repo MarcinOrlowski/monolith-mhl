@@ -11,50 +11,75 @@
 
 // Parse "#RRGGBB" hex string into [r, g, b] floats in [0.0, 1.0]
 function parseHexColor(str) {
-    if (typeof str !== "string" || str.length !== 7 || str.charAt(0) !== '#')
+    if (typeof str !== "string" || str.length !== 7 || str.charAt(0) !== '#') {
         return null;
+    }
     var hex = str.substring(1);
     var r = parseInt(hex.substring(0, 2), 16);
     var g = parseInt(hex.substring(2, 4), 16);
     var b = parseInt(hex.substring(4, 6), 16);
-    if (isNaN(r) || isNaN(g) || isNaN(b))
+    if (isNaN(r) || isNaN(g) || isNaN(b)) {
         return null;
+    }
     return [r / 255.0, g / 255.0, b / 255.0];
 }
 
 // Validate a theme object loaded from a QML component
 function validateTheme(obj) {
-    if (!obj.themeId || typeof obj.themeId !== "string")
+    if (!obj.themeId || typeof obj.themeId !== "string") {
         return "missing or invalid themeId";
-    if (!/^[a-z0-9-]+$/.test(obj.themeId))
+    }
+    if (!/^[a-z0-9-]+$/.test(obj.themeId)) {
         return "themeId contains invalid characters (only a-z, 0-9, - allowed)";
-    if (!obj.name || typeof obj.name !== "string")
+    }
+    if (!obj.name || typeof obj.name !== "string") {
         return "missing or invalid name";
+    }
 
     // Gradient mode
     var validModes = ["vertical", "corners", "rainbow"];
-    if (typeof obj.gradientMode !== "string" || validModes.indexOf(obj.gradientMode) === -1)
+    if (typeof obj.gradientMode !== "string" || validModes.indexOf(obj.gradientMode) === -1) {
         return "gradientMode must be one of: vertical, corners, rainbow";
+    }
 
     // Gradient colors (4 hex colors)
-    if (!Array.isArray(obj.gradientColors) || obj.gradientColors.length !== 4)
+    if (!Array.isArray(obj.gradientColors) || obj.gradientColors.length !== 4) {
         return "gradientColors must be an array of 4 colors";
+    }
     for (var i = 0; i < 4; i++) {
-        if (!parseHexColor(obj.gradientColors[i]))
+        if (!parseHexColor(obj.gradientColors[i])) {
             return "gradientColors[" + i + "] is not a valid #RRGGBB color";
+        }
     }
 
     // Background colors (4 hex colors)
-    if (!Array.isArray(obj.backgroundColors) || obj.backgroundColors.length !== 4)
+    if (!Array.isArray(obj.backgroundColors) || obj.backgroundColors.length !== 4) {
         return "backgroundColors must be an array of 4 colors";
+    }
     for (var j = 0; j < 4; j++) {
-        if (!parseHexColor(obj.backgroundColors[j]))
+        if (!parseHexColor(obj.backgroundColors[j])) {
             return "backgroundColors[" + j + "] is not a valid #RRGGBB color";
+        }
     }
 
     // Glow parameters (optional — defaults applied in applyTheme)
-    if (obj.glowIntensity !== undefined && typeof obj.glowIntensity !== "number")
-        return "glowIntensity must be a number";
+    var numericFields = ["glowIntensity", "glowInnerThreshold", "glowMidThreshold",
+                         "glowOuterThreshold", "glowMinFieldStrength"];
+    for (var n = 0; n < numericFields.length; n++) {
+        var nf = numericFields[n];
+        if (obj[nf] !== undefined && (typeof obj[nf] !== "number" || !isFinite(obj[nf]))) {
+            return nf + " must be a finite number";
+        }
+    }
+
+    // Optional feature toggles
+    var boolFields = ["backgroundGradientEnabled", "glowEnabled"];
+    for (var bf = 0; bf < boolFields.length; bf++) {
+        var bfn = boolFields[bf];
+        if (obj[bfn] !== undefined && typeof obj[bfn] !== "boolean") {
+            return bfn + " must be a boolean";
+        }
+    }
 
     return null; // valid
 }
@@ -72,7 +97,9 @@ function gradientModeToInt(mode) {
 // Convert hex color string to Qt.vector3d for shader uniforms
 function hexToVector3d(hex) {
     var rgb = parseHexColor(hex);
-    if (!rgb) return Qt.vector3d(0, 0, 0);
+    if (!rgb) {
+        return Qt.vector3d(0, 0, 0);
+    }
     return Qt.vector3d(rgb[0], rgb[1], rgb[2]);
 }
 

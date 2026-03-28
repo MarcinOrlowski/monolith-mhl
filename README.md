@@ -35,11 +35,11 @@ for `Monolith MHL` and then click `Install…`.
 
 ## Usage
 
-By the design, Monolith can (and will) feature multiple "effects" that can be used as your live
+By design, Monolith can (and will) feature multiple "effects" that can be used as your live
 wallpaper. Said effects like "Rainbow Waves" or "Lava Lamp" are the cornerstone of the visual
-effects, however aside the the main effects, Monolith also comes post processing filtering, like
-color correction, blur, chromatic abberation and more. And the order of filters in the pipeline
-matters and affects final effects!
+effects, however aside the main effects, Monolith also comes with post-processing filters, like
+color correction, blur, chromatic aberration and more. And the order of filters in the pipeline
+matters and affects the final result!
 
 ## Feedback
 

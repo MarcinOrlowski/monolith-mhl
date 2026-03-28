@@ -564,6 +564,9 @@ Item {
         property int glowEffectEnabled: 1
         property int metaballCount: effectRoot.orbCount
 
+        property real dimLevel: effectRoot.dimLevel
+        Behavior on dimLevel { NumberAnimation { duration: effectRoot.transitionMs } }
+
         // CPU-computed metaball position matrices (4 metaballs packed per mat4)
         property matrix4x4 metaballData0:  Qt.matrix4x4(1,0,0,0, 0,1,0,0, 0,0,1,0, 0,0,0,1)
         property matrix4x4 metaballData1:  Qt.matrix4x4(1,0,0,0, 0,1,0,0, 0,0,1,0, 0,0,0,1)

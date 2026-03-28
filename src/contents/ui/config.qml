@@ -260,8 +260,12 @@ ColumnLayout {
             source: root.effectRegistry[root.findEffectIndex(cfg_ActiveEffect)].configUrl
 
             onLoaded: {
-                item.cfg_EffectRainbowWavesSettings = Qt.binding(function() { return root.cfg_EffectRainbowWavesSettings })
-                item.cfg_EffectLavaLampSettings = Qt.binding(function() { return root.cfg_EffectLavaLampSettings })
+                if ("cfg_EffectRainbowWavesSettings" in item) {
+                    item.cfg_EffectRainbowWavesSettings = Qt.binding(function() { return root.cfg_EffectRainbowWavesSettings })
+                }
+                if ("cfg_EffectLavaLampSettings" in item) {
+                    item.cfg_EffectLavaLampSettings = Qt.binding(function() { return root.cfg_EffectLavaLampSettings })
+                }
                 try { item.hubConfiguration = wallpaper.configuration } catch(e) {}
                 effectSettingsWindow.pageCache = Object.create(null)
                 if (effectSettingsWindow.visible) {

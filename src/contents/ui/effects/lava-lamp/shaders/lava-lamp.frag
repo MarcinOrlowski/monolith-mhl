@@ -46,6 +46,8 @@ layout(std140, binding = 0) uniform buf {
     int glowEffectEnabled;
     int metaballCount;
 
+    float dimLevel;
+
     // CPU-computed metaball positions packed into mat4s (4 metaballs per mat4)
     mat4 metaballData0;
     mat4 metaballData1;
@@ -157,6 +159,9 @@ void main() {
         calculateBackgroundGradientColor(x, y) :
         vec3(0.0, 0.0, 0.0);
     vec3 colorBase = calculateGradientColor(x, y);
+
+    bgColor *= dimLevel;
+    colorBase *= dimLevel;
 
     if (glowEffectEnabled != 0) {
         float fieldStrength = min(1.0, sum * glowIntensity / 10.0);

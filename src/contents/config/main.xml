@@ -11,6 +11,7 @@
 
     <!-- Per-effect settings stored as JSON blobs (defaults in effect code) -->
     <entry name="EffectRainbowWavesSettings" type="String"><default>{}</default></entry>
+    <entry name="EffectLavaLampSettings" type="String"><default>{}</default></entry>
 
     <!-- Post-filter processing order: comma-separated filter IDs -->
     <!-- Filter processing order: comma-separated string IDs -->

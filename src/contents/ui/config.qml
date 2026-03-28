@@ -27,6 +27,7 @@ ColumnLayout {
 
     // --- Per-effect settings (JSON blobs, one cfg_ property per effect) ---
     property string cfg_EffectRainbowWavesSettings
+    property string cfg_EffectLavaLampSettings
 
     // --- Per-filter settings (JSON blobs, one cfg_ property per filter) ---
     property string cfg_FilterPixelateSettings
@@ -87,7 +88,8 @@ ColumnLayout {
 
     // Effect registry: id, name, configUrl
     readonly property var effectRegistry: [
-        { effectId: "rainbow-waves", name: "Rainbow Waves", configUrl: Qt.resolvedUrl("effects/rainbow-waves/RainbowWavesConfig.qml") }
+        { effectId: "rainbow-waves", name: "Rainbow Waves", configUrl: Qt.resolvedUrl("effects/rainbow-waves/RainbowWavesConfig.qml") },
+        { effectId: "lava-lamp", name: "Lava Lamp", configUrl: Qt.resolvedUrl("effects/lava-lamp/LavaLampConfig.qml") }
     ]
 
     function findEffectIndex(effectId) {
@@ -205,7 +207,7 @@ ColumnLayout {
     Kirigami.ApplicationWindow {
         id: effectSettingsWindow
         visible: false
-        property string _snapshot: ""
+        property var _snapshot: ({})
         property bool _accepted: false
 
         title: root.effectRegistry[root.findEffectIndex(cfg_ActiveEffect)].name + " " + i18n("Settings")
@@ -220,7 +222,10 @@ ColumnLayout {
         property var pageCache: Object.create(null)
 
         function showSettings() {
-            _snapshot = root.cfg_EffectRainbowWavesSettings
+            _snapshot = {
+                "cfg_EffectRainbowWavesSettings": root.cfg_EffectRainbowWavesSettings,
+                "cfg_EffectLavaLampSettings": root.cfg_EffectLavaLampSettings
+            }
             _accepted = false
             visible = true
         }
@@ -230,14 +235,21 @@ ColumnLayout {
             visible = false
         }
 
+        function _restoreSnapshot() {
+            var keys = Object.keys(_snapshot)
+            for (var i = 0; i < keys.length; i++) {
+                root[keys[i]] = _snapshot[keys[i]]
+            }
+        }
+
         function cancel() {
-            root.cfg_EffectRainbowWavesSettings = _snapshot
+            _restoreSnapshot()
             visible = false
         }
 
         onClosing: function(close) {
             if (!_accepted) {
-                root.cfg_EffectRainbowWavesSettings = _snapshot
+                _restoreSnapshot()
             }
         }
 
@@ -248,7 +260,12 @@ ColumnLayout {
             source: root.effectRegistry[root.findEffectIndex(cfg_ActiveEffect)].configUrl
 
             onLoaded: {
-                item.cfg_EffectRainbowWavesSettings = Qt.binding(function() { return root.cfg_EffectRainbowWavesSettings })
+                if ("cfg_EffectRainbowWavesSettings" in item) {
+                    item.cfg_EffectRainbowWavesSettings = Qt.binding(function() { return root.cfg_EffectRainbowWavesSettings })
+                }
+                if ("cfg_EffectLavaLampSettings" in item) {
+                    item.cfg_EffectLavaLampSettings = Qt.binding(function() { return root.cfg_EffectLavaLampSettings })
+                }
                 try { item.hubConfiguration = wallpaper.configuration } catch(e) {}
                 effectSettingsWindow.pageCache = Object.create(null)
                 if (effectSettingsWindow.visible) {
@@ -595,6 +612,7 @@ ColumnLayout {
         target: effectConfigLoader.item
         enabled: effectConfigLoader.item !== null
         function onCfg_EffectRainbowWavesSettingsChanged() { root.cfg_EffectRainbowWavesSettings = effectConfigLoader.item.cfg_EffectRainbowWavesSettings }
+        function onCfg_EffectLavaLampSettingsChanged() { root.cfg_EffectLavaLampSettings = effectConfigLoader.item.cfg_EffectLavaLampSettings }
     }
 
 }

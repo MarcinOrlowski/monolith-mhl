@@ -164,7 +164,8 @@ WallpaperItem {
 
     // Effect registry: maps Effect config value to effect QML component
     readonly property var effectRegistry: ({
-        "rainbow-waves": Qt.resolvedUrl("effects/rainbow-waves/RainbowWavesEffect.qml")
+        "rainbow-waves": Qt.resolvedUrl("effects/rainbow-waves/RainbowWavesEffect.qml"),
+        "lava-lamp": Qt.resolvedUrl("effects/lava-lamp/LavaLampEffect.qml")
     })
 
     Loader {
@@ -383,9 +384,12 @@ WallpaperItem {
         fragmentShader: "filters/shaders/postfilter.frag.qsb"
     }
 
+    property string _loadedEffectUrl: ""
     function loadEffect() {
         var url = root.effectRegistry[root.configuration.ActiveEffect] || ""
-        if (url.toString().length > 0) {
+        var urlStr = url.toString()
+        if (urlStr.length > 0 && urlStr !== _loadedEffectUrl) {
+            _loadedEffectUrl = urlStr
             effectLoader.setSource(url, { "configuration": root.configuration })
         }
     }
@@ -393,7 +397,10 @@ WallpaperItem {
     Connections {
         target: root.configuration
         function onActiveEffectChanged() { root.loadEffect() }
-        function onValueChanged(key, value) { root.syncFilterConfig() }
+        function onValueChanged(key, value) {
+            if (key === "ActiveEffect") { root.loadEffect() }
+            root.syncFilterConfig()
+        }
     }
     Component.onCompleted: { syncFilterConfig(); loadEffect() }
 

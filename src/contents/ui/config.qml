@@ -38,6 +38,7 @@ ColumnLayout {
     property string cfg_FilterRgbOffsetSettings
     property string cfg_FilterCrtSettings
     property string cfg_FilterBlurSettings
+    property string cfg_FilterMaskSettings
     property string cfg_FilterOrder
 
     // --- Filter config components (self-contained, loaded from FilterRegistry) ---
@@ -443,7 +444,7 @@ ColumnLayout {
             }
 
             Component.onCompleted: {
-                var ids = (root.cfg_FilterOrder || "pixelate,scanlines,chromatic,color-grading,hue-shift,rgb-offset,crt,blur").split(",")
+                var ids = (root.cfg_FilterOrder || "pixelate,scanlines,chromatic,color-grading,hue-shift,rgb-offset,crt,blur,mask").split(",")
                 var seen = {}
                 // Load saved order, skipping unknown or duplicate IDs
                 for (var i = 0; i < ids.length; i++) {

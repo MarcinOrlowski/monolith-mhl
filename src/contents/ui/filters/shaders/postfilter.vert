@@ -46,6 +46,13 @@ layout(std140, binding = 0) uniform buf {
     float showCrt;
     float crtCurvature;
     float crtVignette;
+    float showMask;
+    float maskSide;
+    float maskGap;
+    float maskInvert;
+    float maskColorR;
+    float maskColorG;
+    float maskColorB;
     float filterSlot0;
     float filterSlot1;
     float filterSlot2;

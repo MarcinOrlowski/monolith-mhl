@@ -121,7 +121,7 @@ ColumnLayout {
         ColumnLayout {
             Layout.fillWidth: true
             QtControls2.Label {
-                text: i18n("Monolith MHL v1.0.0")
+                text: i18n("Monolith MHL v1.1.0")
                 font.bold: true
             }
             QtControls2.Label {

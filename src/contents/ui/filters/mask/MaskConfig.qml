@@ -68,8 +68,15 @@ Item {
         })
     }
     on_ShowChanged: _save()
-    on_SideChanged: _save()
-    on_PaddingChanged: _save()
+    on_SideChanged: {
+        // Padding must always be strictly less than side
+        if (_padding > _side - 1) _padding = Math.max(0, _side - 1)
+        _save()
+    }
+    on_PaddingChanged: {
+        if (_padding > _side - 1) { _padding = Math.max(0, _side - 1); return }
+        _save()
+    }
     on_InvertChanged: _save()
     on_ColorChanged: _save()
 

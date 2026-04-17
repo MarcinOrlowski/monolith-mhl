@@ -31,7 +31,9 @@ Kirigami.FormLayout {
     RowLayout {
         Kirigami.FormData.label: i18n("Padding:")
         QtControls2.SpinBox {
-            from: 0; to: 250; stepSize: 1
+            from: 0
+            to: Math.max(0, filterConfig._side - 1)
+            stepSize: 1
             value: filterConfig._padding
             onValueModified: filterConfig._padding = value
             textFromValue: function(value) { return value + " px" }

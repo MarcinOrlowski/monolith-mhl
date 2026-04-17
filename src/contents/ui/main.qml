@@ -86,6 +86,13 @@ WallpaperItem {
     property real showCrt: 0.0
     property real crtCurvature: 10.0
     property real crtVignette: 30.0
+    property real showMask: 0.0
+    property real maskSide: 64.0
+    property real maskPadding: 8.0
+    property real maskInvert: 0.0
+    property real maskColorR: 0.0
+    property real maskColorG: 0.0
+    property real maskColorB: 0.0
     property real rgbOffsetAmount: 5.0
     property real rgbOffsetAngle: 0.0
     property real blurRadius: 8.0
@@ -129,7 +136,14 @@ WallpaperItem {
         anyFilterActive = active
 
         // Build pipeline: split filter order at pass-breaking filters
-        var order = (root.configuration.FilterOrder || "pixelate,scanlines,chromatic,color-grading,hue-shift,rgb-offset,crt,blur").split(",")
+        var order = (root.configuration.FilterOrder || "pixelate,scanlines,chromatic,color-grading,hue-shift,rgb-offset,crt,blur,mask").split(",")
+        // Append any registered filters not present in saved order (so newly-added filters work without re-saving)
+        var seen = {}
+        for (var si = 0; si < order.length; si++) seen[order[si].trim()] = true
+        for (var ri = 0; ri < FilterRegistry.filters.length; ri++) {
+            var rid = FilterRegistry.filters[ri].id
+            if (!seen[rid]) order.push(rid)
+        }
         var segments = []
         var currentGroup = []
 
@@ -238,6 +252,10 @@ WallpaperItem {
         property real showRgbOffset: 0.0; property real rgbOffsetAmount: 0; property real rgbOffsetAngle: 0
         property real showCrt: root.showCrt
         property real crtCurvature: root.crtCurvature; property real crtVignette: root.crtVignette
+        property real showMask: root.showMask
+        property real maskSide: root.maskSide; property real maskPadding: root.maskPadding
+        property real maskInvert: root.maskInvert
+        property real maskColorR: root.maskColorR; property real maskColorG: root.maskColorG; property real maskColorB: root.maskColorB
         property real filterSlot0: root.slotA0; property real filterSlot1: root.slotA1
         property real filterSlot2: root.slotA2; property real filterSlot3: root.slotA3
         property real filterSlot4: root.slotA4; property real filterSlot5: root.slotA5
@@ -317,6 +335,10 @@ WallpaperItem {
         property real showRgbOffset: 0.0; property real rgbOffsetAmount: 0; property real rgbOffsetAngle: 0
         property real showCrt: root.showCrt
         property real crtCurvature: root.crtCurvature; property real crtVignette: root.crtVignette
+        property real showMask: root.showMask
+        property real maskSide: root.maskSide; property real maskPadding: root.maskPadding
+        property real maskInvert: root.maskInvert
+        property real maskColorR: root.maskColorR; property real maskColorG: root.maskColorG; property real maskColorB: root.maskColorB
         property real filterSlot0: root.slotB0; property real filterSlot1: root.slotB1
         property real filterSlot2: root.slotB2; property real filterSlot3: root.slotB3
         property real filterSlot4: root.slotB4; property real filterSlot5: root.slotB5
@@ -396,6 +418,10 @@ WallpaperItem {
         property real showRgbOffset: 0.0; property real rgbOffsetAmount: 0; property real rgbOffsetAngle: 0
         property real showCrt: root.showCrt
         property real crtCurvature: root.crtCurvature; property real crtVignette: root.crtVignette
+        property real showMask: root.showMask
+        property real maskSide: root.maskSide; property real maskPadding: root.maskPadding
+        property real maskInvert: root.maskInvert
+        property real maskColorR: root.maskColorR; property real maskColorG: root.maskColorG; property real maskColorB: root.maskColorB
         property real filterSlot0: root.slotC0; property real filterSlot1: root.slotC1
         property real filterSlot2: root.slotC2; property real filterSlot3: root.slotC3
         property real filterSlot4: root.slotC4; property real filterSlot5: root.slotC5

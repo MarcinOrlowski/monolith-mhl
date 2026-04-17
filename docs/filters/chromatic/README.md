@@ -7,9 +7,19 @@ outwards from the image center while the green channel stays put. The result is
 colored fringes around high-contrast edges — subtle at low strength, overtly
 "glitchy" at high values.
 
-![Red/blue channels pushed radially outward from the image center](img/radial-shift.webp)
+## Gallert
+
+No filters:
+
+![No filters](img/before.webp)
+
+With chromatic aberration set to `2.4x`
+
+![No filters](img/after.webp)
 
 ## Parameters
+
+![Red/blue channels pushed radially outward from the image center](img/radial-shift.webp)
 
 | Parameter | Description                                                                                                         | Default | Range       |
 | --------- | ------------------------------------------------------------------------------------------------------------------- | ------- | ----------- |

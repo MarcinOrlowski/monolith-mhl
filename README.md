@@ -7,9 +7,9 @@ Some of the (planned) features listed below:
 
 ## Features
 
-- Multiple effects.
+- Multiple [effects and filters](docs/README.md).
 - **User created themes for the effects!**
-- GPU accelerated animated wallpapers.
+- Efficient, GPU accelerated implementation.
 - Smooth color theme transitions.
 - Layered processing pipeline for wider variety of effects.
 - Plenty of adjustable knobs and parameters per effect
@@ -18,9 +18,9 @@ Some of the (planned) features listed below:
 
 ## Examples
 
-The **Rainbow Waves** effect in action…
+Renders of some of visual effects produced by Monolith MHL
 
-![Rainbow Waves](img/themes.webp)
+![Sample effects](img/themes.webp)
 
 ## Requirements
 
@@ -29,17 +29,18 @@ The **Rainbow Waves** effect in action…
 
 ## Installation
 
-To install Monolith MHL wallpaper on your system press the right mouse button over your Plasma
+To install Monolith MHL wallpaper hub on your system press the right mouse button over your Plasma
 desktop and select `Desktop and Wallpaper` from context menu. Next click `Get New Plugins…` and search
 for `Monolith MHL` and then click `Install…`.
 
 ## Usage
 
 By design, Monolith can (and will) feature multiple "effects" that can be used as your live
-wallpaper. Said effects like "Rainbow Waves" or "Lava Lamp" are foundation of Monolith's,
-however aside the main effects, Monolith also comes with post-processing filters, like color
-correction, blur, chromatic aberration and more. And the order of filters in the pipeline
-matters and affects the final result!
+wallpaper. Aside from the effects, Monolith also comes with post-processing filter pipelines,
+with filters like color correction, blur, RGB offset, chromatic aberration and more. Each
+filter can be independently configured and enabled as well as filter execution is under full
+control of the user. And yes, the order of filters in the pipeline matters and affects the
+final result significantly!
 
 ## Feedback
 

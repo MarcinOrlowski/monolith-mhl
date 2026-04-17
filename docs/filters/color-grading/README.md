@@ -6,9 +6,19 @@ Photo-style tonal adjustments applied after the wallpaper is rendered. Lets you
 brighten or darken midtones, push contrast, and warm or cool the overall
 palette without touching the underlying effect's colors.
 
-![Gamma curve, contrast curve, temperature and tint axes](img/grading-axes.webp)
+## Gallery
+
+No filters applied.
+
+![No filter](img/before.webp)
+
+With filter enabled and gamma set to `1.15`, contrast to `1.55`, temperature to `40` and tint to `55`.
+
+![With filter applied](img/after.webp)
 
 ## Parameters
+
+![Gamma curve, contrast curve, temperature and tint axes](img/grading-axes.webp)
 
 | Parameter   | Description                                                                  | Default | Range          |
 | ----------- | ---------------------------------------------------------------------------- | ------- | -------------- |

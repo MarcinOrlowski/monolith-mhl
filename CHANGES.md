@@ -3,7 +3,7 @@
 ## v1.2.0 (TBD)
 
 - New post-filter "mask".
-- Added documentation for built-in filters and their settings.
+- Added extensive documentation for built-in filters.
 
 ## v1.1.0 (2026-04-17)
 

@@ -6,9 +6,15 @@ Tiles a square stencil across the wallpaper and replaces pixels either inside
 or outside each tile with a solid color. Useful for perforated overlays, grid
 patterns, pixel-art-style windows, or simple color-block frames.
 
-![Mask anatomy: tile size, padding, and inverted-vs-non-inverted fills](img/mask-anatomy.webp)
+## Gallery
+
+With mask set to square, tile size 64 px, padding 1 px, mask color `#000000` (black).
+
+![With filter applied](img/after.webp)
 
 ## Parameters
+
+![Mask anatomy: tile size, padding, and inverted-vs-non-inverted fills](img/mask-anatomy.webp)
 
 | Parameter  | Description                                                                                                                               | Default   | Range                |
 | ---------- | ----------------------------------------------------------------------------------------------------------------------------------------- | --------- | -------------------- |

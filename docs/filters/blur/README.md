@@ -9,7 +9,7 @@ individual shapes are reduced to blobs of color.
 
 ## Gallery
 
-No filters:
+No filter
 
 ![No filters](img/before.webp)
 

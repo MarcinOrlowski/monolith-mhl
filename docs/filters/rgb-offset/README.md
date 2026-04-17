@@ -7,9 +7,19 @@ direction, producing a directional color-fringe / "glitch" or 3D-anaglyph look.
 Similar to Chromatic Aberration but with a single fixed offset rather than a
 radial one from the image center.
 
-![RGB channels displaced along a single direction vector](img/rgb-vector.webp)
+## Gallery
+
+No filter.
+
+![No filters](img/before.webp)
+
+With RGB offset set to `25 px` and direction to `20°`.
+
+![With filter applied](img/after.webp)
 
 ## Parameters
+
+![RGB channels displaced along a single direction vector](img/rgb-vector.webp)
 
 | Parameter | Description                                                                 | Default | Range      |
 | --------- | --------------------------------------------------------------------------- | ------- | ---------- |

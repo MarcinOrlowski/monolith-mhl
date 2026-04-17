@@ -6,9 +6,19 @@ Rotates every color on screen around the color wheel by a fixed angle. Reds
 become oranges become yellows, and so on, while brightness and saturation stay
 untouched. Useful for recoloring a favorite effect without editing its theme.
 
-![Hue wheel diagram showing rotation around the HSV color wheel](img/hue-wheel.webp)
+## Gallery
+
+No filter
+
+![No filters](img/before.webp)
+
+With hue shift set to `300°`.
+
+![With filter applied](img/after.webp)
 
 ## Parameters
+
+![Hue wheel diagram showing rotation around the HSV color wheel](img/hue-wheel.webp)
 
 | Parameter | Description                                                                                                        | Default | Range    |
 | --------- | ------------------------------------------------------------------------------------------------------------------ | ------- | -------- |

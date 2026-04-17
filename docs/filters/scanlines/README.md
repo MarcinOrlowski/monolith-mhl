@@ -6,6 +6,16 @@ Overlays horizontal lines across the wallpaper to mimic the look of an old CRT
 display. Line density, thickness, color and opacity are all adjustable, and
 lines can be made to scroll slowly up or down for a subtle animated effect.
 
+## Gallery
+
+No filter.
+
+![No filters](img/before.webp)
+
+With TV Scanlines configured as follow: intensity `30%`, frequency `1.0x`, thickness `1.0x`, scroll speed `0.5x`, color `#000000` (black), line opacity `20%`.
+
+![With filter applied](img/after.webp)
+
 ## Parameters
 
 | Parameter    | Description                                                                                                                      | Default      | Range         |

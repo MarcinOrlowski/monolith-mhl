@@ -9,12 +9,12 @@
 
 - Available post-filters
 
-  - Blur
-  - CRT Curvature
-  - Chromatic Aberration
-  - Color Grading
-  - Hue Shift
-  - Mask
-  - Pixelate
-  - RBG Offset
-  - Scanlines
+  - [Blur](filters/blur/README.md)
+  - [CRT Curvature](filters/crt/README.md)
+  - [Chromatic Aberration](filters/chromatic/README.md)
+  - [Color Grading](filters/color-grading/README.md)
+  - [Hue Shift](filters/hue-shift/README.md)
+  - [Mask](filters/mask/README.md)
+  - [Pixelate](filters/pixelate/README.md)
+  - [RGB Offset](filters/rgb-offset/README.md)
+  - [Scanlines](filters/scanlines/README.md)

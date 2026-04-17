@@ -2,6 +2,8 @@
 
 ## v1.2.0 (TBD)
 
+- Added Mask post-filter: tiles a square stencil over the image and recolors the inside or outside.
+
 ## v1.1.0 (2026-04-17)
 
 - Added Lava Lamp effect with 8 bundled color themes.

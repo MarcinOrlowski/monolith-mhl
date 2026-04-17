@@ -14,6 +14,7 @@
   - Chromatic Aberration
   - Color Grading
   - Hue Shift
+  - Mask
   - Pixelate
   - RBG Offset
   - Scanlines

@@ -20,3 +20,11 @@ radial one from the image center.
   horizontal direction.
 - For a 3D-glasses effect, pair a small horizontal offset (`~5 px`) with a dark
   background.
+
+## Images (TODO)
+
+Prompt to feed to a drawing agent to produce `img/rgb-vector.svg`:
+
+```text
+Flat schematic on neutral mid-gray background. Show three identical simple shapes (e.g. solid silhouettes of a rounded square) stacked with slight offsets: one pure red (#ff0000), one pure green (#00ff00), one pure blue (#0000ff), each shape about 50% opacity so overlap areas mix. The three shapes are displaced from a common center along a single vector drawn as a dark-gray arrow, labeled "Direction (°)". Annotate the distance between any two adjacent shape centers with a double-headed arrow labeled "Amount (px)". No photography, flat vector schematic, 16:9, transparent background, labels in dark-gray sans-serif. Output SVG preferred, PNG 1200×600 fallback.
+```

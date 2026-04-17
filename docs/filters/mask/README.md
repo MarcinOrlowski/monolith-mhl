@@ -22,3 +22,11 @@ patterns, pixel-art-style windows, or simple color-block frames.
 - For a clean grid effect, set padding small relative to tile size; for a
   "looking through a window" look, invert the mask so only the padding area
   shows through.
+
+## Images (TODO)
+
+Prompt to feed to a drawing agent to produce `img/mask-anatomy.svg`:
+
+```text
+Two side-by-side diagrams on neutral mid-gray background, each showing a 3×3 grid of square tiles. Left diagram labeled "Invert: off": each tile has a solid dark fill inside (the square) with a lighter padding gap around it — the dark center is labeled "mask color" and an annotation arrow labels "Tile size" across the edge of one tile, another labels "Padding" across the gap. Right diagram labeled "Invert: on": inverted — the padding gap region is filled with the mask color, tile centers are the underlying (mid-gray) wallpaper, same annotations. No photography, flat vector schematic, 16:9 overall, transparent background, labels in dark-gray sans-serif. Output SVG preferred, PNG 1200×600 fallback.
+```

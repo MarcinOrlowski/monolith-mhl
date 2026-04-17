@@ -48,7 +48,7 @@ layout(std140, binding = 0) uniform buf {
     float crtVignette;
     float showMask;
     float maskSide;
-    float maskGap;
+    float maskPadding;
     float maskInvert;
     float maskColorR;
     float maskColorG;

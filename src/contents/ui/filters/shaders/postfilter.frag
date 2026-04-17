@@ -48,7 +48,7 @@ layout(std140, binding = 0) uniform buf {
     float crtVignette;
     float showMask;
     float maskSide;
-    float maskGap;
+    float maskPadding;
     float maskInvert;
     float maskColorR;
     float maskColorG;
@@ -145,11 +145,12 @@ void applyColorFilter(int id, inout vec3 col, vec2 uv) {
         float v = pow(vig.x * vig.y * 16.0, crtVignette * 0.01);
         col *= v;
     } else if (id == 7 && bool(showMask)) {
-        // Mask: tile a square across the image, recolor inside or outside
-        float cell = maskSide + maskGap;
+        // Mask: tile of size maskSide, inner square inset by maskPadding on all sides
         vec2 pixelPos = uv * vec2(iWidth, iHeight);
-        vec2 local = mod(pixelPos, cell);
-        bool insideSquare = local.x < maskSide && local.y < maskSide;
+        vec2 local = mod(pixelPos, maskSide);
+        float hi = maskSide - maskPadding;
+        bool insideSquare = local.x >= maskPadding && local.x < hi
+                         && local.y >= maskPadding && local.y < hi;
         bool cut = (maskInvert > 0.5) ? !insideSquare : insideSquare;
         if (cut) col = vec3(maskColorR, maskColorG, maskColorB);
     }

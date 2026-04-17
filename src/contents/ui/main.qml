@@ -87,8 +87,8 @@ WallpaperItem {
     property real crtCurvature: 10.0
     property real crtVignette: 30.0
     property real showMask: 0.0
-    property real maskSide: 32.0
-    property real maskGap: 4.0
+    property real maskSide: 64.0
+    property real maskPadding: 8.0
     property real maskInvert: 0.0
     property real maskColorR: 0.0
     property real maskColorG: 0.0
@@ -253,7 +253,7 @@ WallpaperItem {
         property real showCrt: root.showCrt
         property real crtCurvature: root.crtCurvature; property real crtVignette: root.crtVignette
         property real showMask: root.showMask
-        property real maskSide: root.maskSide; property real maskGap: root.maskGap
+        property real maskSide: root.maskSide; property real maskPadding: root.maskPadding
         property real maskInvert: root.maskInvert
         property real maskColorR: root.maskColorR; property real maskColorG: root.maskColorG; property real maskColorB: root.maskColorB
         property real filterSlot0: root.slotA0; property real filterSlot1: root.slotA1
@@ -336,7 +336,7 @@ WallpaperItem {
         property real showCrt: root.showCrt
         property real crtCurvature: root.crtCurvature; property real crtVignette: root.crtVignette
         property real showMask: root.showMask
-        property real maskSide: root.maskSide; property real maskGap: root.maskGap
+        property real maskSide: root.maskSide; property real maskPadding: root.maskPadding
         property real maskInvert: root.maskInvert
         property real maskColorR: root.maskColorR; property real maskColorG: root.maskColorG; property real maskColorB: root.maskColorB
         property real filterSlot0: root.slotB0; property real filterSlot1: root.slotB1
@@ -419,7 +419,7 @@ WallpaperItem {
         property real showCrt: root.showCrt
         property real crtCurvature: root.crtCurvature; property real crtVignette: root.crtVignette
         property real showMask: root.showMask
-        property real maskSide: root.maskSide; property real maskGap: root.maskGap
+        property real maskSide: root.maskSide; property real maskPadding: root.maskPadding
         property real maskInvert: root.maskInvert
         property real maskColorR: root.maskColorR; property real maskColorG: root.maskColorG; property real maskColorB: root.maskColorB
         property real filterSlot0: root.slotC0; property real filterSlot1: root.slotC1

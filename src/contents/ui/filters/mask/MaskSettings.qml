@@ -19,21 +19,21 @@ Kirigami.FormLayout {
     property var filterConfig
 
     RowLayout {
-        Kirigami.FormData.label: i18n("Side:")
+        Kirigami.FormData.label: i18n("Tile size:")
         QtControls2.SpinBox {
-            from: 2; to: 500; stepSize: 1
+            from: 4; to: 500; stepSize: 1
             value: filterConfig._side
             onValueModified: filterConfig._side = value
             textFromValue: function(value) { return value + " px" }
-            valueFromText: function(text) { return parseInt(text) || 32 }
+            valueFromText: function(text) { return parseInt(text) || 64 }
         }
     }
     RowLayout {
-        Kirigami.FormData.label: i18n("Gap:")
+        Kirigami.FormData.label: i18n("Padding:")
         QtControls2.SpinBox {
-            from: 0; to: 500; stepSize: 1
-            value: filterConfig._gap
-            onValueModified: filterConfig._gap = value
+            from: 0; to: 250; stepSize: 1
+            value: filterConfig._padding
+            onValueModified: filterConfig._padding = value
             textFromValue: function(value) { return value + " px" }
             valueFromText: function(text) { return parseInt(text) || 0 }
         }

@@ -2,7 +2,9 @@
 
 ## v1.2.0 (TBD)
 
-- Added Mask post-filter: tiles a square stencil over the image and recolors the inside or outside.
+- New post-filter "mask".
+- Added extensive documentation for built-in filters.
+- Filter settings now include "Help" button linking to docs.
 
 ## v1.1.0 (2026-04-17)
 

@@ -594,6 +594,15 @@ ColumnLayout {
                     icon.name: "edit-reset"
                     onClicked: root.resetFilter(filterSettingsDialog.activeFilterId)
                 }
+                QtControls2.Button {
+                    text: i18n("Help")
+                    icon.name: "help-contents"
+                    onClicked: Qt.openUrlExternally(
+                        "https://github.com/MarcinOrlowski/monolith-mhl/blob/master/docs/filters/" +
+                        filterSettingsDialog.activeFilterId + "/README.md")
+                    QtControls2.ToolTip.text: i18n("Open filter documentation in your browser")
+                    QtControls2.ToolTip.visible: hovered
+                }
                 Item { Layout.fillWidth: true }
                 QtControls2.Button {
                     text: i18n("Ok")

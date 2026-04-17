@@ -50,6 +50,9 @@ Item {
     property real dimLevel: 1.0
     property bool fpsCap: true
     property int fpsLimit: 30
+    property bool paused: false
+
+    function togglePause() { paused = !paused }
 
     function _readSettings() {
         var json = configuration ? configuration.EffectRainbowWavesSettings : "{}";
@@ -482,12 +485,12 @@ Item {
         property real speedMult: effectRoot.speedMult
 
         FrameAnimation {
-            running: effect.visible && !effectRoot.fpsCap
+            running: effect.visible && !effectRoot.fpsCap && !effectRoot.paused
             onTriggered: effect.iTime += frameTime * 60.0 * effect.speedMult
         }
 
         Timer {
-            running: effect.visible && effectRoot.fpsCap
+            running: effect.visible && effectRoot.fpsCap && !effectRoot.paused
             repeat: true
             interval: Math.ceil(1000 / Math.min(240, Math.max(1, effectRoot.fpsLimit)))
             onTriggered: effect.iTime += interval / 1000.0 * 60.0 * effect.speedMult

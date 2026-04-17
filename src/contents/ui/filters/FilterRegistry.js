@@ -19,5 +19,6 @@ var filters = [
     { id: "hue-shift",    configUrl: "hue-shift/HueShiftConfig.qml",       cfgKey: "FilterHueShiftSettings" },
     { id: "rgb-offset",   configUrl: "rgb-offset/RgbOffsetConfig.qml",     cfgKey: "FilterRgbOffsetSettings" },
     { id: "crt",          configUrl: "crt/CrtConfig.qml",                  cfgKey: "FilterCrtSettings" },
-    { id: "blur",         configUrl: "blur/BlurConfig.qml",                cfgKey: "FilterBlurSettings" }
+    { id: "blur",         configUrl: "blur/BlurConfig.qml",                cfgKey: "FilterBlurSettings" },
+    { id: "mask",         configUrl: "mask/MaskConfig.qml",                cfgKey: "FilterMaskSettings" }
 ]

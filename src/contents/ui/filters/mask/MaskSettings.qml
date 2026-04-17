@@ -71,6 +71,48 @@ Kirigami.FormLayout {
         }
     }
 
+    RowLayout {
+        Kirigami.FormData.label: i18n("Sparks:")
+        QtControls2.CheckBox {
+            text: i18n("Leak bright pixels from gap into mask")
+            checked: filterConfig._sparkShow
+            onToggled: filterConfig._sparkShow = checked
+        }
+    }
+    RowLayout {
+        Kirigami.FormData.label: i18n("Spark radius:")
+        QtControls2.SpinBox {
+            from: 1; to: 50; stepSize: 1
+            enabled: filterConfig._sparkShow
+            value: filterConfig._sparkRadius
+            onValueModified: filterConfig._sparkRadius = value
+            textFromValue: function(value) { return value + " px" }
+            valueFromText: function(text) { return parseInt(text) || 8 }
+        }
+    }
+    RowLayout {
+        Kirigami.FormData.label: i18n("Spark threshold:")
+        QtControls2.SpinBox {
+            from: 0; to: 100; stepSize: 5
+            enabled: filterConfig._sparkShow
+            value: filterConfig._sparkThreshold
+            onValueModified: filterConfig._sparkThreshold = value
+            textFromValue: function(value) { return value + "%" }
+            valueFromText: function(text) { return parseInt(text) || 30 }
+        }
+    }
+    RowLayout {
+        Kirigami.FormData.label: i18n("Spark strength:")
+        QtControls2.SpinBox {
+            from: 0; to: 100; stepSize: 5
+            enabled: filterConfig._sparkShow
+            value: filterConfig._sparkStrength
+            onValueModified: filterConfig._sparkStrength = value
+            textFromValue: function(value) { return value + "%" }
+            valueFromText: function(text) { return parseInt(text) || 100 }
+        }
+    }
+
     ColorDialog {
         id: colorDialog
         title: i18n("Mask Color")

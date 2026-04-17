@@ -33,6 +33,14 @@ To install Monolith MHL wallpaper on your system press the right mouse button ov
 desktop and select `Desktop and Wallpaper` from context menu. Next click `Get New Plugins…` and search
 for `Monolith MHL` and then click `Install…`.
 
+## Usage
+
+By design, Monolith can (and will) feature multiple "effects" that can be used as your live
+wallpaper. Said effects like "Rainbow Waves" or "Lava Lamp" are foundation of Monolith's,
+however aside the main effects, Monolith also comes with post-processing filters, like color
+correction, blur, chromatic aberration and more. And the order of filters in the pipeline
+matters and affects the final result!
+
 ## Feedback
 
 The Monolith MHL wallpaper hub is available on the [KDE Store](https://store.kde.org/p/2353773/).

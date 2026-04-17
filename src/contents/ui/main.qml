@@ -17,8 +17,28 @@ import "filters/FilterRegistry.js" as FilterRegistry
 WallpaperItem {
     id: root
 
-    // Forward the active effect's context menu actions
-    contextualActions: effectLoader.item ? effectLoader.item.effectActions : []
+    // Forward the active effect's context menu actions, prepended with hub actions
+    contextualActions: {
+        var actions = [pauseAction]
+        if (effectLoader.item) {
+            var ea = effectLoader.item.effectActions
+            for (var i = 0; i < ea.length; i++) actions.push(ea[i])
+        }
+        return actions
+    }
+
+    property bool effectPaused: effectLoader.item ? effectLoader.item.paused : false
+
+    PlasmaCore.Action {
+        id: pauseAction
+        text: root.effectPaused ? i18n("Resume Animation") : i18n("Pause Animation")
+        icon.name: root.effectPaused ? "media-playback-start" : "media-playback-pause"
+        enabled: effectLoader.item !== null
+        onTriggered: {
+            if (effectLoader.item && effectLoader.item.togglePause)
+                effectLoader.item.togglePause()
+        }
+    }
 
     // --- Filter config components (self-contained, loaded from FilterRegistry) ---
     property var filterConfigs: ({})
@@ -164,7 +184,8 @@ WallpaperItem {
 
     // Effect registry: maps Effect config value to effect QML component
     readonly property var effectRegistry: ({
-        "rainbow-waves": Qt.resolvedUrl("effects/rainbow-waves/RainbowWavesEffect.qml")
+        "rainbow-waves": Qt.resolvedUrl("effects/rainbow-waves/RainbowWavesEffect.qml"),
+        "lava-lamp": Qt.resolvedUrl("effects/lava-lamp/LavaLampEffect.qml")
     })
 
     Loader {
@@ -183,7 +204,7 @@ WallpaperItem {
     // Shared animation timer for all filter passes
     property real filterTime: 0
     FrameAnimation {
-        running: root.anyFilterActive
+        running: root.anyFilterActive && !root.effectPaused
         onTriggered: root.filterTime += frameTime * 60.0
     }
 
@@ -383,9 +404,12 @@ WallpaperItem {
         fragmentShader: "filters/shaders/postfilter.frag.qsb"
     }
 
+    property string _loadedEffectUrl: ""
     function loadEffect() {
         var url = root.effectRegistry[root.configuration.ActiveEffect] || ""
-        if (url.toString().length > 0) {
+        var urlStr = url.toString()
+        if (urlStr.length > 0 && urlStr !== _loadedEffectUrl) {
+            _loadedEffectUrl = urlStr
             effectLoader.setSource(url, { "configuration": root.configuration })
         }
     }
@@ -393,7 +417,10 @@ WallpaperItem {
     Connections {
         target: root.configuration
         function onActiveEffectChanged() { root.loadEffect() }
-        function onValueChanged(key, value) { root.syncFilterConfig() }
+        function onValueChanged(key, value) {
+            if (key === "ActiveEffect") { root.loadEffect() }
+            root.syncFilterConfig()
+        }
     }
     Component.onCompleted: { syncFilterConfig(); loadEffect() }
 

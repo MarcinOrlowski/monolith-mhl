@@ -7,6 +7,8 @@ outwards from the image center while the green channel stays put. The result is
 colored fringes around high-contrast edges — subtle at low strength, overtly
 "glitchy" at high values.
 
+![Red/blue channels pushed radially outward from the image center](img/radial-shift.webp)
+
 ## Parameters
 
 | Parameter | Description                                                                                                         | Default | Range       |
@@ -17,10 +19,12 @@ colored fringes around high-contrast edges — subtle at low strength, overtly
 
 - [Chromatic aberration (Wikipedia)](https://en.wikipedia.org/wiki/Chromatic_aberration)
 
-## Images (TODO)
+<!-- markdownlint-disable MD013 -->
 
-Prompt to feed to a drawing agent to produce `img/radial-shift.svg`:
+<!--
+Prompt to feed to a drawing agent to produce `img/radial-shift.webp`:
 
-```text
-Flat schematic on neutral mid-gray background. A rectangle represents the screen/image bounds. Inside, draw a small crosshair at the rectangle's center marked "image center". Around the edges, show four sample "pixel triplets": at each corner and two edges, draw three small overlapping dots — red, green, blue — where the green dot sits on an ideal grid position and the red/blue dots are pushed radially outward from the image center, farther the closer to the corner. Annotate one triplet with "Strength" labeling the red↔blue separation. No photography, flat vector schematic, 16:9, transparent background, labels in dark-gray sans-serif. Output SVG preferred, PNG 1200×600 fallback.
-```
+Flat schematic on neutral mid-gray background. A rectangle represents the screen/image bounds. Inside, draw a small crosshair at the rectangle's center marked "image center". Around the edges, show four sample "pixel triplets": at each corner and two edges, draw three small overlapping dots — red, green, blue — where the green dot sits on an ideal grid position and the red/blue dots are pushed radially outward from the image center, farther the closer to the corner. Annotate one triplet with "Strength" labeling the red↔blue separation. No photography, flat vector schematic, 16:9, transparent background, labels in dark-gray sans-serif. Output WEBP 1200×600.
+-->
+
+<!-- markdownlint-enable MD013 -->

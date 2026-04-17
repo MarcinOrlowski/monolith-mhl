@@ -7,7 +7,7 @@ outwards from the image center while the green channel stays put. The result is
 colored fringes around high-contrast edges — subtle at low strength, overtly
 "glitchy" at high values.
 
-## Gallert
+## Gallery
 
 No filters:
 
@@ -15,7 +15,7 @@ No filters:
 
 With chromatic aberration set to `2.4x`
 
-![No filters](img/after.webp)
+![With filter applied](img/after.webp)
 
 ## Parameters
 

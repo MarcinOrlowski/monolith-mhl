@@ -7,6 +7,16 @@ dreamy / out-of-focus look, or to attenuate busy backgrounds so icons and widget
 stand out. The larger the radius, the more smeared the result — at high values
 individual shapes are reduced to blobs of color.
 
+## Gallery
+
+No filters:
+
+![No filters](img/before.webp)
+
+With blur set to `6 px`
+
+![With filter applied](img/after.webp)
+
 ## Parameters
 
 | Parameter | Description                                                                     | Default | Range     |

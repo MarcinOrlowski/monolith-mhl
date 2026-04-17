@@ -136,7 +136,14 @@ WallpaperItem {
         anyFilterActive = active
 
         // Build pipeline: split filter order at pass-breaking filters
-        var order = (root.configuration.FilterOrder || "pixelate,scanlines,chromatic,color-grading,hue-shift,rgb-offset,crt,blur").split(",")
+        var order = (root.configuration.FilterOrder || "pixelate,scanlines,chromatic,color-grading,hue-shift,rgb-offset,crt,blur,mask").split(",")
+        // Append any registered filters not present in saved order (so newly-added filters work without re-saving)
+        var seen = {}
+        for (var si = 0; si < order.length; si++) seen[order[si].trim()] = true
+        for (var ri = 0; ri < FilterRegistry.filters.length; ri++) {
+            var rid = FilterRegistry.filters[ri].id
+            if (!seen[rid]) order.push(rid)
+        }
         var segments = []
         var currentGroup = []
 

@@ -53,10 +53,6 @@ layout(std140, binding = 0) uniform buf {
     float maskColorR;
     float maskColorG;
     float maskColorB;
-    float showMaskSpark;
-    float maskSparkRadius;
-    float maskSparkThreshold;
-    float maskSparkStrength;
     float filterSlot0;
     float filterSlot1;
     float filterSlot2;
@@ -156,33 +152,7 @@ void applyColorFilter(int id, inout vec3 col, vec2 uv) {
         bool insideSquare = local.x >= maskPadding && local.x < hi
                          && local.y >= maskPadding && local.y < hi;
         bool cut = (maskInvert > 0.5) ? !insideSquare : insideSquare;
-        if (cut) {
-            vec3 maskCol = vec3(maskColorR, maskColorG, maskColorB);
-            col = maskCol;
-            if (bool(showMaskSpark) && maskInvert < 0.5) {
-                // Project cut pixel onto the nearest gap edge, sample the source
-                // there, and blend proportional to brightness & distance.
-                float dL = local.x - maskPadding;
-                float dR = hi - local.x;
-                float dT = local.y - maskPadding;
-                float dB = hi - local.y;
-                float md = min(min(dL, dR), min(dT, dB));
-                if (md < maskSparkRadius) {
-                    vec2 srcLocal;
-                    if (md == dL)      srcLocal = vec2(maskPadding - 0.5, local.y);
-                    else if (md == dR) srcLocal = vec2(hi + 0.5, local.y);
-                    else if (md == dT) srcLocal = vec2(local.x, maskPadding - 0.5);
-                    else               srcLocal = vec2(local.x, hi + 0.5);
-                    vec2 tileOrigin = floor(pixelPos / maskSide) * maskSide;
-                    vec2 srcUv = (tileOrigin + srcLocal) / vec2(iWidth, iHeight);
-                    vec3 srcCol = texture(source, srcUv).rgb;
-                    float lum = dot(srcCol, vec3(0.299, 0.587, 0.114));
-                    float bright = smoothstep(maskSparkThreshold, 1.0, lum);
-                    float falloff = 1.0 - md / maskSparkRadius;
-                    col = mix(maskCol, srcCol, falloff * bright * maskSparkStrength);
-                }
-            }
-        }
+        if (cut) col = vec3(maskColorR, maskColorG, maskColorB);
     }
 }
 

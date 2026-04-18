@@ -53,10 +53,6 @@ layout(std140, binding = 0) uniform buf {
     float maskColorR;
     float maskColorG;
     float maskColorB;
-    float showMaskSpark;
-    float maskSparkRadius;
-    float maskSparkThreshold;
-    float maskSparkStrength;
     float filterSlot0;
     float filterSlot1;
     float filterSlot2;

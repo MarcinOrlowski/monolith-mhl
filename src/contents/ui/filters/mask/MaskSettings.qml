@@ -71,6 +71,27 @@ Kirigami.FormLayout {
         }
     }
 
+    RowLayout {
+        Kirigami.FormData.label: i18n("Mask opacity:")
+        QtControls2.SpinBox {
+            from: 0; to: 100; stepSize: 5
+            value: filterConfig._maskOpacity
+            onValueModified: filterConfig._maskOpacity = value
+            textFromValue: function(value) { return value + "%" }
+            valueFromText: function(text) { return parseInt(text) || 0 }
+        }
+    }
+    RowLayout {
+        Kirigami.FormData.label: i18n("Gap opacity:")
+        QtControls2.SpinBox {
+            from: 0; to: 100; stepSize: 5
+            value: filterConfig._gapOpacity
+            onValueModified: filterConfig._gapOpacity = value
+            textFromValue: function(value) { return value + "%" }
+            valueFromText: function(text) { return parseInt(text) || 0 }
+        }
+    }
+
     ColorDialog {
         id: colorDialog
         title: i18n("Mask Color")

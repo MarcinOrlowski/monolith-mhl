@@ -16,20 +16,25 @@ With mask set to square, tile size 64 px, padding 1 px, mask color `#000000` (bl
 
 ![Mask anatomy: tile size, padding, and inverted-vs-non-inverted fills](img/mask-anatomy.webp)
 
-| Parameter  | Description                                                                                                                               | Default   | Range                |
-| ---------- | ----------------------------------------------------------------------------------------------------------------------------------------- | --------- | -------------------- |
-| Tile size  | Side length of each repeating tile, in pixels.                                                                                            | `64 px`   | `4–500 px`           |
-| Padding    | Empty gap inside each tile. Pixels within `padding` of the tile edge are considered "outside" the square. Must be smaller than tile size. | `8 px`    | `0 to (tile − 1) px` |
-| Invert     | Which side of the square gets recolored. Off = inside is filled with the mask color; On = outside (the padding area) is filled.           | `off`     | on / off             |
-| Mask color | Solid color used for the replaced pixels.                                                                                                 | `#000000` | any hex color        |
+| Parameter    | Description                                                                                                                               | Default   | Range                |
+| ------------ | ----------------------------------------------------------------------------------------------------------------------------------------- | --------- | -------------------- |
+| Tile size    | Side length of each repeating tile, in pixels.                                                                                            | `64 px`   | `4–500 px`           |
+| Padding      | Empty gap inside each tile. Pixels within `padding` of the tile edge are considered "outside" the square. Must be smaller than tile size. | `8 px`    | `0 to (tile − 1) px` |
+| Invert       | Which side of the square is treated as the "mask" region. Off = inside the square; On = outside (the padding area).                       | `off`     | on / off             |
+| Mask color   | Color blended over the two regions.                                                                                                       | `#000000` | any hex color        |
+| Mask opacity | How strongly the mask color covers the mask region. 0% = region is fully transparent; 100% = region is fully replaced by the mask color.  | `100%`    | `0–100%`             |
+| Gap opacity  | How strongly the mask color covers the gap region. 0% = region is fully transparent; 100% = region is fully replaced by the mask color.   | `0%`      | `0–100%`             |
 
 ## Notes
 
-- "Outside" does not mean transparent — the masked-out region is filled with a
-  solid color, so the mask color becomes the visible background.
+- With the defaults (mask opacity 100%, gap opacity 0%), the mask region is a
+  solid color and the gap shows the underlying wallpaper — the classic
+  hard-edged stencil look.
+- Lower the mask opacity to let the underlying wallpaper bleed through the
+  colored region, or raise the gap opacity to tint the gap.
 - For a clean grid effect, set padding small relative to tile size; for a
   "looking through a window" look, invert the mask so only the padding area
-  shows through.
+  shows through, or equivalently swap the two opacity values.
 
 <!-- markdownlint-disable MD013 -->
 

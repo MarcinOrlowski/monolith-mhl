@@ -25,7 +25,8 @@ Item {
     readonly property bool show: _show
 
     readonly property var defaults: ({
-        show: false, side: 64, padding: 8, invert: false, color: "#000000"
+        show: false, side: 64, padding: 8, invert: false, color: "#000000",
+        maskOpacity: 100, gapOpacity: 0
     })
 
     readonly property var uniforms: ({
@@ -35,7 +36,9 @@ Item {
         maskInvert: _invert ? 1.0 : 0.0,
         maskColorR: _parsedColor[0],
         maskColorG: _parsedColor[1],
-        maskColorB: _parsedColor[2]
+        maskColorB: _parsedColor[2],
+        maskOpacity: _maskOpacity / 100.0,
+        gapOpacity: _gapOpacity / 100.0
     })
 
     property bool _show: false
@@ -43,6 +46,8 @@ Item {
     property int _padding: 8
     property bool _invert: false
     property string _color: "#000000"
+    property int _maskOpacity: 100
+    property int _gapOpacity: 0
     property bool _loading: false
 
     readonly property var _parsedColor: {
@@ -58,13 +63,15 @@ Item {
         var s = EffectSettings.load(settingsBlob, defaults)
         _show = s.show; _side = s.side; _padding = s.padding
         _invert = s.invert; _color = s.color
+        _maskOpacity = s.maskOpacity; _gapOpacity = s.gapOpacity
         _loading = false
     }
     function _save() {
         if (_loading) return
         settingsBlob = EffectSettings.save({
             show: _show, side: _side, padding: _padding,
-            invert: _invert, color: _color
+            invert: _invert, color: _color,
+            maskOpacity: _maskOpacity, gapOpacity: _gapOpacity
         })
     }
     on_ShowChanged: _save()
@@ -79,10 +86,13 @@ Item {
     }
     on_InvertChanged: _save()
     on_ColorChanged: _save()
+    on_MaskOpacityChanged: _save()
+    on_GapOpacityChanged: _save()
 
     function toggle() { _show = !_show }
     function reset() {
         _side = defaults.side; _padding = defaults.padding
         _invert = defaults.invert; _color = defaults.color
+        _maskOpacity = defaults.maskOpacity; _gapOpacity = defaults.gapOpacity
     }
 }

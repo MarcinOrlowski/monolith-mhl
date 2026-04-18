@@ -53,6 +53,8 @@ layout(std140, binding = 0) uniform buf {
     float maskColorR;
     float maskColorG;
     float maskColorB;
+    float maskOpacity;
+    float gapOpacity;
     float filterSlot0;
     float filterSlot1;
     float filterSlot2;
@@ -152,7 +154,8 @@ void applyColorFilter(int id, inout vec3 col, vec2 uv) {
         bool insideSquare = local.x >= maskPadding && local.x < hi
                          && local.y >= maskPadding && local.y < hi;
         bool cut = (maskInvert > 0.5) ? !insideSquare : insideSquare;
-        if (cut) col = vec3(maskColorR, maskColorG, maskColorB);
+        vec3 maskCol = vec3(maskColorR, maskColorG, maskColorB);
+        col = mix(col, maskCol, cut ? maskOpacity : gapOpacity);
     }
 }
 

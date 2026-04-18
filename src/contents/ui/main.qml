@@ -93,6 +93,8 @@ WallpaperItem {
     property real maskColorR: 0.0
     property real maskColorG: 0.0
     property real maskColorB: 0.0
+    property real maskOpacity: 1.0
+    property real gapOpacity: 0.0
     property real rgbOffsetAmount: 5.0
     property real rgbOffsetAngle: 0.0
     property real blurRadius: 8.0
@@ -256,6 +258,7 @@ WallpaperItem {
         property real maskSide: root.maskSide; property real maskPadding: root.maskPadding
         property real maskInvert: root.maskInvert
         property real maskColorR: root.maskColorR; property real maskColorG: root.maskColorG; property real maskColorB: root.maskColorB
+        property real maskOpacity: root.maskOpacity; property real gapOpacity: root.gapOpacity
         property real filterSlot0: root.slotA0; property real filterSlot1: root.slotA1
         property real filterSlot2: root.slotA2; property real filterSlot3: root.slotA3
         property real filterSlot4: root.slotA4; property real filterSlot5: root.slotA5
@@ -339,6 +342,7 @@ WallpaperItem {
         property real maskSide: root.maskSide; property real maskPadding: root.maskPadding
         property real maskInvert: root.maskInvert
         property real maskColorR: root.maskColorR; property real maskColorG: root.maskColorG; property real maskColorB: root.maskColorB
+        property real maskOpacity: root.maskOpacity; property real gapOpacity: root.gapOpacity
         property real filterSlot0: root.slotB0; property real filterSlot1: root.slotB1
         property real filterSlot2: root.slotB2; property real filterSlot3: root.slotB3
         property real filterSlot4: root.slotB4; property real filterSlot5: root.slotB5
@@ -422,6 +426,7 @@ WallpaperItem {
         property real maskSide: root.maskSide; property real maskPadding: root.maskPadding
         property real maskInvert: root.maskInvert
         property real maskColorR: root.maskColorR; property real maskColorG: root.maskColorG; property real maskColorB: root.maskColorB
+        property real maskOpacity: root.maskOpacity; property real gapOpacity: root.gapOpacity
         property real filterSlot0: root.slotC0; property real filterSlot1: root.slotC1
         property real filterSlot2: root.slotC2; property real filterSlot3: root.slotC3
         property real filterSlot4: root.slotC4; property real filterSlot5: root.slotC5

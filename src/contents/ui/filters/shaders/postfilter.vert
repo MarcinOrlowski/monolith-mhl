@@ -53,6 +53,8 @@ layout(std140, binding = 0) uniform buf {
     float maskColorR;
     float maskColorG;
     float maskColorB;
+    float maskOpacity;
+    float gapOpacity;
     float filterSlot0;
     float filterSlot1;
     float filterSlot2;

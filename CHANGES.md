@@ -2,10 +2,10 @@
 
 ## v1.2.0 (TBD)
 
-- New post-filter "mask", with per-region opacity controls for blending the
+- New post-filter "Mask", with per-region opacity controls for blending the
   mask color over the cut and gap regions.
 - Added extensive documentation for built-in filters.
-- Filter settings now include "Help" button linking to docs.
+- Filter settings now include "Help" button linking to the docs.
 
 ## v1.1.0 (2026-04-17)
 

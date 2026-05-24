@@ -201,7 +201,8 @@ WallpaperItem {
     // Effect registry: maps Effect config value to effect QML component
     readonly property var effectRegistry: ({
         "rainbow-waves": Qt.resolvedUrl("effects/rainbow-waves/RainbowWavesEffect.qml"),
-        "lava-lamp": Qt.resolvedUrl("effects/lava-lamp/LavaLampEffect.qml")
+        "lava-lamp": Qt.resolvedUrl("effects/lava-lamp/LavaLampEffect.qml"),
+        "dot-waves": Qt.resolvedUrl("effects/dot-waves/DotWavesEffect.qml")
     })
 
     Loader {

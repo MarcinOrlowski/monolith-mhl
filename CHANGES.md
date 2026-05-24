@@ -2,6 +2,7 @@
 
 ## v1.2.0 (TBD)
 
+- New "Dot Waves" effect: animated dot grid driven by a drifting sine/cosine
 - New post-filter "Mask", with per-region opacity controls for blending the
   mask color over the cut and gap regions.
 - Added extensive documentation for built-in filters.

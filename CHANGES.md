@@ -7,6 +7,7 @@
   mask color over the cut and gap regions.
 - Added extensive documentation for built-in filters.
 - Filter settings now include "Help" button linking to the docs.
+- Fixed Pause Animation not stopping theme color cycling.
 
 ## v1.1.0 (2026-04-17)
 

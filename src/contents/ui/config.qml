@@ -28,6 +28,7 @@ ColumnLayout {
     // --- Per-effect settings (JSON blobs, one cfg_ property per effect) ---
     property string cfg_EffectRainbowWavesSettings
     property string cfg_EffectLavaLampSettings
+    property string cfg_EffectDotWavesSettings
 
     // --- Per-filter settings (JSON blobs, one cfg_ property per filter) ---
     property string cfg_FilterPixelateSettings
@@ -38,6 +39,7 @@ ColumnLayout {
     property string cfg_FilterRgbOffsetSettings
     property string cfg_FilterCrtSettings
     property string cfg_FilterBlurSettings
+    property string cfg_FilterMaskSettings
     property string cfg_FilterOrder
 
     // --- Filter config components (self-contained, loaded from FilterRegistry) ---
@@ -88,8 +90,9 @@ ColumnLayout {
 
     // Effect registry: id, name, configUrl
     readonly property var effectRegistry: [
-        { effectId: "rainbow-waves", name: "Rainbow Waves", configUrl: Qt.resolvedUrl("effects/rainbow-waves/RainbowWavesConfig.qml") },
-        { effectId: "lava-lamp", name: "Lava Lamp", configUrl: Qt.resolvedUrl("effects/lava-lamp/LavaLampConfig.qml") }
+        { effectId: "dot-waves", name: "Dot Waves", configUrl: Qt.resolvedUrl("effects/dot-waves/DotWavesConfig.qml") },
+        { effectId: "lava-lamp", name: "Lava Lamp", configUrl: Qt.resolvedUrl("effects/lava-lamp/LavaLampConfig.qml") },
+        { effectId: "rainbow-waves", name: "Rainbow Waves", configUrl: Qt.resolvedUrl("effects/rainbow-waves/RainbowWavesConfig.qml") }
     ]
 
     function findEffectIndex(effectId) {
@@ -224,7 +227,8 @@ ColumnLayout {
         function showSettings() {
             _snapshot = {
                 "cfg_EffectRainbowWavesSettings": root.cfg_EffectRainbowWavesSettings,
-                "cfg_EffectLavaLampSettings": root.cfg_EffectLavaLampSettings
+                "cfg_EffectLavaLampSettings": root.cfg_EffectLavaLampSettings,
+                "cfg_EffectDotWavesSettings": root.cfg_EffectDotWavesSettings
             }
             _accepted = false
             visible = true
@@ -265,6 +269,9 @@ ColumnLayout {
                 }
                 if ("cfg_EffectLavaLampSettings" in item) {
                     item.cfg_EffectLavaLampSettings = Qt.binding(function() { return root.cfg_EffectLavaLampSettings })
+                }
+                if ("cfg_EffectDotWavesSettings" in item) {
+                    item.cfg_EffectDotWavesSettings = Qt.binding(function() { return root.cfg_EffectDotWavesSettings })
                 }
                 try { item.hubConfiguration = wallpaper.configuration } catch(e) {}
                 effectSettingsWindow.pageCache = Object.create(null)
@@ -443,7 +450,7 @@ ColumnLayout {
             }
 
             Component.onCompleted: {
-                var ids = (root.cfg_FilterOrder || "pixelate,scanlines,chromatic,color-grading,hue-shift,rgb-offset,crt,blur").split(",")
+                var ids = (root.cfg_FilterOrder || "pixelate,scanlines,chromatic,color-grading,hue-shift,rgb-offset,crt,blur,mask").split(",")
                 var seen = {}
                 // Load saved order, skipping unknown or duplicate IDs
                 for (var i = 0; i < ids.length; i++) {
@@ -593,6 +600,15 @@ ColumnLayout {
                     icon.name: "edit-reset"
                     onClicked: root.resetFilter(filterSettingsDialog.activeFilterId)
                 }
+                QtControls2.Button {
+                    text: i18n("Help")
+                    icon.name: "help-contents"
+                    onClicked: Qt.openUrlExternally(
+                        "https://github.com/MarcinOrlowski/monolith-mhl/blob/master/docs/filters/" +
+                        filterSettingsDialog.activeFilterId + "/README.md")
+                    QtControls2.ToolTip.text: i18n("Open filter documentation in your browser")
+                    QtControls2.ToolTip.visible: hovered
+                }
                 Item { Layout.fillWidth: true }
                 QtControls2.Button {
                     text: i18n("Ok")
@@ -613,6 +629,7 @@ ColumnLayout {
         enabled: effectConfigLoader.item !== null
         function onCfg_EffectRainbowWavesSettingsChanged() { root.cfg_EffectRainbowWavesSettings = effectConfigLoader.item.cfg_EffectRainbowWavesSettings }
         function onCfg_EffectLavaLampSettingsChanged() { root.cfg_EffectLavaLampSettings = effectConfigLoader.item.cfg_EffectLavaLampSettings }
+        function onCfg_EffectDotWavesSettingsChanged() { root.cfg_EffectDotWavesSettings = effectConfigLoader.item.cfg_EffectDotWavesSettings }
     }
 
 }

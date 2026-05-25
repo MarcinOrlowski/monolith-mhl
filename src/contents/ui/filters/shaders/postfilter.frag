@@ -46,6 +46,15 @@ layout(std140, binding = 0) uniform buf {
     float showCrt;
     float crtCurvature;
     float crtVignette;
+    float showMask;
+    float maskSide;
+    float maskPadding;
+    float maskInvert;
+    float maskColorR;
+    float maskColorG;
+    float maskColorB;
+    float maskOpacity;
+    float gapOpacity;
     float filterSlot0;
     float filterSlot1;
     float filterSlot2;
@@ -137,6 +146,21 @@ void applyColorFilter(int id, inout vec3 col, vec2 uv) {
         vec2 vig = uv * (1.0 - uv);
         float v = pow(vig.x * vig.y * 16.0, crtVignette * 0.01);
         col *= v;
+    } else if (id == 7 && bool(showMask)) {
+        // Mask: tile of size maskSide, inner square inset by maskPadding on all sides.
+        // Use signed distance to the nearest tile edge and a fwidth-based smoothstep so
+        // line thickness stays visually uniform when tile boundaries fall on fractional
+        // device-pixel positions (e.g. on non-integer DPR displays).
+        vec2 pixelPos = uv * vec2(iWidth, iHeight);
+        vec2 local = mod(pixelPos, maskSide);
+        vec2 distFromEdge = min(local, maskSide - local);
+        float d = min(distFromEdge.x, distFromEdge.y);
+        float aa = max(0.5 * fwidth(d), 1e-4);
+        float insideAmt = smoothstep(maskPadding - aa, maskPadding + aa, d);
+        float cutAmt = (maskInvert > 0.5) ? (1.0 - insideAmt) : insideAmt;
+        vec3 maskCol = vec3(maskColorR, maskColorG, maskColorB);
+        float alpha = mix(gapOpacity, maskOpacity, cutAmt);
+        col = mix(col, maskCol, alpha);
     }
 }
 

@@ -387,6 +387,7 @@ Item {
                  && themeScanner.ready && themeScanner.themeList.count > 1
                  && effectRoot._cycleInterval > 0
                  && effectRoot.initialized
+                 && !effectRoot.paused
         repeat: true
         interval: Math.max(1, effectRoot._cycleInterval) * (effectRoot._cycleIntervalUnit === 1 ? 60000 : 1000)
         onTriggered: effectRoot.cycleInRandomOrder ? effectRoot.cycleToRandomTheme() : effectRoot.cycleToNextTheme()

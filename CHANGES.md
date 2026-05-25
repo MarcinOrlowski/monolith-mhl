@@ -1,6 +1,6 @@
 # Changelog
 
-## v1.2.0 (TBD)
+## v1.2.0 (2026-05-25)
 
 - New "Dot Waves" effect: animated dot grid driven by a drifting sine/cosine
 - New post-filter "Mask", with per-region opacity controls for blending the

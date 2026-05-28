@@ -3,6 +3,7 @@
 ## v1.3.0 (TBD)
 
 - Fixed Rainbow Waves effect resetting layer visibility on every theme transition.
+- Fixed Mask filter in Invert mode filling the whole screen when padding ≥ half the tile size.
 
 ## v1.2.0 (2026-05-25)
 

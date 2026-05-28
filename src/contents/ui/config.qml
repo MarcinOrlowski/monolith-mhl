@@ -108,6 +108,34 @@ ColumnLayout {
         }
     }
 
+    // Push the current KCM values into the live wallpaper configuration so the
+    // running wallpaper updates immediately, without closing this settings
+    // window and clicking "Apply" in the main wallpaper dialog. ConfigPropertyMap
+    // only emits valueChanged for keys that actually differ, so re-writing
+    // unchanged values is a no-op.
+    function applyLive() {
+        try {
+            var cfg = wallpaper.configuration
+            if (!cfg) return
+            cfg.ActiveEffect = cfg_ActiveEffect
+            cfg.EffectRainbowWavesSettings = cfg_EffectRainbowWavesSettings
+            cfg.EffectLavaLampSettings = cfg_EffectLavaLampSettings
+            cfg.EffectDotWavesSettings = cfg_EffectDotWavesSettings
+            cfg.FilterOrder = cfg_FilterOrder
+            cfg.FilterPixelateSettings = cfg_FilterPixelateSettings
+            cfg.FilterScanlinesSettings = cfg_FilterScanlinesSettings
+            cfg.FilterChromaticSettings = cfg_FilterChromaticSettings
+            cfg.FilterColorGradingSettings = cfg_FilterColorGradingSettings
+            cfg.FilterHueShiftSettings = cfg_FilterHueShiftSettings
+            cfg.FilterRgbOffsetSettings = cfg_FilterRgbOffsetSettings
+            cfg.FilterCrtSettings = cfg_FilterCrtSettings
+            cfg.FilterBlurSettings = cfg_FilterBlurSettings
+            cfg.FilterMaskSettings = cfg_FilterMaskSettings
+        } catch (e) {
+            console.warn("applyLive failed:", e)
+        }
+    }
+
     Kirigami.Separator {
         Layout.fillWidth: true
     }
@@ -243,6 +271,18 @@ ColumnLayout {
         function accept() {
             _accepted = true
             visible = false
+        }
+
+        // Live-preview the current settings, then re-baseline the snapshot so a
+        // later Cancel reverts only edits made after this Apply (keeping the form
+        // and the running wallpaper in sync).
+        function apply() {
+            root.applyLive()
+            _snapshot = {
+                "cfg_EffectRainbowWavesSettings": root.cfg_EffectRainbowWavesSettings,
+                "cfg_EffectLavaLampSettings": root.cfg_EffectLavaLampSettings,
+                "cfg_EffectDotWavesSettings": root.cfg_EffectDotWavesSettings
+            }
         }
 
         function _restoreSnapshot() {
@@ -422,6 +462,13 @@ ColumnLayout {
                     onClicked: effectSettingsWindow.accept()
                 }
                 QtControls2.Button {
+                    text: i18n("Apply")
+                    icon.name: "dialog-ok-apply"
+                    onClicked: effectSettingsWindow.apply()
+                    QtControls2.ToolTip.text: i18n("Preview these settings on the live wallpaper")
+                    QtControls2.ToolTip.visible: hovered
+                }
+                QtControls2.Button {
                     text: i18n("Cancel")
                     onClicked: effectSettingsWindow.cancel()
                 }
@@ -575,6 +622,14 @@ ColumnLayout {
             visible = false
         }
 
+        // Live-preview the current settings, then re-baseline the snapshot so a
+        // later Cancel reverts only edits made after this Apply.
+        function apply() {
+            root.applyLive()
+            var fc = root.filterConfig(activeFilterId)
+            _snapshot = fc ? fc.settingsBlob : "{}"
+        }
+
         function cancel() {
             var fc = root.filterConfig(activeFilterId)
             if (fc) fc.settingsBlob = _snapshot
@@ -629,6 +684,13 @@ ColumnLayout {
                     text: i18n("Ok")
                     highlighted: true
                     onClicked: filterSettingsDialog.accept()
+                }
+                QtControls2.Button {
+                    text: i18n("Apply")
+                    icon.name: "dialog-ok-apply"
+                    onClicked: filterSettingsDialog.apply()
+                    QtControls2.ToolTip.text: i18n("Preview these settings on the live wallpaper")
+                    QtControls2.ToolTip.visible: hovered
                 }
                 QtControls2.Button {
                     text: i18n("Cancel")

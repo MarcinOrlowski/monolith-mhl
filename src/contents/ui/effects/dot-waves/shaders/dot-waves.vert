@@ -32,6 +32,15 @@ layout(std140, binding = 0) uniform buf {
     float bgColorR;
     float bgColorG;
     float bgColorB;
+    float shineEnabled;
+    float shineMode;
+    float shineChannel;
+    float shineIntensity;
+    float iShineTime;
+    float shineColorR;
+    float shineColorG;
+    float shineColorB;
+    float shineWidth;
 };
 
 layout(location = 0) out vec2 coord;

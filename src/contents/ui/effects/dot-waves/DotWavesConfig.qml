@@ -33,7 +33,14 @@ Item {
         fpsCap: true,
         fpsLimit: 30,
         dimCap: false,
-        dimLevel: 100
+        dimLevel: 100,
+        shineEnabled: false,
+        shineMode: 0,
+        shineChannel: 2,
+        shineIntensity: 60,
+        shineSpeedIndex: 3,
+        shineColor: "#ffffff",
+        shineWidth: 30
     })
 
     // --- Backing properties ---
@@ -49,6 +56,13 @@ Item {
     property int _fpsLimit: 30
     property bool _dimCap: false
     property int _dimLevel: 100
+    property bool _shineEnabled: false
+    property int _shineMode: 0
+    property int _shineChannel: 2
+    property int _shineIntensity: 60
+    property int _shineSpeedIndex: 3
+    property string _shineColor: "#ffffff"
+    property int _shineWidth: 30
 
     // --- Load / save plumbing ---
     property bool _loading: false
@@ -71,6 +85,13 @@ Item {
         _fpsLimit = s.fpsLimit
         _dimCap = s.dimCap
         _dimLevel = s.dimLevel
+        _shineEnabled = s.shineEnabled
+        _shineMode = s.shineMode
+        _shineChannel = s.shineChannel
+        _shineIntensity = s.shineIntensity
+        _shineSpeedIndex = s.shineSpeedIndex
+        _shineColor = s.shineColor
+        _shineWidth = s.shineWidth
         _loading = false
     }
 
@@ -88,7 +109,14 @@ Item {
             fpsCap: _fpsCap,
             fpsLimit: _fpsLimit,
             dimCap: _dimCap,
-            dimLevel: _dimLevel
+            dimLevel: _dimLevel,
+            shineEnabled: _shineEnabled,
+            shineMode: _shineMode,
+            shineChannel: _shineChannel,
+            shineIntensity: _shineIntensity,
+            shineSpeedIndex: _shineSpeedIndex,
+            shineColor: _shineColor,
+            shineWidth: _shineWidth
         })
     }
 
@@ -104,10 +132,18 @@ Item {
     on_FpsLimitChanged: _save()
     on_DimCapChanged: _save()
     on_DimLevelChanged: _save()
+    on_ShineEnabledChanged: _save()
+    on_ShineModeChanged: _save()
+    on_ShineChannelChanged: _save()
+    on_ShineIntensityChanged: _save()
+    on_ShineSpeedIndexChanged: _save()
+    on_ShineColorChanged: _save()
+    on_ShineWidthChanged: _save()
 
     // --- Page definitions for sidebar navigation ---
     readonly property var pages: [
         { moduleId: "appearance", text: qsTr("Appearance"), icon: "preferences-desktop-color", page: "DotWavesAppearancePage.qml" },
+        { moduleId: "shine", text: qsTr("Shine"), icon: "color-gradient", page: "DotWavesShinePage.qml" },
         { moduleId: "animation", text: qsTr("Animation"), icon: "media-playback-start", page: "DotWavesAnimationPage.qml" }
     ]
 }

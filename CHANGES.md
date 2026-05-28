@@ -8,6 +8,7 @@
 - Fixed unnecessary vertical spacing around the post-processing filter list and a typo in its header.
 - Effect switching arrow buttons grouped together to the right of the effect dropdown.
 - Added "Reset to Defaults" button to every effect's settings, matching filters.
+- Added "Apply" button to effect and filter settings windows to simplify testing the settings.
 
 ## v1.2.0 (2026-05-25)
 

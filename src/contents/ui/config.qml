@@ -176,14 +176,20 @@ ColumnLayout {
             QtControls2.Button {
                 icon.name: "globe"
                 onClicked: Qt.openUrlExternally("https://github.com/MarcinOrlowski/monolith-mhl")
+                QtControls2.ToolTip.text: i18n("Project homepage")
+                QtControls2.ToolTip.visible: hovered
             }
             QtControls2.Button {
                 icon.name: "tools-report-bug"
                 onClicked: Qt.openUrlExternally("https://github.com/MarcinOrlowski/monolith-mhl/issues")
+                QtControls2.ToolTip.text: i18n("Report a bug")
+                QtControls2.ToolTip.visible: hovered
             }
             QtControls2.Button {
                 text: i18n("More…")
                 onClicked: Qt.openUrlExternally("https://store.kde.org/u/marcinorlowski")
+                QtControls2.ToolTip.text: i18n("More wallpapers on the KDE Store")
+                QtControls2.ToolTip.visible: hovered
             }
         }
     } // RowLayout
@@ -224,12 +230,16 @@ ColumnLayout {
             icon.name: "go-previous"
             enabled: effectCombo.currentIndex > 0
             onClicked: effectCombo.currentIndex = effectCombo.currentIndex - 1
+            QtControls2.ToolTip.text: i18n("Previous effect")
+            QtControls2.ToolTip.visible: hovered
         }
 
         QtControls2.Button {
             icon.name: "go-next"
             enabled: effectCombo.currentIndex < effectCombo.count - 1
             onClicked: effectCombo.currentIndex = effectCombo.currentIndex + 1
+            QtControls2.ToolTip.text: i18n("Next effect")
+            QtControls2.ToolTip.visible: hovered
         }
 
         QtControls2.Button {
@@ -553,6 +563,8 @@ ColumnLayout {
                         implicitHeight: Kirigami.Units.gridUnit * 2
                         opacity: root.isFilterEnabled(filterId) ? 1.0 : 0.4
                         onClicked: root.toggleFilter(filterId)
+                        QtControls2.ToolTip.text: root.isFilterEnabled(filterId) ? i18n("Disable filter") : i18n("Enable filter")
+                        QtControls2.ToolTip.visible: hovered
                     }
                     QtControls2.Label {
                         text: root.filterName(filterId)
@@ -578,6 +590,8 @@ ColumnLayout {
                             filterOrderModel.move(index, index - 1, 1)
                             filterOrderContainer.syncOrderToConfig()
                         }
+                        QtControls2.ToolTip.text: i18n("Move up")
+                        QtControls2.ToolTip.visible: hovered
                     }
                     QtControls2.Button {
                         icon.name: "go-down"
@@ -589,6 +603,8 @@ ColumnLayout {
                             filterOrderModel.move(index, index + 1, 1)
                             filterOrderContainer.syncOrderToConfig()
                         }
+                        QtControls2.ToolTip.text: i18n("Move down")
+                        QtControls2.ToolTip.visible: hovered
                     }
                 }
             }

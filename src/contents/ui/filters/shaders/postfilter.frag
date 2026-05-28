@@ -156,7 +156,11 @@ void applyColorFilter(int id, inout vec3 col, vec2 uv) {
         vec2 distFromEdge = min(local, maskSide - local);
         float d = min(distFromEdge.x, distFromEdge.y);
         float aa = max(0.5 * fwidth(d), 1e-4);
-        float insideAmt = smoothstep(maskPadding - aa, maskPadding + aa, d);
+        // Guard against degenerate inner square (2 * padding >= side): clamp effective
+        // padding so a positive-area inner region always exists, preventing Invert mode
+        // from filling the whole screen with the mask color.
+        float effPadding = min(maskPadding, maskSide * 0.5 - 1e-3);
+        float insideAmt = smoothstep(effPadding - aa, effPadding + aa, d);
         float cutAmt = (maskInvert > 0.5) ? (1.0 - insideAmt) : insideAmt;
         vec3 maskCol = vec3(maskColorR, maskColorG, maskColorB);
         float alpha = mix(gapOpacity, maskOpacity, cutAmt);

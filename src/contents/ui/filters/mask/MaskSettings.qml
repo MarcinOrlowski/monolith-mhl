@@ -32,7 +32,7 @@ Kirigami.FormLayout {
         Kirigami.FormData.label: i18n("Padding:")
         QtControls2.SpinBox {
             from: 0
-            to: Math.max(0, filterConfig._side - 1)
+            to: Math.max(0, Math.floor((filterConfig._side - 1) / 2))
             stepSize: 1
             value: filterConfig._padding
             onValueModified: filterConfig._padding = value

@@ -76,12 +76,14 @@ Item {
     }
     on_ShowChanged: _save()
     on_SideChanged: {
-        // Padding must always be strictly less than side
-        if (_padding > _side - 1) _padding = Math.max(0, _side - 1)
+        // 2 * padding must stay strictly less than side, so the inner square has positive area
+        var maxPad = Math.max(0, Math.floor((_side - 1) / 2))
+        if (_padding > maxPad) _padding = maxPad
         _save()
     }
     on_PaddingChanged: {
-        if (_padding > _side - 1) { _padding = Math.max(0, _side - 1); return }
+        var maxPad = Math.max(0, Math.floor((_side - 1) / 2))
+        if (_padding > maxPad) { _padding = maxPad; return }
         _save()
     }
     on_InvertChanged: _save()

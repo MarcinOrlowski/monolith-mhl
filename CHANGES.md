@@ -1,5 +1,9 @@
 # Changelog
 
+## v1.3.0 (TBD)
+
+- Fixed Rainbow Waves effect resetting layer visibility on every theme transition.
+
 ## v1.2.0 (2026-05-25)
 
 - New "Dot Waves" effect: animated dot grid driven by a drifting sine/cosine

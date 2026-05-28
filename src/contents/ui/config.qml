@@ -188,7 +188,7 @@ ColumnLayout {
             QtControls2.Button {
                 text: i18n("More…")
                 onClicked: Qt.openUrlExternally("https://store.kde.org/u/marcinorlowski")
-                QtControls2.ToolTip.text: i18n("My projects in KDE store…")
+                QtControls2.ToolTip.text: i18n("My projects in KDE Store…")
                 QtControls2.ToolTip.visible: hovered
             }
         }

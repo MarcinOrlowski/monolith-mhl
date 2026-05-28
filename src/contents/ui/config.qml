@@ -168,12 +168,6 @@ ColumnLayout {
             text: i18n("Effect:")
         }
 
-        QtControls2.Button {
-            icon.name: "go-previous"
-            enabled: effectCombo.currentIndex > 0
-            onClicked: effectCombo.currentIndex = effectCombo.currentIndex - 1
-        }
-
         QtControls2.ComboBox {
             id: effectCombo
             Layout.fillWidth: true
@@ -190,6 +184,12 @@ ColumnLayout {
                     cfg_ActiveEffect = root.effectRegistry[currentIndex].effectId
                 }
             }
+        }
+
+        QtControls2.Button {
+            icon.name: "go-previous"
+            enabled: effectCombo.currentIndex > 0
+            onClicked: effectCombo.currentIndex = effectCombo.currentIndex - 1
         }
 
         QtControls2.Button {

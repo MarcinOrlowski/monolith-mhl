@@ -102,6 +102,12 @@ ColumnLayout {
         return 0
     }
 
+    function resetActiveEffect() {
+        if (effectConfigLoader.item && typeof effectConfigLoader.item.reset === "function") {
+            effectConfigLoader.item.reset()
+        }
+    }
+
     Kirigami.Separator {
         Layout.fillWidth: true
     }
@@ -401,7 +407,15 @@ ColumnLayout {
 
         footer: QtControls2.ToolBar {
             contentItem: RowLayout {
+                // Left edge is covered by the always-open globalDrawer sidebar,
+                // so footer buttons must live on the right side.
                 Item { Layout.fillWidth: true }
+                QtControls2.Button {
+                    text: i18n("Reset to Defaults")
+                    icon.name: "edit-reset"
+                    onClicked: root.resetActiveEffect()
+                }
+                Item { Layout.preferredWidth: Kirigami.Units.largeSpacing * 2 }
                 QtControls2.Button {
                     text: i18n("Ok")
                     highlighted: true

@@ -120,6 +120,11 @@ Item {
     on_DimCapChanged: _save()
     on_DimLevelChanged: _save()
 
+    // Restore all settings to their schema defaults
+    function reset() {
+        cfg_EffectLavaLampSettings = EffectSettings.save(_defaults)
+    }
+
     // --- External config sync (e.g. "Set Current Theme" context menu) ---
     Connections {
         target: effectConfig.hubConfiguration

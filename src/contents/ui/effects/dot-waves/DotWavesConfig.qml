@@ -140,6 +140,11 @@ Item {
     on_ShineColorChanged: _save()
     on_ShineWidthChanged: _save()
 
+    // Restore all settings to their schema defaults
+    function reset() {
+        cfg_EffectDotWavesSettings = EffectSettings.save(_defaults)
+    }
+
     // --- Page definitions for sidebar navigation ---
     readonly property var pages: [
         { moduleId: "appearance", text: qsTr("Appearance"), icon: "preferences-desktop-color", page: "DotWavesAppearancePage.qml" },

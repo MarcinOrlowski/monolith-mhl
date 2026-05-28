@@ -418,24 +418,25 @@ ColumnLayout {
     } // ApplicationWindow
 
     // --- Filter processing order ---
-    Kirigami.FormLayout {
-        twinFormLayouts: parentLayout
+    Kirigami.Heading {
         Layout.fillWidth: true
-
-        Kirigami.Separator {
-            Kirigami.FormData.isSection: true
-            Kirigami.FormData.label: i18n("Post Processin Filters")
-         }
-
-        QtControls2.Label {
-            Layout.fillWidth: true
-            Kirigami.FormData.isSection: true
-            horizontalAlignment: Text.AlignHCenter
-            text: i18n("Enabled filters are executed in top-to-bottom order.")
-            wrapMode: Text.WordWrap
-            font.pixelSize: Kirigami.Theme.smallFont.pixelSize
-            opacity: 0.7
-        }
+        Layout.topMargin: Kirigami.Units.smallSpacing
+        horizontalAlignment: Text.AlignHCenter
+        level: 3
+        text: i18n("Post Processing Filters")
+    }
+    Kirigami.Separator {
+        Layout.fillWidth: true
+        Layout.leftMargin: 15
+        Layout.rightMargin: 15
+    }
+    QtControls2.Label {
+        Layout.fillWidth: true
+        horizontalAlignment: Text.AlignHCenter
+        text: i18n("Enabled filters are executed in top-to-bottom order.")
+        wrapMode: Text.WordWrap
+        font.pixelSize: Kirigami.Theme.smallFont.pixelSize
+        opacity: 0.7
     }
 
     ColumnLayout {
@@ -632,4 +633,7 @@ ColumnLayout {
         function onCfg_EffectDotWavesSettingsChanged() { root.cfg_EffectDotWavesSettings = effectConfigLoader.item.cfg_EffectDotWavesSettings }
     }
 
+    // Absorbs leftover vertical space so the filter list stays at its natural height
+    // instead of having the gap distributed mid-column.
+    Item { Layout.fillHeight: true }
 }

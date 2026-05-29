@@ -9,7 +9,9 @@
 - Effect switching arrow buttons grouped together to the right of the effect dropdown.
 - Added "Reset to Defaults" button to every effect's settings, matching filters.
 - Added "Apply" button to effect and filter settings windows to simplify testing the settings.
-- Added missing tooltips to settings buttons (header links, effect switching arrows, and filter visibility/reorder buttons).
+- Added missing tooltips to settings buttons.
+- Settings window now shows the correct version, and the copyright year updates automatically.
+- Corrected version number shown in settings not being updated.
 
 ## v1.2.0 (2026-05-25)
 

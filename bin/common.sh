@@ -9,6 +9,7 @@
 #
 # ==============================================================================
 
+# shellcheck shell=bash  # sourced, not executed (no shebang by design)
 set -euo pipefail
 
 # Reads given jq path from Plasma 6 metadata.json.

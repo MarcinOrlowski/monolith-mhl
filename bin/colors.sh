@@ -9,6 +9,7 @@
 #
 # ==============================================================================
 
+# shellcheck shell=bash  # sourced, not executed (no shebang by design)
 # Sourced by other scripts; the color palette below is consumed by callers.
 # shellcheck disable=SC2034  # vars are used by sourcing scripts, not within this file
 # shellcheck disable=SC2155  # readonly+assign is intentional for this palette

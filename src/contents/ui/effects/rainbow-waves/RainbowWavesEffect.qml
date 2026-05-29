@@ -179,18 +179,6 @@ Item {
         "showGlow", "showHalo", "showShine", "showSpotlights"
     ]
 
-    function applyLayerVisibility(theme) {
-        var patch = {};
-        for (var i = 0; i < layerKeys.length; i++) {
-            var key = layerKeys[i];
-            var rawVal = theme[key];
-            var value = (rawVal === undefined) ? true : Boolean(rawVal);
-            patch[key] = value;
-            effect[key] = value ? 1.0 : 0.0;
-        }
-        _writeSettings(patch);
-    }
-
     // React to any config change (JSON blob or hub-level)
     Connections {
         target: effectRoot.configuration
@@ -246,7 +234,6 @@ Item {
         var theme = themeScanner.loadThemeById(themeId);
         if (theme) {
             ThemeLoader.applyTheme(theme, effect);
-            applyLayerVisibility(theme);
             displayedThemeId = theme.themeId;
             theme.destroy();
         }
@@ -261,7 +248,6 @@ Item {
         var theme = themeScanner.loadThemeById(currentThemeId);
         if (theme) {
             ThemeLoader.applyTheme(theme, effect);
-            applyLayerVisibility(theme);
             displayedThemeId = theme.themeId;
             theme.destroy();
         }
@@ -276,7 +262,6 @@ Item {
         var theme = themeScanner.loadThemeFile(entry.fileUrl);
         if (theme) {
             ThemeLoader.applyTheme(theme, effect);
-            applyLayerVisibility(theme);
             displayedThemeId = entry.themeId;
             theme.destroy();
         }

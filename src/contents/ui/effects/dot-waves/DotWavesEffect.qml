@@ -33,7 +33,14 @@ Item {
         fpsCap: true,
         fpsLimit: 30,
         dimCap: false,
-        dimLevel: 100
+        dimLevel: 100,
+        shineEnabled: false,
+        shineMode: 0,
+        shineChannel: 2,
+        shineIntensity: 60,
+        shineSpeedIndex: 3,
+        shineColor: "#ffffff",
+        shineWidth: 30
     })
 
     // --- Parsed settings (reactive properties for bindings) ---
@@ -50,8 +57,17 @@ Item {
     property string dotColor: "#c8c8c8"
     property string bgColor: "#1c1c1c"
 
+    property bool shineEnabled: false
+    property int shineMode: 0          // 0 = wave field, 1 = spotlight
+    property int shineChannel: 2       // 0 = color, 1 = alpha, 2 = both
+    property real shineIntensity: 0.6  // 0..1
+    property real shineSpeedMult: 1.0
+    property string shineColor: "#ffffff"
+    property real shineWidth: 0.3      // 0..1, fraction of shine field that passes
+
     readonly property color _dotCol: Qt.color(dotColor)
     readonly property color _bgCol: Qt.color(bgColor)
+    readonly property color _shineCol: Qt.color(shineColor)
 
     function togglePause() { paused = !paused }
 
@@ -74,6 +90,14 @@ Item {
         maxAlpha = Math.min(1.0, Math.max(0.0, s.maxAlpha / 100.0));
         dotColor = s.dotColor;
         bgColor = s.bgColor;
+
+        shineEnabled = s.shineEnabled;
+        shineMode = s.shineMode;
+        shineChannel = s.shineChannel;
+        shineIntensity = Math.min(1.0, Math.max(0.0, s.shineIntensity / 100.0));
+        shineSpeedMult = [0.25, 0.5, 0.75, 1.0, 1.25, 1.5, 1.75][s.shineSpeedIndex] ?? 1.0;
+        shineColor = s.shineColor;
+        shineWidth = Math.min(1.0, Math.max(0.05, s.shineWidth / 100.0));
     }
 
     // --- Outputs for hub ---
@@ -119,18 +143,34 @@ Item {
         property real bgColorR: effectRoot._bgCol.r
         property real bgColorG: effectRoot._bgCol.g
         property real bgColorB: effectRoot._bgCol.b
+        property real shineEnabled: effectRoot.shineEnabled ? 1.0 : 0.0
+        property real shineMode: effectRoot.shineMode
+        property real shineChannel: effectRoot.shineChannel
+        property real shineIntensity: effectRoot.shineIntensity
+        property real iShineTime: 0
+        property real shineColorR: effectRoot._shineCol.r
+        property real shineColorG: effectRoot._shineCol.g
+        property real shineColorB: effectRoot._shineCol.b
+        property real shineWidth: effectRoot.shineWidth
 
-        // iTime is accumulated in seconds; shader wave constants are tuned for it.
+        // iTime / iShineTime are accumulated in seconds; shader wave constants are tuned for it.
         FrameAnimation {
             running: effect.visible && !effectRoot.fpsCap && !effectRoot.paused
-            onTriggered: effect.iTime += frameTime * effectRoot.speedMult
+            onTriggered: {
+                effect.iTime += frameTime * effectRoot.speedMult
+                effect.iShineTime += frameTime * effectRoot.shineSpeedMult
+            }
         }
 
         Timer {
             running: effect.visible && effectRoot.fpsCap && !effectRoot.paused
             repeat: true
             interval: Math.ceil(1000 / Math.min(240, Math.max(1, effectRoot.fpsLimit)))
-            onTriggered: effect.iTime += (interval / 1000.0) * effectRoot.speedMult
+            onTriggered: {
+                var dt = interval / 1000.0
+                effect.iTime += dt * effectRoot.speedMult
+                effect.iShineTime += dt * effectRoot.shineSpeedMult
+            }
         }
 
         vertexShader: "shaders/dot-waves.vert.qsb"

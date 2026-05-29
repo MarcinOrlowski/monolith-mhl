@@ -18,6 +18,7 @@ import org.kde.kirigami as Kirigami
 import org.kde.kirigamiaddons.delegates as Delegates
 import "EffectSettings.js" as EffectSettings
 import "filters/FilterRegistry.js" as FilterRegistry
+import "../js/meta.js" as Meta
 
 ColumnLayout {
     id: root
@@ -124,11 +125,16 @@ ColumnLayout {
         ColumnLayout {
             Layout.fillWidth: true
             QtControls2.Label {
-                text: i18n("Monolith MHL v1.1.0")
+                text: i18n("%1 v%2", Meta.title, Meta.version)
                 font.bold: true
             }
             QtControls2.Label {
-                text: i18n("©2026 Marcin Orlowski")
+                text: {
+                    const start = Meta.firstReleaseYear
+                    const now = new Date().getFullYear()
+                    const years = now > start ? (start + "-" + now) : start
+                    return i18n("©%1 %2", years, Meta.authorName)
+                }
                 font.pixelSize: Kirigami.Theme.smallFont.pixelSize
                 opacity: 0.7
             }

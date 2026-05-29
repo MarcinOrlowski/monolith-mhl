@@ -1,12 +1,17 @@
 #!/bin/bash
 
-#==============================================================================
+# ==============================================================================
 #
-# Monolith MHL live wallpapers for Plasma 6
+# Monolith MHL: Beautiful animated wallpapers for Plasma 6
 #
-# Author Marcin Orlowski <mail@MarcinOrlowski.com>
+# @author    Marcin Orlowski <mail (#) marcinOrlowski (.) com>
+# @copyright 2025-2026 Marcin Orlowski
+# @license   http://www.opensource.org/licenses/mit-license.php MIT
+# @link      https://github.com/MarcinOrlowski/plasmoid-tools
 #
-#==============================================================================
+# Creates <PLASMOID>/contents/js/meta.js file with plasmoid metadata.
+#
+# ==============================================================================
 #
 # DESCRIPTION:
 #   This script builds a .zip package for the Monolith MHL wallpaper.
@@ -18,7 +23,7 @@
 # OUTPUT:
 #   Creates release ZIP archive in the current directory
 #
-#==============================================================================
+# ==============================================================================
 
 set -uo pipefail
 
@@ -51,6 +56,11 @@ fi
 
 VERSION=$(jq -r ".KPlugin.Version" "${METADATA_FILE}")
 echo "Version read from metadata: ${VERSION}"
+
+# Regenerate runtime metadata (src/contents/js/meta.js) from metadata.json so
+# the package always ships up-to-date version/author info.
+echo "Generating runtime metadata…"
+"${SCRIPT_DIR}/meta.sh"
 
 # Directories
 THEME_INSTALL_DIR="${BUILD_DIR}/com.marcinorlowski.monolithmhl"

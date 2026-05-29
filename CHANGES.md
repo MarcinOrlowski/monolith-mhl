@@ -1,5 +1,10 @@
 # Changelog
 
+## v1.3.0 (TBD)
+
+- Settings window now shows the correct version, and the copyright year updates automatically.
+- [DEV] Version and author details are now generated from the manifest at build/install time.
+
 ## v1.2.0 (2026-05-25)
 
 - New "Dot Waves" effect: animated dot grid driven by a drifting sine/cosine

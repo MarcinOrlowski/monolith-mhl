@@ -10,24 +10,37 @@ slowly rotates while the central whirl counter-rotates.
 - Seamless infinite zoom: rings of leafy silhouettes grow and sweep past the
   frame while new ones **fade in** at the centre (no popping), so the flight
   never ends.
+
 - Independent **tunnel rotation** and counter-rotating central **vortex**, each
   with its own signed speed (negative reverses the spin).
+
 - Colour **themes** with the same auto-cycling and cross-fade machinery as the
   other effects: pick an initial theme (or Random), auto-cycle on a timer in
-  sequential or random order, and cross-fade smoothly between them. 9 bundled
-  themes grouped by tone — light, dark and mixed — including a full-rainbow
-  **Spectrum**, natural **Jungle**, **Neon**, **Ember**, **Abyss**, **Aurora**,
-  **Gruvbox Dark**, **Gruvbox Light** and **Charcoal**. Restrict cycling to a
-  single tone with the **Cycle set** filter. Drop-in custom themes are supported
-  too.
+  sequential or random order, and cross-fade smoothly between them. 19 bundled
+  themes grouped by tone — light, dark, mixed and psychedelic:
+
+  - **Mixed/dark:** **Spectrum**, natural **Jungle**, **Neon**, **Ember**,
+    **Abyss**, **Aurora**, **Gruvbox Dark**, **Gruvbox Light**, **Charcoal**.
+  - **Psychedelic:** **Acid Trip**, **Vaporwave**, **Blotter**, **Plasma**,
+    **Kaleidoscope**, **Ultraviolet**, **Toxic**, **Fever Dream**,
+    **Oil Slick**, **Candy**.
+
+  Restrict cycling to a single tone with the **Cycle set** filter. Drop-in
+  custom themes are supported too.
+
 - Cycle themes from the desktop context menu (Next / Previous / Set Current
   Theme).
+
 - Toggle each scene layer on or off: canopy, glow spots and the central vortex
   glow. Layers that depend on another (glow spots sit on the canopy) are
   disabled in the settings when their parent is off.
+
 - Glowing "mushroom / flower" spots scattered across the canopy.
+
 - Adjustable canopy density, swirl, depth haze and centre-glow brightness.
+
 - Zoom-speed control and FPS capping.
+
 - Dimming control.
 
 Everything is generated procedurally in the shader — there are no image assets.
@@ -48,8 +61,8 @@ Everything is generated procedurally in the shader — there are no image assets
 - **Initial theme** — the theme loaded at start, or *Random*.
 - **Auto-cycle themes** — cross-fade to another theme every N secs/mins.
 - **Cycle in random order** — shuffle instead of going in list order.
-- **Cycle set** — restrict cycling/random selection to *All*, *Light*, *Dark*
-  or *Mixed* themes.
+- **Cycle set** — restrict cycling/random selection to *All*, *Light*, *Dark*,
+  *Mixed* or *Psychedelic* themes.
 - **Transition duration** — how long each cross-fade takes.
 - **Brightness** — globally darken the effect.
 
@@ -74,8 +87,8 @@ Drop a `.qml` theme file into
 `~/.config/monolith/trippy-forest/themes.d/` and restart plasmashell. See
 `themes/example.qml` in the effect directory for the format — a theme provides
 `foliage`, `glow` and `mist` colours, an optional `mode` tone
-(`light`/`dark`/`mixed`), plus a 6-colour `palette` that is wrapped around the
-tunnel to drive the colour flow.
+(`light`/`dark`/`mixed`/`psychedelic`), plus a 6-colour `palette` that is
+wrapped around the tunnel to drive the colour flow.
 
 ## Gallery
 

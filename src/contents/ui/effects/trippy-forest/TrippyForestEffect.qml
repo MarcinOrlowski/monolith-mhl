@@ -195,7 +195,7 @@ Item {
     property int transitionMs: 4000
     property bool cycleInRandomOrder: false
     onCycleInRandomOrderChanged: resetCycleState()
-    property string cycleMode: "all"     // all | light | dark | mixed
+    property string cycleMode: "all"     // all | light | dark | mixed | psychedelic
     onCycleModeChanged: resetCycleState()
     property int _cycleInterval: 20
     property int _cycleIntervalUnit: 1

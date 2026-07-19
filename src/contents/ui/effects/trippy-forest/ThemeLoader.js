@@ -30,8 +30,8 @@ function validateTheme(obj) {
         return "themeId contains invalid characters (only a-z, 0-9, - allowed)";
     if (!obj.name || typeof obj.name !== "string")
         return "missing or invalid name";
-    if (obj.mode !== undefined && ["light", "dark", "mixed"].indexOf(obj.mode) === -1)
-        return "mode must be one of: light, dark, mixed";
+    if (obj.mode !== undefined && ["light", "dark", "mixed", "psychedelic"].indexOf(obj.mode) === -1)
+        return "mode must be one of: light, dark, mixed, psychedelic";
 
     var singles = ["foliage", "glow", "mist"];
     for (var s = 0; s < singles.length; s++) {

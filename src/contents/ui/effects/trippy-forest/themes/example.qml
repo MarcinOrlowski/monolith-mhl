@@ -20,7 +20,9 @@
  *
  * Reserved built-in theme IDs (do NOT reuse these):
  *   tfm-spectrum, tfm-jungle, tfm-neon, tfm-ember, tfm-abyss, tfm-aurora,
- *   tfm-gruvbox-dark, tfm-gruvbox-light, tfm-charcoal
+ *   tfm-gruvbox-dark, tfm-gruvbox-light, tfm-charcoal, tfm-acid,
+ *   tfm-vaporwave, tfm-blotter, tfm-plasma, tfm-kaleidoscope,
+ *   tfm-ultraviolet, tfm-toxic, tfm-fever, tfm-oil-slick, tfm-candy
  *
  **********************************************************************/
 
@@ -40,8 +42,8 @@ QtObject {
     //   does not clutter the theme list.
     property bool enabled: false
 
-    // mode: tone group for the light/dark/mixed cycle filter. Optional —
-    //   defaults to "mixed" when omitted. One of: "light", "dark", "mixed".
+    // mode: tone group for the cycle filter. Optional — defaults to "mixed"
+    //   when omitted. One of: "light", "dark", "mixed", "psychedelic".
     property string mode: "mixed"
 
     // ── Foliage ───────────────────────────────────────────────────────

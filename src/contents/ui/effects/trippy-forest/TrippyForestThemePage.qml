@@ -142,8 +142,8 @@ Kirigami.ScrollablePage {
         QtControls2.ComboBox {
             Kirigami.FormData.label: i18n("Cycle set:")
             // Restrict auto-cycle / random selection to themes of this tone.
-            readonly property var _modes: ["all", "light", "dark", "mixed"]
-            model: [i18n("All"), i18n("Light"), i18n("Dark"), i18n("Mixed")]
+            readonly property var _modes: ["all", "light", "dark", "mixed", "psychedelic"]
+            model: [i18n("All"), i18n("Light"), i18n("Dark"), i18n("Mixed"), i18n("Psychedelic")]
             currentIndex: Math.max(0, _modes.indexOf(page.effectConfig._cycleMode))
             onActivated: function(index) { page.effectConfig._cycleMode = _modes[index] }
         }

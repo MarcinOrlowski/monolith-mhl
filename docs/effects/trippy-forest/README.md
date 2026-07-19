@@ -31,9 +31,10 @@ slowly rotates while the central whirl counter-rotates.
 - Cycle themes from the desktop context menu (Next / Previous / Set Current
   Theme).
 
-- Toggle each scene layer on or off: canopy, glow spots and the central vortex
-  glow. Layers that depend on another (glow spots sit on the canopy) are
-  disabled in the settings when their parent is off.
+- Toggle each scene layer on or off: canopy, glow spots, the central vortex
+  glow and a forward-flying **3D starfield**. Layers that depend on another
+  (glow spots sit on the canopy) are disabled in the settings when their parent
+  is off.
 
 - Glowing "mushroom / flower" spots scattered across the canopy.
 
@@ -51,7 +52,8 @@ Everything is generated procedurally in the shader — there are no image assets
 
 - **Canopy density** — how full the leafy canopies are (fewer gaps at higher
   values).
-- **Swirl** — how tightly the tunnel spirals as it recedes.
+- **Swirl** — how tightly the tunnel and central vortex spiral (loose, nearly
+  radial arms at low values; a tight whirlpool at high values).
 - **Glow spots** — brightness/quantity of the emissive mushroom-like spots.
 - **Centre glow** — brightness of the misty light at the end of the tunnel.
 - **Depth haze** — how strongly distant rings dissolve into the central glow.
@@ -68,9 +70,9 @@ Everything is generated procedurally in the shader — there are no image assets
 
 ### Layers
 
-On/off toggles for **Canopy**, **Glow spots** and **Centre glow (vortex)**.
-Glow spots require the Canopy layer, so their toggle is disabled when the canopy
-is off.
+On/off toggles for **Canopy**, **Glow spots**, **Centre glow (vortex)** and
+**Stars** (a 3D starfield streaming forward behind the canopy). Glow spots
+require the Canopy layer, so their toggle is disabled when the canopy is off.
 
 ### Animation
 

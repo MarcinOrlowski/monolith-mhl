@@ -34,6 +34,7 @@ Item {
         showFoliage: true,
         showGlow: true,
         showVortex: true,
+        showStars: true,
         speedIndex: 3,
         rotSpeed: 25,
         whirlSpeed: -35,
@@ -202,7 +203,7 @@ Item {
 
     // --- Layer visibility ---
     property var layerKeys: [
-        "showFoliage", "showGlow", "showVortex"
+        "showFoliage", "showGlow", "showVortex", "showStars"
     ]
 
     // React to any config change (JSON blob or hub-level)
@@ -442,11 +443,19 @@ Item {
         property real showFoliage: 1.0
         property real showGlow: 1.0
         property real showVortex: 1.0
+        property real showStars: 1.0
+        // Ease look-parameter changes so pressing Apply glides to the new value
+        // instead of snapping (which reads as the animation "restarting").
         property real spiral: effectRoot.spiral
+        Behavior on spiral { NumberAnimation { duration: 700; easing.type: Easing.InOutQuad } }
         property real density: effectRoot.density
+        Behavior on density { NumberAnimation { duration: 700; easing.type: Easing.InOutQuad } }
         property real glowAmount: effectRoot.glowAmount
+        Behavior on glowAmount { NumberAnimation { duration: 700; easing.type: Easing.InOutQuad } }
         property real mistAmount: effectRoot.mistAmount
+        Behavior on mistAmount { NumberAnimation { duration: 700; easing.type: Easing.InOutQuad } }
         property real fog: effectRoot.fog
+        Behavior on fog { NumberAnimation { duration: 700; easing.type: Easing.InOutQuad } }
         property real dimLevel: effectRoot.dimLevel
         Behavior on dimLevel { NumberAnimation { duration: effectRoot.transitionMs } }
 

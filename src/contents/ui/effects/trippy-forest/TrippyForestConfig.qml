@@ -33,6 +33,7 @@ Item {
         showFoliage: true,
         showGlow: true,
         showVortex: true,
+        showStars: true,
         speedIndex: 3,
         rotSpeed: 25,
         whirlSpeed: -35,
@@ -59,6 +60,7 @@ Item {
     property bool _showFoliage: true
     property bool _showGlow: true
     property bool _showVortex: true
+    property bool _showStars: true
     property int _speedIndex: 3
     property int _rotSpeed: 25
     property int _whirlSpeed: -35
@@ -92,6 +94,7 @@ Item {
         _showFoliage = s.showFoliage
         _showGlow = s.showGlow
         _showVortex = s.showVortex
+        _showStars = s.showStars
         _speedIndex = s.speedIndex
         _rotSpeed = s.rotSpeed
         _whirlSpeed = s.whirlSpeed
@@ -121,6 +124,7 @@ Item {
             showFoliage: _showFoliage,
             showGlow: _showGlow,
             showVortex: _showVortex,
+            showStars: _showStars,
             speedIndex: _speedIndex,
             rotSpeed: _rotSpeed,
             whirlSpeed: _whirlSpeed,
@@ -147,6 +151,7 @@ Item {
     on_ShowFoliageChanged: _save()
     on_ShowGlowChanged: _save()
     on_ShowVortexChanged: _save()
+    on_ShowStarsChanged: _save()
     on_SpeedIndexChanged: _save()
     on_RotSpeedChanged: _save()
     on_WhirlSpeedChanged: _save()

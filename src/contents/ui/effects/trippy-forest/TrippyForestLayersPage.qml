@@ -41,6 +41,11 @@ Kirigami.ScrollablePage {
                 checked: page.effectConfig._showVortex
                 onToggled: page.effectConfig._showVortex = checked
             }
+            QtControls2.CheckBox {
+                text: i18n("Stars")
+                checked: page.effectConfig._showStars
+                onToggled: page.effectConfig._showStars = checked
+            }
         }
     }
 }

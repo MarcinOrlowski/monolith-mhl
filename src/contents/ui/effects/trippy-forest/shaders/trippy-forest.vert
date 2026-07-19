@@ -25,6 +25,7 @@ layout(std140, binding = 0) uniform buf {
     float showFoliage;
     float showGlow;
     float showVortex;
+    float showStars;
     float spiral;
     float density;
     float glowAmount;

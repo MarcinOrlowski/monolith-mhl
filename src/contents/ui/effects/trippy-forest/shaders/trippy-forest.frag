@@ -25,6 +25,7 @@ layout(std140, binding = 0) uniform buf {
     float showFoliage;
     float showGlow;
     float showVortex;
+    float showStars;
     float spiral;
     float density;
     float glowAmount;
@@ -55,6 +56,7 @@ const int LAYERS = 9;         // depth slices composited per pixel
 const float ZOOM = 0.22;      // rings advanced per time unit
 const float RINGSCALE = 0.55; // projected radius = RINGSCALE / distance
 const float ARMS = 5.0;       // vortex spiral-arm count
+const int STARS = 40;         // 3D starfield point count
 
 float hash21(vec2 p) {
     p = fract(p * vec2(123.34, 345.45));
@@ -84,6 +86,11 @@ float fbm(vec2 p) {
     return s;
 }
 
+// Cheap 2D hash for the starfield.
+vec2 hash2(float n) {
+    return fract(sin(vec2(n, n + 1.7)) * vec2(43758.5453, 22578.145));
+}
+
 // Smooth 6-stop wrapping gradient over the theme palette.
 vec3 palette(float t) {
     t = fract(t) * 6.0;
@@ -103,13 +110,41 @@ vec3 scene(vec2 uv) {
     float ringBase = floor(scroll);
 
     // --- central mist / counter-swirling vortex glow (deepest layer) ---
+    // `spiral` sets how tightly the vortex arms wind (log-radius frequency), so
+    // it is a visible control rather than a mere phase offset.
     float cg = smoothstep(1.0, 0.0, r);
-    float swirl = 0.5 + 0.5 * sin(ARMS * a + log(r) * 7.0 + whirlTime * 1.5 - spiral * 3.0);
+    float swirl = 0.5 + 0.5 * sin(ARMS * a + log(r) * (2.0 + spiral * 14.0) + whirlTime * 1.5);
     swirl = pow(swirl, 2.0);
     vec3 vortexTint = palette(fract(a / 6.2831 + whirlTime * 0.05 + 0.5));
     vec3 center = mistCol.rgb * mistAmount * (0.30 + 0.70 * cg);
     center = mix(center, center * 0.4 + vortexTint * mistAmount, (0.35 + 0.45 * swirl) * cg);
     vec3 col = center * showVortex;
+
+    // --- 3D starfield flying forward, above the vortex / behind the canopy ---
+    if (showStars > 0.5) {
+        float st = iTime * 0.16;
+        float starSum = 0.0;
+        for (int s = 0; s < STARS; s++) {
+            vec2 h = hash2(float(s) * 1.7 + 3.1);
+            float ang = h.x * 6.2831 + rotTime * 0.15;      // drift gently with the tunnel
+            // depth 1 -> 0 as time advances: star flies from centre out to the edge
+            float z = fract(h.y - st);
+            vec2 rdir = vec2(cos(ang), sin(ang));
+            vec2 sp = rdir * (0.95 * pow(1.0 - z, 1.6));     // centre when far, edge when near
+            vec2 dvec = uv - sp;
+            float along = dot(dvec, rdir);
+            float perp = dot(dvec, vec2(-rdir.y, rdir.x));
+            float streak = 1.0 - z;                          // longer radial tail as it nears
+            float d = length(vec2(along / (1.0 + streak * 7.0), perp));
+            float size = mix(0.004, 0.02, 1.0 - z);
+            float spark = smoothstep(size, 0.0, d);
+            // brighten as it approaches, but fade out before it recycles (no pop)
+            float bright = (1.0 - z) * smoothstep(0.0, 0.12, z);
+            starSum += spark * bright;
+        }
+        vec3 starCol = mix(vec3(1.0), palette(fract(st * 0.1)), 0.45);
+        col += starCol * clamp(starSum, 0.0, 1.0);
+    }
 
     // --- foliage rings, far to near (painter's order) ---
     for (int i = LAYERS - 1; i >= 0; i--) {
@@ -119,8 +154,8 @@ vec3 scene(vec2 uv) {
         float proj = RINGSCALE / zc;            // on-screen radius of this ring
 
         // angular twist grows with distance -> nested mouths form a spiral; the
-        // whole tunnel also rotates with rotTime.
-        float aa = a + spiral * zc * 0.55 + rotTime;
+        // whole tunnel also rotates with rotTime. Higher `spiral` = tighter tunnel.
+        float aa = a + spiral * zc * 1.1 + rotTime;
         vec2 pc = vec2(cos(aa), sin(aa));       // periodic (no seam) around the ring
         float rNorm = r / proj;                 // radial position within this ring
 

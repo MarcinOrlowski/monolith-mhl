@@ -19,6 +19,17 @@ shape position and shade is randomized, so the sample never repeats.
 - Dimming control.
 - Works with all post-processing filters.
 
+## Gallery
+
+Microscope Zoom effect on default settings, with no additional filters applied.
+
+![Preview](img/preview.webp)
+
+Microscope Zoom effect on default settings, with filters:
+HUE Shift, Blur and Scanlines enabled
+
+![Preview](img/preview-filters.webp)
+
 ## Settings
 
 ### Appearance

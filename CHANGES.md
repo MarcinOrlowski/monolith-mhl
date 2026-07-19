@@ -2,7 +2,7 @@
 
 ## v1.3.0 (TBD)
 
-- New "Microscope Zoom" effect: an endless, constant-speed forward zoom into a microscopic world, with adjustable floating dust.
+- New "Microscope Zoom" effect: an endless, constant-speed zoom into a microscopic world.
 - Extended Dot Waves effect with additional "Shine" highlight layer.
 - Fixed Rainbow Waves effect resetting layer visibility on every theme transition.
 - Fixed Mask filter in Invert mode filling the whole screen when padding ≥ half the tile size.

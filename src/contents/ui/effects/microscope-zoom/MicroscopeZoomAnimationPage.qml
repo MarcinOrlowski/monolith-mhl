@@ -22,7 +22,7 @@ Kirigami.ScrollablePage {
 
     Kirigami.FormLayout {
         QtControls2.ComboBox {
-            Kirigami.FormData.label: i18n("Walking speed:")
+            Kirigami.FormData.label: i18n("Zoom speed:")
             model: ["0.25", "0.5", "0.75", "Normal", "1.25", "1.50", "1.75"]
             currentIndex: page.effectConfig._speedIndex
             onActivated: page.effectConfig._speedIndex = currentIndex

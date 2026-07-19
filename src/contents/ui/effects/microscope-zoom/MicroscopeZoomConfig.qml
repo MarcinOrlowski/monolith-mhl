@@ -16,7 +16,7 @@ Item {
     id: effectConfig
 
     // --- JSON blob bound from hub config.qml ---
-    property string cfg_EffectJungleWalkSettings
+    property string cfg_EffectMicroscopeZoomSettings
 
     property var hubConfiguration: null
 
@@ -30,6 +30,8 @@ Item {
         showRays: true,
         showParticles: true,
         showVignette: true,
+        dustAmount: 55,
+        dustSize: 22,
         speedIndex: 3,
         fpsCap: true,
         fpsLimit: 30,
@@ -46,6 +48,8 @@ Item {
     property bool _showRays: true
     property bool _showParticles: true
     property bool _showVignette: true
+    property int _dustAmount: 55
+    property int _dustSize: 22
     property int _speedIndex: 3
     property bool _fpsCap: true
     property int _fpsLimit: 30
@@ -55,12 +59,12 @@ Item {
     // --- Load / save plumbing ---
     property bool _loading: false
 
-    onCfg_EffectJungleWalkSettingsChanged: _load()
+    onCfg_EffectMicroscopeZoomSettingsChanged: _load()
     Component.onCompleted: _load()
 
     function _load() {
         _loading = true
-        var s = EffectSettings.load(cfg_EffectJungleWalkSettings, _defaults)
+        var s = EffectSettings.load(cfg_EffectMicroscopeZoomSettings, _defaults)
         _density = s.density
         _leafColor = s.leafColor
         _bgColor = s.bgColor
@@ -69,6 +73,8 @@ Item {
         _showRays = s.showRays
         _showParticles = s.showParticles
         _showVignette = s.showVignette
+        _dustAmount = s.dustAmount
+        _dustSize = s.dustSize
         _speedIndex = s.speedIndex
         _fpsCap = s.fpsCap
         _fpsLimit = s.fpsLimit
@@ -79,7 +85,7 @@ Item {
 
     function _save() {
         if (_loading) return
-        cfg_EffectJungleWalkSettings = EffectSettings.save({
+        cfg_EffectMicroscopeZoomSettings = EffectSettings.save({
             density: _density,
             leafColor: _leafColor,
             bgColor: _bgColor,
@@ -88,6 +94,8 @@ Item {
             showRays: _showRays,
             showParticles: _showParticles,
             showVignette: _showVignette,
+            dustAmount: _dustAmount,
+            dustSize: _dustSize,
             speedIndex: _speedIndex,
             fpsCap: _fpsCap,
             fpsLimit: _fpsLimit,
@@ -104,6 +112,8 @@ Item {
     on_ShowRaysChanged: _save()
     on_ShowParticlesChanged: _save()
     on_ShowVignetteChanged: _save()
+    on_DustAmountChanged: _save()
+    on_DustSizeChanged: _save()
     on_SpeedIndexChanged: _save()
     on_FpsCapChanged: _save()
     on_FpsLimitChanged: _save()
@@ -112,13 +122,13 @@ Item {
 
     // Restore all settings to their schema defaults
     function reset() {
-        cfg_EffectJungleWalkSettings = EffectSettings.save(_defaults)
+        cfg_EffectMicroscopeZoomSettings = EffectSettings.save(_defaults)
     }
 
     // --- Page definitions for sidebar navigation ---
     readonly property var pages: [
-        { moduleId: "appearance", text: qsTr("Appearance"), icon: "preferences-desktop-color", page: "JungleWalkAppearancePage.qml" },
-        { moduleId: "scene", text: qsTr("Scene"), icon: "view-visible", page: "JungleWalkScenePage.qml" },
-        { moduleId: "animation", text: qsTr("Animation"), icon: "media-playback-start", page: "JungleWalkAnimationPage.qml" }
+        { moduleId: "appearance", text: qsTr("Appearance"), icon: "preferences-desktop-color", page: "MicroscopeZoomAppearancePage.qml" },
+        { moduleId: "scene", text: qsTr("Scene"), icon: "view-visible", page: "MicroscopeZoomScenePage.qml" },
+        { moduleId: "animation", text: qsTr("Animation"), icon: "media-playback-start", page: "MicroscopeZoomAnimationPage.qml" }
     ]
 }

@@ -20,7 +20,7 @@ Item {
     // --- Input from hub ---
     property var configuration: null
 
-    // --- Schema (must match JungleWalkConfig.qml) ---
+    // --- Schema (must match MicroscopeZoomConfig.qml) ---
     readonly property var _defaults: ({
         density: 60,
         leafColor: "#3a8a2e",
@@ -30,12 +30,17 @@ Item {
         showRays: true,
         showParticles: true,
         showVignette: true,
+        dustAmount: 55,
+        dustSize: 22,
         speedIndex: 3,
         fpsCap: true,
         fpsLimit: 30,
         dimCap: false,
         dimLevel: 100
     })
+
+    // Hard cap on dust motes; mirrors PMAX in microscope-zoom.frag.
+    readonly property int _dustMax: 96
 
     // --- Parsed settings (reactive properties for bindings) ---
     property real speedMult: 1.0
@@ -52,6 +57,8 @@ Item {
     property bool showRays: true
     property bool showParticles: true
     property bool showVignette: true
+    property real dustCount: 53      // number of motes passed to the shader
+    property real dustRadius: 0.015  // base mote radius passed to the shader
 
     readonly property color _leafCol: Qt.color(leafColor)
     readonly property color _bgCol: Qt.color(bgColor)
@@ -60,7 +67,7 @@ Item {
     function togglePause() { paused = !paused }
 
     function _readSettings() {
-        var json = configuration ? configuration.EffectJungleWalkSettings : "{}";
+        var json = configuration ? configuration.EffectMicroscopeZoomSettings : "{}";
         return EffectSettings.load(json, _defaults);
     }
 
@@ -79,13 +86,17 @@ Item {
         showRays = s.showRays;
         showParticles = s.showParticles;
         showVignette = s.showVignette;
+
+        // Dust amount -> mote count; dust size -> mote radius (smaller = finer dust).
+        dustCount = Math.round(Math.min(100, Math.max(0, s.dustAmount)) / 100.0 * _dustMax);
+        dustRadius = 0.006 + Math.min(100, Math.max(1, s.dustSize)) / 100.0 * 0.039;
     }
 
     // --- Outputs for hub ---
     readonly property bool hasError: effect.status === ShaderEffect.Error
     readonly property string errorLog: effect.log || ""
-    readonly property string effectName: "Jungle Walk"
-    readonly property url configUrl: Qt.resolvedUrl("JungleWalkConfig.qml")
+    readonly property string effectName: "Microscope Zoom"
+    readonly property url configUrl: Qt.resolvedUrl("MicroscopeZoomConfig.qml")
 
     // No themes -> no per-effect context menu actions.
     readonly property list<PlasmaCore.Action> effectActions: []
@@ -94,7 +105,7 @@ Item {
     Connections {
         target: effectRoot.configuration
         function onValueChanged(key, value) {
-            if (key === "EffectJungleWalkSettings") {
+            if (key === "EffectMicroscopeZoomSettings") {
                 effectRoot._applySettings();
             }
         }
@@ -103,7 +114,7 @@ Item {
     Component.onCompleted: _applySettings()
 
     // --- Shader effect ---
-    // CRITICAL: Property order must match the std140 uniform block in jungle-walk.frag
+    // CRITICAL: Property order must match the std140 uniform block in microscope-zoom.frag
     ShaderEffect {
         id: effect
         anchors.fill: parent
@@ -127,9 +138,11 @@ Item {
         property real showRays: effectRoot.showRays ? 1.0 : 0.0
         property real showParticles: effectRoot.showParticles ? 1.0 : 0.0
         property real showVignette: effectRoot.showVignette ? 1.0 : 0.0
+        property real particleCount: effectRoot.dustCount
+        property real particleSize: effectRoot.dustRadius
 
         // iTime is accumulated in seconds; the forward-motion constants in the
-        // shader are tuned for it. speedMult scales the walk pace.
+        // shader are tuned for it. speedMult scales the zoom pace.
         FrameAnimation {
             running: effect.visible && !effectRoot.fpsCap && !effectRoot.paused
             onTriggered: effect.iTime += frameTime * effectRoot.speedMult
@@ -142,7 +155,7 @@ Item {
             onTriggered: effect.iTime += (interval / 1000.0) * effectRoot.speedMult
         }
 
-        vertexShader: "shaders/jungle-walk.vert.qsb"
-        fragmentShader: "shaders/jungle-walk.frag.qsb"
+        vertexShader: "shaders/microscope-zoom.vert.qsb"
+        fragmentShader: "shaders/microscope-zoom.frag.qsb"
     }
 }

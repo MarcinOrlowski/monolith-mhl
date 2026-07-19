@@ -23,7 +23,7 @@ Kirigami.ScrollablePage {
 
     Kirigami.FormLayout {
         QtControls2.SpinBox {
-            Kirigami.FormData.label: i18n("Foliage density:")
+            Kirigami.FormData.label: i18n("Density:")
             from: 0; to: 100; stepSize: 5
             value: page.effectConfig._density
             onValueModified: page.effectConfig._density = value
@@ -32,7 +32,7 @@ Kirigami.ScrollablePage {
         }
 
         RowLayout {
-            Kirigami.FormData.label: i18n("Leaf color:")
+            Kirigami.FormData.label: i18n("Cell color:")
             Rectangle {
                 width: 24; height: 24; radius: 4
                 color: page.effectConfig._leafColor
@@ -55,7 +55,7 @@ Kirigami.ScrollablePage {
         }
 
         RowLayout {
-            Kirigami.FormData.label: i18n("Canopy / fog color:")
+            Kirigami.FormData.label: i18n("Medium color:")
             Rectangle {
                 width: 24; height: 24; radius: 4
                 color: page.effectConfig._bgColor
@@ -78,7 +78,7 @@ Kirigami.ScrollablePage {
         }
 
         RowLayout {
-            Kirigami.FormData.label: i18n("Light color:")
+            Kirigami.FormData.label: i18n("Illumination color:")
             Rectangle {
                 width: 24; height: 24; radius: 4
                 color: page.effectConfig._lightColor
@@ -103,21 +103,21 @@ Kirigami.ScrollablePage {
 
     ColorDialog {
         id: leafColorDialog
-        title: i18n("Leaf Color")
+        title: i18n("Cell Color")
         selectedColor: page.effectConfig._leafColor
         onAccepted: page.effectConfig._leafColor = selectedColor
     }
 
     ColorDialog {
         id: bgColorDialog
-        title: i18n("Canopy / Fog Color")
+        title: i18n("Medium Color")
         selectedColor: page.effectConfig._bgColor
         onAccepted: page.effectConfig._bgColor = selectedColor
     }
 
     ColorDialog {
         id: lightColorDialog
-        title: i18n("Light Color")
+        title: i18n("Illumination Color")
         selectedColor: page.effectConfig._lightColor
         onAccepted: page.effectConfig._lightColor = selectedColor
     }

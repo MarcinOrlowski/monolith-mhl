@@ -35,6 +35,8 @@ layout(std140, binding = 0) uniform buf {
     float showRays;
     float showParticles;
     float showVignette;
+    float particleCount;
+    float particleSize;
 };
 
 layout(location = 0) out vec2 coord;

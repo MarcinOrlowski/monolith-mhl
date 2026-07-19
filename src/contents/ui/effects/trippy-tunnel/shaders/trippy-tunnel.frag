@@ -289,11 +289,12 @@ vec3 scene(vec2 uv) {
         col += spotCol * spot * glowAmount * showGlow * (0.4 + 0.6 * far);
     }
 
-    // Soft centre bloom: a bright, semi-transparent glow over the middle that
-    // hides where the swirl, stars and beams converge (otherwise a hard point).
+    // Centre bloom: a bright glow over the middle that hides where the swirl,
+    // stars and beams converge. A solid inner core always fully covers the exact
+    // convergence point, while `bloomAmount` sets the surrounding soft halo.
     if (bloomAmount > 0.001) {
-        float b = smoothstep(bloomRadius, 0.0, r);
-        b = pow(b, 1.7) * bloomAmount;
+        float t = smoothstep(bloomRadius, 0.0, r);          // 0 at edge, 1 at centre
+        float b = pow(t, 1.7) * bloomAmount + smoothstep(0.55, 1.0, t);
         vec3 bloomCol = mix(mistCol.rgb, vec3(1.0), 0.6);   // bright, theme-tinted
         col = mix(col, bloomCol, clamp(b, 0.0, 1.0));
     }

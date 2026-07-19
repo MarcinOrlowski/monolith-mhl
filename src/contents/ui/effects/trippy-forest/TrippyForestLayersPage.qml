@@ -42,9 +42,14 @@ Kirigami.ScrollablePage {
                 onToggled: page.effectConfig._showVortex = checked
             }
             QtControls2.CheckBox {
-                text: i18n("Stars")
+                text: i18n("Stars (points)")
                 checked: page.effectConfig._showStars
                 onToggled: page.effectConfig._showStars = checked
+            }
+            QtControls2.CheckBox {
+                text: i18n("Beams (hyperspace)")
+                checked: page.effectConfig._showBeams
+                onToggled: page.effectConfig._showBeams = checked
             }
         }
     }

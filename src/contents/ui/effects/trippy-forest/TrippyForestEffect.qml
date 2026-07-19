@@ -35,6 +35,7 @@ Item {
         showGlow: true,
         showVortex: true,
         showStars: true,
+        showBeams: true,
         speedIndex: 3,
         rotSpeed: 25,
         whirlSpeed: -35,
@@ -43,9 +44,14 @@ Item {
         glow: 60,
         mist: 75,
         fog: 50,
-        starDensity: 70,
+        starCount: 40,
         starSpeed: 100,
         starLength: 35,
+        starOpacity: 100,
+        beamCount: 220,
+        beamSpeed: 100,
+        beamLength: 45,
+        beamOpacity: 100,
         fpsCap: true,
         fpsLimit: 30,
         dimCap: false,
@@ -70,9 +76,14 @@ Item {
     property real glowAmount: 0.60
     property real mistAmount: 0.75
     property real fog: 0.50
-    property real starDensity: 0.70
+    property real starCount: 40
     property real starSpeed: 1.0
     property real starLength: 0.35
+    property real starOpacity: 1.0
+    property real beamCount: 220
+    property real beamSpeed: 1.0
+    property real beamLength: 0.45
+    property real beamOpacity: 1.0
 
     function togglePause() { paused = !paused }
 
@@ -103,9 +114,14 @@ Item {
         glowAmount = Math.min(1.0, Math.max(0.0, s.glow / 100.0));
         mistAmount = Math.min(1.0, Math.max(0.0, s.mist / 100.0));
         fog = Math.min(1.0, Math.max(0.0, s.fog / 100.0));
-        starDensity = Math.min(1.0, Math.max(0.0, s.starDensity / 100.0));
+        starCount = Math.max(0, s.starCount);
         starSpeed = Math.max(0.0, s.starSpeed / 100.0);
         starLength = Math.min(1.0, Math.max(0.0, s.starLength / 100.0));
+        starOpacity = Math.min(1.0, Math.max(0.0, s.starOpacity / 100.0));
+        beamCount = Math.max(4, s.beamCount);
+        beamSpeed = Math.max(0.0, s.beamSpeed / 100.0);
+        beamLength = Math.min(1.0, Math.max(0.0, s.beamLength / 100.0));
+        beamOpacity = Math.min(1.0, Math.max(0.0, s.beamOpacity / 100.0));
 
         // Theme ID — detect changes
         var newThemeId = s.themeId;
@@ -212,7 +228,7 @@ Item {
 
     // --- Layer visibility ---
     property var layerKeys: [
-        "showFoliage", "showGlow", "showVortex", "showStars"
+        "showFoliage", "showGlow", "showVortex", "showStars", "showBeams"
     ]
 
     // React to any config change (JSON blob or hub-level)
@@ -453,6 +469,7 @@ Item {
         property real showGlow: 1.0
         property real showVortex: 1.0
         property real showStars: 1.0
+        property real showBeams: 1.0
         // Ease look-parameter changes so pressing Apply glides to the new value
         // instead of snapping (which reads as the animation "restarting").
         property real spiral: effectRoot.spiral
@@ -465,12 +482,20 @@ Item {
         Behavior on mistAmount { NumberAnimation { duration: 700; easing.type: Easing.InOutQuad } }
         property real fog: effectRoot.fog
         Behavior on fog { NumberAnimation { duration: 700; easing.type: Easing.InOutQuad } }
-        property real starDensity: effectRoot.starDensity
-        Behavior on starDensity { NumberAnimation { duration: 700; easing.type: Easing.InOutQuad } }
+        property real starCount: effectRoot.starCount
         property real starSpeed: effectRoot.starSpeed
         Behavior on starSpeed { NumberAnimation { duration: 700; easing.type: Easing.InOutQuad } }
         property real starLength: effectRoot.starLength
         Behavior on starLength { NumberAnimation { duration: 700; easing.type: Easing.InOutQuad } }
+        property real starOpacity: effectRoot.starOpacity
+        Behavior on starOpacity { NumberAnimation { duration: 700; easing.type: Easing.InOutQuad } }
+        property real beamCount: effectRoot.beamCount
+        property real beamSpeed: effectRoot.beamSpeed
+        Behavior on beamSpeed { NumberAnimation { duration: 700; easing.type: Easing.InOutQuad } }
+        property real beamLength: effectRoot.beamLength
+        Behavior on beamLength { NumberAnimation { duration: 700; easing.type: Easing.InOutQuad } }
+        property real beamOpacity: effectRoot.beamOpacity
+        Behavior on beamOpacity { NumberAnimation { duration: 700; easing.type: Easing.InOutQuad } }
         property real dimLevel: effectRoot.dimLevel
         Behavior on dimLevel { NumberAnimation { duration: effectRoot.transitionMs } }
 

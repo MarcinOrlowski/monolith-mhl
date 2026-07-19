@@ -71,16 +71,14 @@ Kirigami.ScrollablePage {
             valueFromText: function(text) { return parseInt(text) || 0 }
         }
 
-        Kirigami.Separator { Kirigami.FormData.label: i18n("Stars"); Kirigami.FormData.isSection: true }
+        Kirigami.Separator { Kirigami.FormData.label: i18n("Stars (points)"); Kirigami.FormData.isSection: true }
 
         QtControls2.SpinBox {
-            Kirigami.FormData.label: i18n("Star density:")
-            from: 0; to: 100; stepSize: 5
+            Kirigami.FormData.label: i18n("Star count:")
+            from: 0; to: 128; stepSize: 4
             enabled: page.effectConfig._showStars
-            value: page.effectConfig._starDensity
-            onValueModified: page.effectConfig._starDensity = value
-            textFromValue: function(value) { return value + "%" }
-            valueFromText: function(text) { return parseInt(text) || 0 }
+            value: page.effectConfig._starCount
+            onValueModified: page.effectConfig._starCount = value
         }
 
         QtControls2.SpinBox {
@@ -99,6 +97,56 @@ Kirigami.ScrollablePage {
             enabled: page.effectConfig._showStars
             value: page.effectConfig._starLength
             onValueModified: page.effectConfig._starLength = value
+            textFromValue: function(value) { return value + "%" }
+            valueFromText: function(text) { return parseInt(text) || 0 }
+        }
+
+        QtControls2.SpinBox {
+            Kirigami.FormData.label: i18n("Star opacity:")
+            from: 0; to: 100; stepSize: 5
+            enabled: page.effectConfig._showStars
+            value: page.effectConfig._starOpacity
+            onValueModified: page.effectConfig._starOpacity = value
+            textFromValue: function(value) { return value + "%" }
+            valueFromText: function(text) { return parseInt(text) || 0 }
+        }
+
+        Kirigami.Separator { Kirigami.FormData.label: i18n("Beams (hyperspace)"); Kirigami.FormData.isSection: true }
+
+        QtControls2.SpinBox {
+            Kirigami.FormData.label: i18n("Beam count:")
+            from: 4; to: 800; stepSize: 10
+            enabled: page.effectConfig._showBeams
+            value: page.effectConfig._beamCount
+            onValueModified: page.effectConfig._beamCount = value
+        }
+
+        QtControls2.SpinBox {
+            Kirigami.FormData.label: i18n("Beam speed:")
+            from: 0; to: 300; stepSize: 10
+            enabled: page.effectConfig._showBeams
+            value: page.effectConfig._beamSpeed
+            onValueModified: page.effectConfig._beamSpeed = value
+            textFromValue: function(value) { return value + "%" }
+            valueFromText: function(text) { return parseInt(text) || 0 }
+        }
+
+        QtControls2.SpinBox {
+            Kirigami.FormData.label: i18n("Beam length:")
+            from: 0; to: 100; stepSize: 5
+            enabled: page.effectConfig._showBeams
+            value: page.effectConfig._beamLength
+            onValueModified: page.effectConfig._beamLength = value
+            textFromValue: function(value) { return value + "%" }
+            valueFromText: function(text) { return parseInt(text) || 0 }
+        }
+
+        QtControls2.SpinBox {
+            Kirigami.FormData.label: i18n("Beam opacity:")
+            from: 0; to: 100; stepSize: 5
+            enabled: page.effectConfig._showBeams
+            value: page.effectConfig._beamOpacity
+            onValueModified: page.effectConfig._beamOpacity = value
             textFromValue: function(value) { return value + "%" }
             valueFromText: function(text) { return parseInt(text) || 0 }
         }

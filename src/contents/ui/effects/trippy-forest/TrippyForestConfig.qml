@@ -34,6 +34,7 @@ Item {
         showGlow: true,
         showVortex: true,
         showStars: true,
+        showBeams: true,
         speedIndex: 3,
         rotSpeed: 25,
         whirlSpeed: -35,
@@ -42,9 +43,14 @@ Item {
         glow: 60,
         mist: 75,
         fog: 50,
-        starDensity: 70,
+        starCount: 40,
         starSpeed: 100,
         starLength: 35,
+        starOpacity: 100,
+        beamCount: 220,
+        beamSpeed: 100,
+        beamLength: 45,
+        beamOpacity: 100,
         fpsCap: true,
         fpsLimit: 30,
         dimCap: false,
@@ -64,6 +70,7 @@ Item {
     property bool _showGlow: true
     property bool _showVortex: true
     property bool _showStars: true
+    property bool _showBeams: true
     property int _speedIndex: 3
     property int _rotSpeed: 25
     property int _whirlSpeed: -35
@@ -72,9 +79,14 @@ Item {
     property int _glow: 60
     property int _mist: 75
     property int _fog: 50
-    property int _starDensity: 70
+    property int _starCount: 40
     property int _starSpeed: 100
     property int _starLength: 35
+    property int _starOpacity: 100
+    property int _beamCount: 220
+    property int _beamSpeed: 100
+    property int _beamLength: 45
+    property int _beamOpacity: 100
     property bool _fpsCap: true
     property int _fpsLimit: 30
     property bool _dimCap: false
@@ -101,6 +113,7 @@ Item {
         _showGlow = s.showGlow
         _showVortex = s.showVortex
         _showStars = s.showStars
+        _showBeams = s.showBeams
         _speedIndex = s.speedIndex
         _rotSpeed = s.rotSpeed
         _whirlSpeed = s.whirlSpeed
@@ -109,9 +122,14 @@ Item {
         _glow = s.glow
         _mist = s.mist
         _fog = s.fog
-        _starDensity = s.starDensity
+        _starCount = s.starCount
         _starSpeed = s.starSpeed
         _starLength = s.starLength
+        _starOpacity = s.starOpacity
+        _beamCount = s.beamCount
+        _beamSpeed = s.beamSpeed
+        _beamLength = s.beamLength
+        _beamOpacity = s.beamOpacity
         _fpsCap = s.fpsCap
         _fpsLimit = s.fpsLimit
         _dimCap = s.dimCap
@@ -134,6 +152,7 @@ Item {
             showGlow: _showGlow,
             showVortex: _showVortex,
             showStars: _showStars,
+            showBeams: _showBeams,
             speedIndex: _speedIndex,
             rotSpeed: _rotSpeed,
             whirlSpeed: _whirlSpeed,
@@ -142,9 +161,14 @@ Item {
             glow: _glow,
             mist: _mist,
             fog: _fog,
-            starDensity: _starDensity,
+            starCount: _starCount,
             starSpeed: _starSpeed,
             starLength: _starLength,
+            starOpacity: _starOpacity,
+            beamCount: _beamCount,
+            beamSpeed: _beamSpeed,
+            beamLength: _beamLength,
+            beamOpacity: _beamOpacity,
             fpsCap: _fpsCap,
             fpsLimit: _fpsLimit,
             dimCap: _dimCap,
@@ -164,6 +188,7 @@ Item {
     on_ShowGlowChanged: _save()
     on_ShowVortexChanged: _save()
     on_ShowStarsChanged: _save()
+    on_ShowBeamsChanged: _save()
     on_SpeedIndexChanged: _save()
     on_RotSpeedChanged: _save()
     on_WhirlSpeedChanged: _save()
@@ -172,9 +197,14 @@ Item {
     on_GlowChanged: _save()
     on_MistChanged: _save()
     on_FogChanged: _save()
-    on_StarDensityChanged: _save()
+    on_StarCountChanged: _save()
     on_StarSpeedChanged: _save()
     on_StarLengthChanged: _save()
+    on_StarOpacityChanged: _save()
+    on_BeamCountChanged: _save()
+    on_BeamSpeedChanged: _save()
+    on_BeamLengthChanged: _save()
+    on_BeamOpacityChanged: _save()
     on_FpsCapChanged: _save()
     on_FpsLimitChanged: _save()
     on_DimCapChanged: _save()

@@ -26,14 +26,20 @@ layout(std140, binding = 0) uniform buf {
     float showGlow;
     float showVortex;
     float showStars;
+    float showBeams;
     float spiral;
     float density;
     float glowAmount;
     float mistAmount;
     float fog;
-    float starDensity;
+    float starCount;
     float starSpeed;
     float starLength;
+    float starOpacity;
+    float beamCount;
+    float beamSpeed;
+    float beamLength;
+    float beamOpacity;
     float dimLevel;
     vec4 foliageCol;
     vec4 glowCol;
@@ -60,7 +66,7 @@ const int LAYERS = 9;         // depth slices composited per pixel
 const float ZOOM = 0.22;      // rings advanced per time unit
 const float RINGSCALE = 0.55; // projected radius = RINGSCALE / distance
 const float ARMS = 5.0;       // vortex spiral-arm count
-const int STARS = 64;         // 3D starfield point budget (starDensity gates how many show)
+const int STAR_MAX = 128;     // point-star loop budget (starCount caps how many run)
 
 float hash21(vec2 p) {
     p = fract(p * vec2(123.34, 345.45));
@@ -124,32 +130,59 @@ vec3 scene(vec2 uv) {
     center = mix(center, center * 0.4 + vortexTint * mistAmount, (0.35 + 0.45 * swirl) * cg);
     vec3 col = center * showVortex;
 
-    // --- 3D starfield flying forward, above the vortex / behind the canopy ---
+    // Fade both star layers around the centre so nothing meets in the middle.
+    float centerHole = smoothstep(0.04, 0.18, r);
+
+    // --- point starfield: sparse dots with short motion streaks, flying outward ---
     if (showStars > 0.5) {
         float st = iTime * 0.16 * starSpeed;
-        float tail = 2.0 + starLength * 22.0;                // radial streak length
-        float starSum = 0.0;
-        for (int s = 0; s < STARS; s++) {
+        float tail = 2.0 + starLength * 22.0;
+        float sSum = 0.0;
+        for (int s = 0; s < STAR_MAX; s++) {
+            if (float(s) >= starCount) break;                // starCount = real count
             vec2 h = hash2(float(s) * 1.7 + 3.1);
-            // density gate: a fixed per-star roll keeps a stable subset visible
-            if (hash2(float(s) * 2.3 + 9.1).x > starDensity) continue;
-            float ang = h.x * 6.2831 + rotTime * 0.15;      // drift gently with the tunnel
-            // depth 1 -> 0 as time advances: star flies from centre out to the edge
-            float z = fract(h.y - st);
-            vec2 rdir = vec2(cos(ang), sin(ang));
-            vec2 sp = rdir * (0.95 * pow(1.0 - z, 1.6));     // centre when far, edge when near
-            vec2 dvec = uv - sp;
-            float along = dot(dvec, rdir);
-            float perp = dot(dvec, vec2(-rdir.y, rdir.x));
-            float streak = 1.0 - z;                          // longer radial tail as it nears
-            float d = length(vec2(along / (1.0 + streak * tail), perp));
+            float sang = h.x * 6.2831 + rotTime * 0.15;
+            float z = fract(h.y - st);                       // 1 -> 0: centre -> edge (outward)
+            vec2 rdir = vec2(cos(sang), sin(sang));
+            vec2 sp = rdir * (0.95 * pow(1.0 - z, 1.6));
+            vec2 dv = uv - sp;
+            float along = dot(dv, rdir);
+            float perp = dot(dv, vec2(-rdir.y, rdir.x));
+            float d = length(vec2(along / (1.0 + (1.0 - z) * tail), perp));
             float size = mix(0.004, 0.02, 1.0 - z);
             float spark = smoothstep(size, 0.0, d);
-            // brighten as it approaches, but fade out before it recycles (no pop)
-            float bright = (1.0 - z) * smoothstep(0.0, 0.12, z);
-            starSum += spark * bright;
+            sSum += spark * (1.0 - z) * smoothstep(0.0, 0.12, z);
         }
-        col += starsCol.rgb * clamp(starSum, 0.0, 1.0);
+        col += starsCol.rgb * clamp(sSum, 0.0, 1.0) * centerHole * starOpacity;
+    }
+
+    // --- hyperspace beams: many thin radial streaks flying outward to the edge ---
+    // Each angular sector hosts one streak, so beamCount is a real line count and
+    // the pass is O(1) per pixel regardless of how many are requested.
+    if (showBeams > 0.5) {
+        float N = max(4.0, beamCount);
+        float sa = (a / 6.2831 + 0.5) * N;        // angle -> line-index space
+        float base = floor(sa);
+        float beams = 0.0;
+        for (int k = -1; k <= 1; k++) {           // include neighbours for border lines
+            float id = base + float(k);
+            vec2 h = hash2(mod(id, N) * 1.7 + 11.0);
+            vec2 h2 = hash2(mod(id, N) * 3.1 + 4.7);
+            float bcenter = id + 0.5 + (h.x - 0.5) * 0.7;
+            float across = sa - bcenter;
+            float thin = exp(-across * across * 40.0);       // thin angular line
+            if (thin < 0.003) continue;
+            // head grows 0 -> 1 over the cycle, so the streak flies outward
+            float t = fract(h2.x + iTime * 0.16 * beamSpeed * (0.5 + h.y));
+            float head = pow(t, 0.7);
+            float tailLen = (0.04 + beamLength * 0.7) * (0.5 + h2.y);  // per-line length
+            float radial = smoothstep(head - tailLen, head, r)
+                         * (1.0 - smoothstep(head, head + 0.02, r));
+            float edgeFade = 1.0 - smoothstep(0.92, 1.08, head);      // fade out at recycle
+            float bright = 0.35 + 0.65 * h.y;                         // per-line brightness
+            beams += thin * radial * edgeFade * bright;
+        }
+        col += starsCol.rgb * clamp(beams, 0.0, 1.4) * centerHole * beamOpacity;
     }
 
     // --- foliage rings, far to near (painter's order) ---

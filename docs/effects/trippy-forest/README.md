@@ -32,9 +32,10 @@ slowly rotates while the central whirl counter-rotates.
   Theme).
 
 - Toggle each scene layer on or off: canopy, glow spots, the central vortex
-  glow and a forward-flying **3D starfield**. Layers that depend on another
-  (glow spots sit on the canopy) are disabled in the settings when their parent
-  is off.
+  glow, a forward-flying **point starfield** and a dense **hyperspace beam**
+  field — the last two blend independently via per-layer opacity. Layers that
+  depend on another (glow spots sit on the canopy) are disabled in the settings
+  when their parent is off.
 
 - Glowing "mushroom / flower" spots scattered across the canopy.
 
@@ -57,12 +58,19 @@ Everything is generated procedurally in the shader — there are no image assets
 - **Glow spots** — brightness/quantity of the emissive mushroom-like spots.
 - **Centre glow** — brightness of the misty light at the end of the tunnel.
 - **Depth haze** — how strongly distant rings dissolve into the central glow.
-- **Star density** — how many stars are in flight (needs the Stars layer on).
-- **Star speed** — how fast the stars fly toward the camera.
-- **Star length** — length of the stars' motion-blur streaks (from dots to long
-  hyperspace lines).
 
-The star **colour** comes from the active theme.
+**Stars (points)** and **Beams (hyperspace)** each have their own controls,
+active when the matching layer is on:
+
+- **Star / Beam count** — how many points / radial streaks are in flight (star
+  count is an absolute number; beam count is the number of radial lines).
+- **Star / Beam speed** — how fast they fly outward toward the edges.
+- **Star / Beam length** — length of the motion streaks, from dots/short dashes
+  to long hyperspace lines.
+- **Star / Beam opacity** — blend each layer in or out independently.
+
+Both fade out around the centre so nothing converges to a single point, and
+their **colour** comes from the active theme.
 
 ### Theme
 
@@ -76,9 +84,9 @@ The star **colour** comes from the active theme.
 
 ### Layers
 
-On/off toggles for **Canopy**, **Glow spots**, **Centre glow (vortex)** and
-**Stars** (a 3D starfield streaming forward behind the canopy). Glow spots
-require the Canopy layer, so their toggle is disabled when the canopy is off.
+On/off toggles for **Canopy**, **Glow spots**, **Centre glow (vortex)**,
+**Stars (points)** and **Beams (hyperspace)**. Glow spots require the Canopy
+layer, so their toggle is disabled when the canopy is off.
 
 ### Animation
 

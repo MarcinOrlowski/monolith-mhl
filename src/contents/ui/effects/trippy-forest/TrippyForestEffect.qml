@@ -44,6 +44,10 @@ Item {
         vortexSwirl: 45,
         tunnelWidth: 100,
         holeRadius: 25,
+        holeOsc: false,
+        holeOscRange: 20,
+        holeOscInterval: 10,
+        holeOscChance: 50,
         swirlVary: false,
         swirlSpeed: 20,
         swirlBurst: false,
@@ -92,7 +96,12 @@ Item {
     property bool _swirlInit: false
     property real vortexSwirl: 0.45
     property real tunnelWidth: 1.0
-    property real holeRadius: 0.11
+    property real holeRadius: 0.11        // runtime value fed to the shader
+    property real holeRadiusBase: 0.11    // initial value; oscillation ranges around THIS
+    property bool holeOsc: false
+    property real holeOscRangeUv: 0.09    // ± oscillation range in uv units
+    property int holeOscInterval: 10
+    property int holeOscChance: 50
     property bool swirlVary: false        // continuous drift enable
     property real swirlSpeedMult: 0.012   // continuous swirl drift (0..1 units / sec)
     property int _swirlDir: 1              // drift direction, reflects at the bounds
@@ -169,7 +178,12 @@ Item {
         if (!_swirlInit) { spiral = spiralTarget; spiralVel = 0.0; _swirlInit = true; }
         vortexSwirl = Math.min(1.0, Math.max(0.0, s.vortexSwirl / 100.0));
         tunnelWidth = Math.max(0.1, s.tunnelWidth / 100.0);
-        holeRadius = Math.min(0.45, Math.max(0.0, s.holeRadius / 100.0 * 0.45));
+        holeRadiusBase = Math.min(0.45, Math.max(0.0, s.holeRadius / 100.0 * 0.45));
+        holeRadius = holeRadiusBase;   // re-centre on the (new) initial value
+        holeOsc = s.holeOsc;
+        holeOscRangeUv = Math.max(0.0, s.holeOscRange / 100.0 * 0.45);
+        holeOscInterval = Math.max(1, s.holeOscInterval);
+        holeOscChance = Math.max(0, Math.min(100, s.holeOscChance));
         swirlVary = s.swirlVary;
         swirlSpeedMult = Math.max(0.0, s.swirlSpeed / 100.0) * 0.06;
         swirlBurst = s.swirlBurst;
@@ -535,6 +549,21 @@ Item {
             if (Math.random() * 100.0 >= effectRoot.swirlVaryChance) return   // probability gate
             var delta = (Math.random() * 2.0 - 1.0) * effectRoot.swirlVaryMargin
             effectRoot.spiralTarget = Math.min(1.0, Math.max(0.0, effectRoot.spiralTarget + delta))
+        }
+    }
+
+    // Oscillate the centre hole around its INITIAL value (not the current one),
+    // so the range is bounded and it can never creep down to 0. The ShaderEffect's
+    // Behavior on holeRadius eases each jump. Runtime only.
+    Timer {
+        id: holeOscTimer
+        running: effectRoot.holeOsc && !effectRoot.paused
+        repeat: true
+        interval: Math.max(1, effectRoot.holeOscInterval) * 1000
+        onTriggered: {
+            if (Math.random() * 100.0 >= effectRoot.holeOscChance) return
+            var d = (Math.random() * 2.0 - 1.0) * effectRoot.holeOscRangeUv
+            effectRoot.holeRadius = Math.min(0.45, Math.max(0.0, effectRoot.holeRadiusBase + d))
         }
     }
 

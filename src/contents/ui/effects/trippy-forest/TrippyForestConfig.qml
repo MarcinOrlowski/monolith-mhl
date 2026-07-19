@@ -43,6 +43,10 @@ Item {
         vortexSwirl: 45,
         tunnelWidth: 100,
         holeRadius: 25,
+        holeOsc: false,
+        holeOscRange: 20,
+        holeOscInterval: 10,
+        holeOscChance: 50,
         swirlVary: false,
         swirlSpeed: 20,
         swirlBurst: false,
@@ -94,6 +98,10 @@ Item {
     property int _vortexSwirl: 45
     property int _tunnelWidth: 100
     property int _holeRadius: 25
+    property bool _holeOsc: false
+    property int _holeOscRange: 20
+    property int _holeOscInterval: 10
+    property int _holeOscChance: 50
     property bool _swirlVary: false
     property int _swirlSpeed: 20
     property bool _swirlBurst: false
@@ -152,6 +160,10 @@ Item {
         _vortexSwirl = s.vortexSwirl
         _tunnelWidth = s.tunnelWidth
         _holeRadius = s.holeRadius
+        _holeOsc = s.holeOsc
+        _holeOscRange = s.holeOscRange
+        _holeOscInterval = s.holeOscInterval
+        _holeOscChance = s.holeOscChance
         _swirlVary = s.swirlVary
         _swirlSpeed = s.swirlSpeed
         _swirlBurst = s.swirlBurst
@@ -206,6 +218,10 @@ Item {
             vortexSwirl: _vortexSwirl,
             tunnelWidth: _tunnelWidth,
             holeRadius: _holeRadius,
+            holeOsc: _holeOsc,
+            holeOscRange: _holeOscRange,
+            holeOscInterval: _holeOscInterval,
+            holeOscChance: _holeOscChance,
             swirlVary: _swirlVary,
             swirlSpeed: _swirlSpeed,
             swirlBurst: _swirlBurst,
@@ -257,6 +273,10 @@ Item {
     on_VortexSwirlChanged: _save()
     on_TunnelWidthChanged: _save()
     on_HoleRadiusChanged: _save()
+    on_HoleOscChanged: _save()
+    on_HoleOscRangeChanged: _save()
+    on_HoleOscIntervalChanged: _save()
+    on_HoleOscChanceChanged: _save()
     on_SwirlVaryChanged: _save()
     on_SwirlSpeedChanged: _save()
     on_SwirlBurstChanged: _save()

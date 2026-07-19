@@ -68,6 +68,10 @@ disabled when their parent is off.
   - **Swirl burst** — an independent toggle that jolts the swirl by **±margin**;
     it is *rolled* **every** N seconds and only fires with the given
     **probability**, so a 1 s interval at 10 % bursts only occasionally.
+  - **Oscillate hole** — same roll (**±range every** N s at a **probability**)
+    applied to the **centre hole**, but the range is measured from the *initial*
+    Centre hole value (clamped 0–100 %), so it stays bounded and never creeps
+    down to zero.
 
   Every swirl change — manual, drift or burst — is spring-smoothed so the
   rotation it induces eases gently in and out instead of snapping.

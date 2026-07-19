@@ -30,6 +30,7 @@ ColumnLayout {
     property string cfg_EffectRainbowWavesSettings
     property string cfg_EffectLavaLampSettings
     property string cfg_EffectDotWavesSettings
+    property string cfg_EffectTrippyForestSettings
 
     // --- Per-filter settings (JSON blobs, one cfg_ property per filter) ---
     property string cfg_FilterPixelateSettings
@@ -93,7 +94,8 @@ ColumnLayout {
     readonly property var effectRegistry: [
         { effectId: "dot-waves", name: "Dot Waves", configUrl: Qt.resolvedUrl("effects/dot-waves/DotWavesConfig.qml") },
         { effectId: "lava-lamp", name: "Lava Lamp", configUrl: Qt.resolvedUrl("effects/lava-lamp/LavaLampConfig.qml") },
-        { effectId: "rainbow-waves", name: "Rainbow Waves", configUrl: Qt.resolvedUrl("effects/rainbow-waves/RainbowWavesConfig.qml") }
+        { effectId: "rainbow-waves", name: "Rainbow Waves", configUrl: Qt.resolvedUrl("effects/rainbow-waves/RainbowWavesConfig.qml") },
+        { effectId: "trippy-forest", name: "Trippy Forest", configUrl: Qt.resolvedUrl("effects/trippy-forest/TrippyForestConfig.qml") }
     ]
 
     function findEffectIndex(effectId) {
@@ -122,6 +124,7 @@ ColumnLayout {
             cfg.EffectRainbowWavesSettings = cfg_EffectRainbowWavesSettings
             cfg.EffectLavaLampSettings = cfg_EffectLavaLampSettings
             cfg.EffectDotWavesSettings = cfg_EffectDotWavesSettings
+            cfg.EffectTrippyForestSettings = cfg_EffectTrippyForestSettings
             cfg.FilterOrder = cfg_FilterOrder
             cfg.FilterPixelateSettings = cfg_FilterPixelateSettings
             cfg.FilterScanlinesSettings = cfg_FilterScanlinesSettings
@@ -278,7 +281,8 @@ ColumnLayout {
             _snapshot = {
                 "cfg_EffectRainbowWavesSettings": root.cfg_EffectRainbowWavesSettings,
                 "cfg_EffectLavaLampSettings": root.cfg_EffectLavaLampSettings,
-                "cfg_EffectDotWavesSettings": root.cfg_EffectDotWavesSettings
+                "cfg_EffectDotWavesSettings": root.cfg_EffectDotWavesSettings,
+                "cfg_EffectTrippyForestSettings": root.cfg_EffectTrippyForestSettings
             }
             _accepted = false
             visible = true
@@ -297,7 +301,8 @@ ColumnLayout {
             _snapshot = {
                 "cfg_EffectRainbowWavesSettings": root.cfg_EffectRainbowWavesSettings,
                 "cfg_EffectLavaLampSettings": root.cfg_EffectLavaLampSettings,
-                "cfg_EffectDotWavesSettings": root.cfg_EffectDotWavesSettings
+                "cfg_EffectDotWavesSettings": root.cfg_EffectDotWavesSettings,
+                "cfg_EffectTrippyForestSettings": root.cfg_EffectTrippyForestSettings
             }
         }
 
@@ -334,6 +339,9 @@ ColumnLayout {
                 }
                 if ("cfg_EffectDotWavesSettings" in item) {
                     item.cfg_EffectDotWavesSettings = Qt.binding(function() { return root.cfg_EffectDotWavesSettings })
+                }
+                if ("cfg_EffectTrippyForestSettings" in item) {
+                    item.cfg_EffectTrippyForestSettings = Qt.binding(function() { return root.cfg_EffectTrippyForestSettings })
                 }
                 try { item.hubConfiguration = wallpaper.configuration } catch(e) {}
                 effectSettingsWindow.pageCache = Object.create(null)
@@ -729,6 +737,7 @@ ColumnLayout {
         function onCfg_EffectRainbowWavesSettingsChanged() { root.cfg_EffectRainbowWavesSettings = effectConfigLoader.item.cfg_EffectRainbowWavesSettings }
         function onCfg_EffectLavaLampSettingsChanged() { root.cfg_EffectLavaLampSettings = effectConfigLoader.item.cfg_EffectLavaLampSettings }
         function onCfg_EffectDotWavesSettingsChanged() { root.cfg_EffectDotWavesSettings = effectConfigLoader.item.cfg_EffectDotWavesSettings }
+        function onCfg_EffectTrippyForestSettingsChanged() { root.cfg_EffectTrippyForestSettings = effectConfigLoader.item.cfg_EffectTrippyForestSettings }
     }
 
     // Absorbs leftover vertical space so the filter list stays at its natural height

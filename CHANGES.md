@@ -2,6 +2,10 @@
 
 ## v1.3.0 (TBD)
 
+- New "Trippy Forest" effect: an endless, constant-pace zoom into a psychedelic
+  forest tunnel with a swirling central vortex, an independently rotating tunnel
+  and vortex, toggleable scene layers, and 9 tone-grouped colour themes (light /
+  dark / mixed) with auto-cycling and cross-fades.
 - Extended Dot Waves effect with additional "Shine" highlight layer.
 - Fixed Rainbow Waves effect resetting layer visibility on every theme transition.
 - Fixed Mask filter in Invert mode filling the whole screen when padding ≥ half the tile size.

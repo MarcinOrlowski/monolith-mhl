@@ -150,5 +150,35 @@ Kirigami.ScrollablePage {
             textFromValue: function(value) { return value + "%" }
             valueFromText: function(text) { return parseInt(text) || 0 }
         }
+
+        Kirigami.Separator { Kirigami.FormData.label: i18n("Dots (twinkling stars)"); Kirigami.FormData.isSection: true }
+
+        QtControls2.SpinBox {
+            Kirigami.FormData.label: i18n("Dot count:")
+            from: 0; to: 128; stepSize: 4
+            enabled: page.effectConfig._showDots
+            value: page.effectConfig._dotCount
+            onValueModified: page.effectConfig._dotCount = value
+        }
+
+        QtControls2.SpinBox {
+            Kirigami.FormData.label: i18n("Dot speed:")
+            from: 0; to: 300; stepSize: 10
+            enabled: page.effectConfig._showDots
+            value: page.effectConfig._dotSpeed
+            onValueModified: page.effectConfig._dotSpeed = value
+            textFromValue: function(value) { return value + "%" }
+            valueFromText: function(text) { return parseInt(text) || 0 }
+        }
+
+        QtControls2.SpinBox {
+            Kirigami.FormData.label: i18n("Dot opacity:")
+            from: 0; to: 100; stepSize: 5
+            enabled: page.effectConfig._showDots
+            value: page.effectConfig._dotOpacity
+            onValueModified: page.effectConfig._dotOpacity = value
+            textFromValue: function(value) { return value + "%" }
+            valueFromText: function(text) { return parseInt(text) || 0 }
+        }
     }
 }

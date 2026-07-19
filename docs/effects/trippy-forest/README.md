@@ -32,10 +32,11 @@ slowly rotates while the central whirl counter-rotates.
   Theme).
 
 - Toggle each scene layer on or off: canopy, glow spots, the central vortex
-  glow, a forward-flying **point starfield** and a dense **hyperspace beam**
-  field — the last two blend independently via per-layer opacity. Layers that
-  depend on another (glow spots sit on the canopy) are disabled in the settings
-  when their parent is off.
+  glow and three independent space layers flying outward toward the viewer — a
+  **point starfield** (short streaks), a dense **hyperspace beam** field (many
+  thin radial lines) and plain twinkling **dots** — each blended via its own
+  per-layer opacity. Layers that depend on another (glow spots sit on the
+  canopy) are disabled in the settings when their parent is off.
 
 - Glowing "mushroom / flower" spots scattered across the canopy.
 
@@ -59,18 +60,19 @@ Everything is generated procedurally in the shader — there are no image assets
 - **Centre glow** — brightness of the misty light at the end of the tunnel.
 - **Depth haze** — how strongly distant rings dissolve into the central glow.
 
-**Stars (points)** and **Beams (hyperspace)** each have their own controls,
-active when the matching layer is on:
+**Stars (points)**, **Beams (hyperspace)** and **Dots (twinkling stars)** each
+have their own controls, active when the matching layer is on:
 
-- **Star / Beam count** — how many points / radial streaks are in flight (star
-  count is an absolute number; beam count is the number of radial lines).
-- **Star / Beam speed** — how fast they fly outward toward the edges.
-- **Star / Beam length** — length of the motion streaks, from dots/short dashes
-  to long hyperspace lines.
-- **Star / Beam opacity** — blend each layer in or out independently.
+- **count** — how many are in flight (an absolute number; for beams it is the
+  number of radial lines).
+- **speed** — how fast they fly outward toward the edges. Changing speed only
+  affects the flow from that moment on — it never jumps or restarts.
+- **length** (stars & beams) — length of the motion streaks, from short dashes
+  to long hyperspace lines. Dots are plain round points and twinkle instead.
+- **opacity** — blend each layer in or out independently.
 
-Both fade out around the centre so nothing converges to a single point, and
-their **colour** comes from the active theme.
+All three fade out around the centre so nothing converges to a single point,
+and their **colour** comes from the active theme.
 
 ### Theme
 
@@ -85,8 +87,9 @@ their **colour** comes from the active theme.
 ### Layers
 
 On/off toggles for **Canopy**, **Glow spots**, **Centre glow (vortex)**,
-**Stars (points)** and **Beams (hyperspace)**. Glow spots require the Canopy
-layer, so their toggle is disabled when the canopy is off.
+**Stars (points)**, **Beams (hyperspace)** and **Dots (twinkling stars)**. Glow
+spots require the Canopy layer, so their toggle is disabled when the canopy is
+off.
 
 ### Animation
 

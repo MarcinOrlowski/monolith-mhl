@@ -22,24 +22,28 @@ layout(std140, binding = 0) uniform buf {
     float iHeight;
     float rotTime;          // tunnel rotation accumulator (signed speed folded in)
     float whirlTime;        // vortex rotation accumulator (signed, usually opposite)
+    float starTime;         // point-star flight accumulator (speed folded in)
+    float beamTime;         // hyperspace-beam flight accumulator
+    float dotTime;          // dot-star flight accumulator
     float showFoliage;
     float showGlow;
     float showVortex;
     float showStars;
     float showBeams;
+    float showDots;
     float spiral;
     float density;
     float glowAmount;
     float mistAmount;
     float fog;
     float starCount;
-    float starSpeed;
     float starLength;
     float starOpacity;
     float beamCount;
-    float beamSpeed;
     float beamLength;
     float beamOpacity;
+    float dotCount;
+    float dotOpacity;
     float dimLevel;
     vec4 foliageCol;
     vec4 glowCol;
@@ -54,19 +58,18 @@ layout(std140, binding = 0) uniform buf {
 };
 
 // Endless zoom into a trippy forest. Rings of leafy silhouettes recede toward a
-// glowing, swirling vortex at the centre. Each ring is a perspective slice at a
-// growing distance; as time advances the rings scale up and sweep past the frame
-// edge while new ones fade in at the centre, giving a seamless infinite zoom. The
-// whole tunnel rotates (rotTime) while the central whirl counter-rotates
-// (whirlTime). Colours come entirely from the active theme's 6-stop palette, so
-// theme cycling cross-fades the whole scene. Everything is procedural (no
-// textures).
+// glowing, swirling vortex at the centre. Three optional space layers fly
+// outward toward the viewer above the vortex and behind the canopy: point stars
+// (short motion streaks), hyperspace beams (many thin radial lines) and plain
+// twinkling dots. Each has its own flight accumulator so changing speed never
+// retroactively rescales time. Colours come from the active theme's palette.
+// Everything is procedural (no textures).
 
 const int LAYERS = 9;         // depth slices composited per pixel
 const float ZOOM = 0.22;      // rings advanced per time unit
 const float RINGSCALE = 0.55; // projected radius = RINGSCALE / distance
 const float ARMS = 5.0;       // vortex spiral-arm count
-const int STAR_MAX = 128;     // point-star loop budget (starCount caps how many run)
+const int STAR_MAX = 128;     // point/dot loop budget (count caps how many run)
 
 float hash21(vec2 p) {
     p = fract(p * vec2(123.34, 345.45));
@@ -96,7 +99,7 @@ float fbm(vec2 p) {
     return s;
 }
 
-// Cheap 2D hash for the starfield.
+// Cheap 2D hash for the star layers.
 vec2 hash2(float n) {
     return fract(sin(vec2(n, n + 1.7)) * vec2(43758.5453, 22578.145));
 }
@@ -130,16 +133,16 @@ vec3 scene(vec2 uv) {
     center = mix(center, center * 0.4 + vortexTint * mistAmount, (0.35 + 0.45 * swirl) * cg);
     vec3 col = center * showVortex;
 
-    // Fade both star layers around the centre so nothing meets in the middle.
+    // Fade the space layers around the centre so nothing meets in the middle.
     float centerHole = smoothstep(0.04, 0.18, r);
 
     // --- point starfield: sparse dots with short motion streaks, flying outward ---
     if (showStars > 0.5) {
-        float st = iTime * 0.16 * starSpeed;
+        float st = starTime * 0.16;
         float tail = 2.0 + starLength * 22.0;
         float sSum = 0.0;
         for (int s = 0; s < STAR_MAX; s++) {
-            if (float(s) >= starCount) break;                // starCount = real count
+            if (float(s) >= starCount) break;
             vec2 h = hash2(float(s) * 1.7 + 3.1);
             float sang = h.x * 6.2831 + rotTime * 0.15;
             float z = fract(h.y - st);                       // 1 -> 0: centre -> edge (outward)
@@ -173,7 +176,7 @@ vec3 scene(vec2 uv) {
             float thin = exp(-across * across * 40.0);       // thin angular line
             if (thin < 0.003) continue;
             // head grows 0 -> 1 over the cycle, so the streak flies outward
-            float t = fract(h2.x + iTime * 0.16 * beamSpeed * (0.5 + h.y));
+            float t = fract(h2.x + beamTime * 0.16 * (0.5 + h.y));
             float head = pow(t, 0.7);
             float tailLen = (0.04 + beamLength * 0.7) * (0.5 + h2.y);  // per-line length
             float radial = smoothstep(head - tailLen, head, r)
@@ -183,6 +186,25 @@ vec3 scene(vec2 uv) {
             beams += thin * radial * edgeFade * bright;
         }
         col += starsCol.rgb * clamp(beams, 0.0, 1.4) * centerHole * beamOpacity;
+    }
+
+    // --- dot starfield: plain round twinkling stars flying forward ---
+    if (showDots > 0.5) {
+        float dt2 = dotTime * 0.16;
+        float dSum = 0.0;
+        for (int s = 0; s < STAR_MAX; s++) {
+            if (float(s) >= dotCount) break;
+            vec2 h = hash2(float(s) * 4.3 + 1.9);
+            float dang = h.x * 6.2831;
+            float z = fract(h.y - dt2);                      // 1 -> 0: centre -> edge (outward)
+            vec2 pos = vec2(cos(dang), sin(dang)) * (0.98 * pow(1.0 - z, 1.7));
+            float d = length(uv - pos);
+            float size = mix(0.0015, 0.010, 1.0 - z);        // grows as it approaches
+            float dotv = smoothstep(size, 0.0, d);
+            float twinkle = 0.6 + 0.4 * sin(dotTime * 3.0 + h.x * 30.0);
+            dSum += dotv * (1.0 - z) * smoothstep(0.0, 0.1, z) * twinkle;
+        }
+        col += starsCol.rgb * clamp(dSum, 0.0, 1.0) * centerHole * dotOpacity;
     }
 
     // --- foliage rings, far to near (painter's order) ---

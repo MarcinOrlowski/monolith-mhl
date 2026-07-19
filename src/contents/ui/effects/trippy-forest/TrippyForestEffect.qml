@@ -36,6 +36,7 @@ Item {
         showVortex: true,
         showStars: true,
         showBeams: true,
+        showDots: true,
         speedIndex: 3,
         rotSpeed: 25,
         whirlSpeed: -35,
@@ -52,6 +53,9 @@ Item {
         beamSpeed: 100,
         beamLength: 45,
         beamOpacity: 100,
+        dotCount: 60,
+        dotSpeed: 100,
+        dotOpacity: 100,
         fpsCap: true,
         fpsLimit: 30,
         dimCap: false,
@@ -84,6 +88,9 @@ Item {
     property real beamSpeed: 1.0
     property real beamLength: 0.45
     property real beamOpacity: 1.0
+    property real dotCount: 60
+    property real dotSpeed: 1.0
+    property real dotOpacity: 1.0
 
     function togglePause() { paused = !paused }
 
@@ -122,6 +129,9 @@ Item {
         beamSpeed = Math.max(0.0, s.beamSpeed / 100.0);
         beamLength = Math.min(1.0, Math.max(0.0, s.beamLength / 100.0));
         beamOpacity = Math.min(1.0, Math.max(0.0, s.beamOpacity / 100.0));
+        dotCount = Math.max(0, s.dotCount);
+        dotSpeed = Math.max(0.0, s.dotSpeed / 100.0);
+        dotOpacity = Math.min(1.0, Math.max(0.0, s.dotOpacity / 100.0));
 
         // Theme ID — detect changes
         var newThemeId = s.themeId;
@@ -228,7 +238,7 @@ Item {
 
     // --- Layer visibility ---
     property var layerKeys: [
-        "showFoliage", "showGlow", "showVortex", "showStars", "showBeams"
+        "showFoliage", "showGlow", "showVortex", "showStars", "showBeams", "showDots"
     ]
 
     // React to any config change (JSON blob or hub-level)
@@ -465,11 +475,15 @@ Item {
         property real iHeight: height
         property real rotTime: 0
         property real whirlTime: 0
+        property real starTime: 0
+        property real beamTime: 0
+        property real dotTime: 0
         property real showFoliage: 1.0
         property real showGlow: 1.0
         property real showVortex: 1.0
         property real showStars: 1.0
         property real showBeams: 1.0
+        property real showDots: 1.0
         // Ease look-parameter changes so pressing Apply glides to the new value
         // instead of snapping (which reads as the animation "restarting").
         property real spiral: effectRoot.spiral
@@ -483,19 +497,18 @@ Item {
         property real fog: effectRoot.fog
         Behavior on fog { NumberAnimation { duration: 700; easing.type: Easing.InOutQuad } }
         property real starCount: effectRoot.starCount
-        property real starSpeed: effectRoot.starSpeed
-        Behavior on starSpeed { NumberAnimation { duration: 700; easing.type: Easing.InOutQuad } }
         property real starLength: effectRoot.starLength
         Behavior on starLength { NumberAnimation { duration: 700; easing.type: Easing.InOutQuad } }
         property real starOpacity: effectRoot.starOpacity
         Behavior on starOpacity { NumberAnimation { duration: 700; easing.type: Easing.InOutQuad } }
         property real beamCount: effectRoot.beamCount
-        property real beamSpeed: effectRoot.beamSpeed
-        Behavior on beamSpeed { NumberAnimation { duration: 700; easing.type: Easing.InOutQuad } }
         property real beamLength: effectRoot.beamLength
         Behavior on beamLength { NumberAnimation { duration: 700; easing.type: Easing.InOutQuad } }
         property real beamOpacity: effectRoot.beamOpacity
         Behavior on beamOpacity { NumberAnimation { duration: 700; easing.type: Easing.InOutQuad } }
+        property real dotCount: effectRoot.dotCount
+        property real dotOpacity: effectRoot.dotOpacity
+        Behavior on dotOpacity { NumberAnimation { duration: 700; easing.type: Easing.InOutQuad } }
         property real dimLevel: effectRoot.dimLevel
         Behavior on dimLevel { NumberAnimation { duration: effectRoot.transitionMs } }
 
@@ -530,6 +543,9 @@ Item {
                 effect.iTime += frameTime * effectRoot.speedMult
                 effect.rotTime += frameTime * effectRoot.rotSpeedMult
                 effect.whirlTime += frameTime * effectRoot.whirlSpeedMult
+                effect.starTime += frameTime * effectRoot.starSpeed
+                effect.beamTime += frameTime * effectRoot.beamSpeed
+                effect.dotTime += frameTime * effectRoot.dotSpeed
             }
         }
 
@@ -542,6 +558,9 @@ Item {
                 effect.iTime += dt * effectRoot.speedMult
                 effect.rotTime += dt * effectRoot.rotSpeedMult
                 effect.whirlTime += dt * effectRoot.whirlSpeedMult
+                effect.starTime += dt * effectRoot.starSpeed
+                effect.beamTime += dt * effectRoot.beamSpeed
+                effect.dotTime += dt * effectRoot.dotSpeed
             }
         }
 

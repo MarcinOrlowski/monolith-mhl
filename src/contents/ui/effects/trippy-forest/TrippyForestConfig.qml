@@ -35,6 +35,7 @@ Item {
         showVortex: true,
         showStars: true,
         showBeams: true,
+        showDots: true,
         speedIndex: 3,
         rotSpeed: 25,
         whirlSpeed: -35,
@@ -51,6 +52,9 @@ Item {
         beamSpeed: 100,
         beamLength: 45,
         beamOpacity: 100,
+        dotCount: 60,
+        dotSpeed: 100,
+        dotOpacity: 100,
         fpsCap: true,
         fpsLimit: 30,
         dimCap: false,
@@ -71,6 +75,7 @@ Item {
     property bool _showVortex: true
     property bool _showStars: true
     property bool _showBeams: true
+    property bool _showDots: true
     property int _speedIndex: 3
     property int _rotSpeed: 25
     property int _whirlSpeed: -35
@@ -87,6 +92,9 @@ Item {
     property int _beamSpeed: 100
     property int _beamLength: 45
     property int _beamOpacity: 100
+    property int _dotCount: 60
+    property int _dotSpeed: 100
+    property int _dotOpacity: 100
     property bool _fpsCap: true
     property int _fpsLimit: 30
     property bool _dimCap: false
@@ -114,6 +122,7 @@ Item {
         _showVortex = s.showVortex
         _showStars = s.showStars
         _showBeams = s.showBeams
+        _showDots = s.showDots
         _speedIndex = s.speedIndex
         _rotSpeed = s.rotSpeed
         _whirlSpeed = s.whirlSpeed
@@ -130,6 +139,9 @@ Item {
         _beamSpeed = s.beamSpeed
         _beamLength = s.beamLength
         _beamOpacity = s.beamOpacity
+        _dotCount = s.dotCount
+        _dotSpeed = s.dotSpeed
+        _dotOpacity = s.dotOpacity
         _fpsCap = s.fpsCap
         _fpsLimit = s.fpsLimit
         _dimCap = s.dimCap
@@ -153,6 +165,7 @@ Item {
             showVortex: _showVortex,
             showStars: _showStars,
             showBeams: _showBeams,
+            showDots: _showDots,
             speedIndex: _speedIndex,
             rotSpeed: _rotSpeed,
             whirlSpeed: _whirlSpeed,
@@ -169,6 +182,9 @@ Item {
             beamSpeed: _beamSpeed,
             beamLength: _beamLength,
             beamOpacity: _beamOpacity,
+            dotCount: _dotCount,
+            dotSpeed: _dotSpeed,
+            dotOpacity: _dotOpacity,
             fpsCap: _fpsCap,
             fpsLimit: _fpsLimit,
             dimCap: _dimCap,
@@ -189,6 +205,7 @@ Item {
     on_ShowVortexChanged: _save()
     on_ShowStarsChanged: _save()
     on_ShowBeamsChanged: _save()
+    on_ShowDotsChanged: _save()
     on_SpeedIndexChanged: _save()
     on_RotSpeedChanged: _save()
     on_WhirlSpeedChanged: _save()
@@ -205,6 +222,9 @@ Item {
     on_BeamSpeedChanged: _save()
     on_BeamLengthChanged: _save()
     on_BeamOpacityChanged: _save()
+    on_DotCountChanged: _save()
+    on_DotSpeedChanged: _save()
+    on_DotOpacityChanged: _save()
     on_FpsCapChanged: _save()
     on_FpsLimitChanged: _save()
     on_DimCapChanged: _save()

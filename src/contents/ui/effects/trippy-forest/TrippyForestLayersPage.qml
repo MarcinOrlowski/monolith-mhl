@@ -51,6 +51,11 @@ Kirigami.ScrollablePage {
                 checked: page.effectConfig._showBeams
                 onToggled: page.effectConfig._showBeams = checked
             }
+            QtControls2.CheckBox {
+                text: i18n("Dots (twinkling stars)")
+                checked: page.effectConfig._showDots
+                onToggled: page.effectConfig._showDots = checked
+            }
         }
     }
 }

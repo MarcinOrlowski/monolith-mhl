@@ -70,5 +70,37 @@ Kirigami.ScrollablePage {
             textFromValue: function(value) { return value + "%" }
             valueFromText: function(text) { return parseInt(text) || 0 }
         }
+
+        Kirigami.Separator { Kirigami.FormData.label: i18n("Stars"); Kirigami.FormData.isSection: true }
+
+        QtControls2.SpinBox {
+            Kirigami.FormData.label: i18n("Star density:")
+            from: 0; to: 100; stepSize: 5
+            enabled: page.effectConfig._showStars
+            value: page.effectConfig._starDensity
+            onValueModified: page.effectConfig._starDensity = value
+            textFromValue: function(value) { return value + "%" }
+            valueFromText: function(text) { return parseInt(text) || 0 }
+        }
+
+        QtControls2.SpinBox {
+            Kirigami.FormData.label: i18n("Star speed:")
+            from: 0; to: 300; stepSize: 10
+            enabled: page.effectConfig._showStars
+            value: page.effectConfig._starSpeed
+            onValueModified: page.effectConfig._starSpeed = value
+            textFromValue: function(value) { return value + "%" }
+            valueFromText: function(text) { return parseInt(text) || 0 }
+        }
+
+        QtControls2.SpinBox {
+            Kirigami.FormData.label: i18n("Star length:")
+            from: 0; to: 100; stepSize: 5
+            enabled: page.effectConfig._showStars
+            value: page.effectConfig._starLength
+            onValueModified: page.effectConfig._starLength = value
+            textFromValue: function(value) { return value + "%" }
+            valueFromText: function(text) { return parseInt(text) || 0 }
+        }
     }
 }

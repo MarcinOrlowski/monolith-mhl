@@ -31,10 +31,14 @@ layout(std140, binding = 0) uniform buf {
     float glowAmount;
     float mistAmount;
     float fog;
+    float starDensity;
+    float starSpeed;
+    float starLength;
     float dimLevel;
     vec4 foliageCol;
     vec4 glowCol;
     vec4 mistCol;
+    vec4 starsCol;
     vec4 pal0;
     vec4 pal1;
     vec4 pal2;
@@ -56,7 +60,7 @@ const int LAYERS = 9;         // depth slices composited per pixel
 const float ZOOM = 0.22;      // rings advanced per time unit
 const float RINGSCALE = 0.55; // projected radius = RINGSCALE / distance
 const float ARMS = 5.0;       // vortex spiral-arm count
-const int STARS = 40;         // 3D starfield point count
+const int STARS = 64;         // 3D starfield point budget (starDensity gates how many show)
 
 float hash21(vec2 p) {
     p = fract(p * vec2(123.34, 345.45));
@@ -122,10 +126,13 @@ vec3 scene(vec2 uv) {
 
     // --- 3D starfield flying forward, above the vortex / behind the canopy ---
     if (showStars > 0.5) {
-        float st = iTime * 0.16;
+        float st = iTime * 0.16 * starSpeed;
+        float tail = 2.0 + starLength * 22.0;                // radial streak length
         float starSum = 0.0;
         for (int s = 0; s < STARS; s++) {
             vec2 h = hash2(float(s) * 1.7 + 3.1);
+            // density gate: a fixed per-star roll keeps a stable subset visible
+            if (hash2(float(s) * 2.3 + 9.1).x > starDensity) continue;
             float ang = h.x * 6.2831 + rotTime * 0.15;      // drift gently with the tunnel
             // depth 1 -> 0 as time advances: star flies from centre out to the edge
             float z = fract(h.y - st);
@@ -135,15 +142,14 @@ vec3 scene(vec2 uv) {
             float along = dot(dvec, rdir);
             float perp = dot(dvec, vec2(-rdir.y, rdir.x));
             float streak = 1.0 - z;                          // longer radial tail as it nears
-            float d = length(vec2(along / (1.0 + streak * 7.0), perp));
+            float d = length(vec2(along / (1.0 + streak * tail), perp));
             float size = mix(0.004, 0.02, 1.0 - z);
             float spark = smoothstep(size, 0.0, d);
             // brighten as it approaches, but fade out before it recycles (no pop)
             float bright = (1.0 - z) * smoothstep(0.0, 0.12, z);
             starSum += spark * bright;
         }
-        vec3 starCol = mix(vec3(1.0), palette(fract(st * 0.1)), 0.45);
-        col += starCol * clamp(starSum, 0.0, 1.0);
+        col += starsCol.rgb * clamp(starSum, 0.0, 1.0);
     }
 
     // --- foliage rings, far to near (painter's order) ---

@@ -42,6 +42,9 @@ Item {
         glow: 60,
         mist: 75,
         fog: 50,
+        starDensity: 70,
+        starSpeed: 100,
+        starLength: 35,
         fpsCap: true,
         fpsLimit: 30,
         dimCap: false,
@@ -69,6 +72,9 @@ Item {
     property int _glow: 60
     property int _mist: 75
     property int _fog: 50
+    property int _starDensity: 70
+    property int _starSpeed: 100
+    property int _starLength: 35
     property bool _fpsCap: true
     property int _fpsLimit: 30
     property bool _dimCap: false
@@ -103,6 +109,9 @@ Item {
         _glow = s.glow
         _mist = s.mist
         _fog = s.fog
+        _starDensity = s.starDensity
+        _starSpeed = s.starSpeed
+        _starLength = s.starLength
         _fpsCap = s.fpsCap
         _fpsLimit = s.fpsLimit
         _dimCap = s.dimCap
@@ -133,6 +142,9 @@ Item {
             glow: _glow,
             mist: _mist,
             fog: _fog,
+            starDensity: _starDensity,
+            starSpeed: _starSpeed,
+            starLength: _starLength,
             fpsCap: _fpsCap,
             fpsLimit: _fpsLimit,
             dimCap: _dimCap,
@@ -160,6 +172,9 @@ Item {
     on_GlowChanged: _save()
     on_MistChanged: _save()
     on_FogChanged: _save()
+    on_StarDensityChanged: _save()
+    on_StarSpeedChanged: _save()
+    on_StarLengthChanged: _save()
     on_FpsCapChanged: _save()
     on_FpsLimitChanged: _save()
     on_DimCapChanged: _save()

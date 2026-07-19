@@ -57,6 +57,12 @@ Everything is generated procedurally in the shader — there are no image assets
 - **Glow spots** — brightness/quantity of the emissive mushroom-like spots.
 - **Centre glow** — brightness of the misty light at the end of the tunnel.
 - **Depth haze** — how strongly distant rings dissolve into the central glow.
+- **Star density** — how many stars are in flight (needs the Stars layer on).
+- **Star speed** — how fast the stars fly toward the camera.
+- **Star length** — length of the stars' motion-blur streaks (from dots to long
+  hyperspace lines).
+
+The star **colour** comes from the active theme.
 
 ### Theme
 
@@ -88,8 +94,8 @@ require the Canopy layer, so their toggle is disabled when the canopy is off.
 Drop a `.qml` theme file into
 `~/.config/monolith/trippy-forest/themes.d/` and restart plasmashell. See
 `themes/example.qml` in the effect directory for the format — a theme provides
-`foliage`, `glow` and `mist` colours, an optional `mode` tone
-(`light`/`dark`/`mixed`/`psychedelic`), plus a 6-colour `palette` that is
+`foliage`, `glow` and `mist` colours, an optional `stars` colour and `mode`
+tone (`light`/`dark`/`mixed`/`psychedelic`), plus a 6-colour `palette` that is
 wrapped around the tunnel to drive the colour flow.
 
 ## Gallery

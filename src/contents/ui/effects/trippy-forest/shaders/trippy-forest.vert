@@ -31,10 +31,14 @@ layout(std140, binding = 0) uniform buf {
     float glowAmount;
     float mistAmount;
     float fog;
+    float starDensity;
+    float starSpeed;
+    float starLength;
     float dimLevel;
     vec4 foliageCol;
     vec4 glowCol;
     vec4 mistCol;
+    vec4 starsCol;
     vec4 pal0;
     vec4 pal1;
     vec4 pal2;

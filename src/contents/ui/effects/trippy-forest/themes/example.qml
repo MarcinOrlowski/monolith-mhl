@@ -65,6 +65,12 @@ QtObject {
     // fairly dark — a near-white mist washes the scene out.
     property string mist: "#3a6a80"
 
+    // ── Stars ─────────────────────────────────────────────────────────
+    //
+    // Colour of the 3D starfield points. Optional — defaults to white when
+    // omitted. Bright / near-white values read best as stars.
+    property string stars: "#ffffff"
+
     // ── Palette ───────────────────────────────────────────────────────
     //
     // Exactly 6 colours forming a smooth loop that is wrapped around the

@@ -43,6 +43,9 @@ Item {
         glow: 60,
         mist: 75,
         fog: 50,
+        starDensity: 70,
+        starSpeed: 100,
+        starLength: 35,
         fpsCap: true,
         fpsLimit: 30,
         dimCap: false,
@@ -67,6 +70,9 @@ Item {
     property real glowAmount: 0.60
     property real mistAmount: 0.75
     property real fog: 0.50
+    property real starDensity: 0.70
+    property real starSpeed: 1.0
+    property real starLength: 0.35
 
     function togglePause() { paused = !paused }
 
@@ -97,6 +103,9 @@ Item {
         glowAmount = Math.min(1.0, Math.max(0.0, s.glow / 100.0));
         mistAmount = Math.min(1.0, Math.max(0.0, s.mist / 100.0));
         fog = Math.min(1.0, Math.max(0.0, s.fog / 100.0));
+        starDensity = Math.min(1.0, Math.max(0.0, s.starDensity / 100.0));
+        starSpeed = Math.max(0.0, s.starSpeed / 100.0);
+        starLength = Math.min(1.0, Math.max(0.0, s.starLength / 100.0));
 
         // Theme ID — detect changes
         var newThemeId = s.themeId;
@@ -456,6 +465,12 @@ Item {
         Behavior on mistAmount { NumberAnimation { duration: 700; easing.type: Easing.InOutQuad } }
         property real fog: effectRoot.fog
         Behavior on fog { NumberAnimation { duration: 700; easing.type: Easing.InOutQuad } }
+        property real starDensity: effectRoot.starDensity
+        Behavior on starDensity { NumberAnimation { duration: 700; easing.type: Easing.InOutQuad } }
+        property real starSpeed: effectRoot.starSpeed
+        Behavior on starSpeed { NumberAnimation { duration: 700; easing.type: Easing.InOutQuad } }
+        property real starLength: effectRoot.starLength
+        Behavior on starLength { NumberAnimation { duration: 700; easing.type: Easing.InOutQuad } }
         property real dimLevel: effectRoot.dimLevel
         Behavior on dimLevel { NumberAnimation { duration: effectRoot.transitionMs } }
 
@@ -467,6 +482,8 @@ Item {
         Behavior on glowCol { ColorAnimation { duration: effectRoot.transitionMs } }
         property color mistCol: "#3a6a80"
         Behavior on mistCol { ColorAnimation { duration: effectRoot.transitionMs } }
+        property color starsCol: "#ffffff"
+        Behavior on starsCol { ColorAnimation { duration: effectRoot.transitionMs } }
         property color pal0: "#ff2d55"
         Behavior on pal0 { ColorAnimation { duration: effectRoot.transitionMs } }
         property color pal1: "#ff9500"

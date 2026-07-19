@@ -103,6 +103,12 @@ Item {
     property real spiralTarget: 0.45    // base + drift + burst steer this
     property real spiralVel: 0.0        // spring velocity
     property bool _swirlInit: false
+    // Last-applied BASE values. Runtime swirl/width/hole are only re-seeded when
+    // their base setting actually changes, so editing an unrelated setting (e.g.
+    // Brightness) doesn't interrupt the ongoing drift / oscillation.
+    property real _spiralBasePrev: -999
+    property real _widthBasePrev: -999
+    property real _holeBasePrev: -999
     property real vortexSwirl: 0.45
     property real tunnelWidth: 1.0        // runtime value fed to the shader
     property real tunnelWidthBase: 1.0    // initial value; oscillation ranges around THIS
@@ -192,17 +198,21 @@ Item {
         whirlSpeedMult = (s.whirlSpeed / 100.0) * _whirlBase;
 
         // Look
-        spiralTarget = Math.min(1.0, Math.max(0.0, s.spiral / 100.0));
-        if (!_swirlInit) { spiral = spiralTarget; spiralVel = 0.0; _swirlInit = true; }
+        var sBase = Math.min(1.0, Math.max(0.0, s.spiral / 100.0));
+        if (sBase !== _spiralBasePrev) {
+            _spiralBasePrev = sBase;
+            spiralTarget = sBase;
+            if (!_swirlInit) { spiral = spiralTarget; spiralVel = 0.0; _swirlInit = true; }
+        }
         vortexSwirl = Math.min(1.0, Math.max(0.0, s.vortexSwirl / 100.0));
         tunnelWidthBase = Math.max(0.1, s.tunnelWidth / 100.0);
-        tunnelWidth = tunnelWidthBase;   // re-centre on the (new) initial value
+        if (tunnelWidthBase !== _widthBasePrev) { _widthBasePrev = tunnelWidthBase; tunnelWidth = tunnelWidthBase; }
         widthOsc = s.widthOsc;
         widthOscRangeMult = Math.max(0.0, s.widthOscRange / 100.0);
         widthOscInterval = Math.max(1, s.widthOscInterval);
         widthOscChance = Math.max(0, Math.min(100, s.widthOscChance));
         holeRadiusBase = Math.min(0.45, Math.max(0.0, s.holeRadius / 100.0 * 0.45));
-        holeRadius = holeRadiusBase;   // re-centre on the (new) initial value
+        if (holeRadiusBase !== _holeBasePrev) { _holeBasePrev = holeRadiusBase; holeRadius = holeRadiusBase; }
         holeOsc = s.holeOsc;
         holeOscRangeUv = Math.max(0.0, s.holeOscRange / 100.0 * 0.45);
         holeOscInterval = Math.max(1, s.holeOscInterval);

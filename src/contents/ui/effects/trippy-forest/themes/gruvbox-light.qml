@@ -19,7 +19,7 @@ QtObject {
     // Tone group for the light/dark/mixed cycle filter.
     property string mode: "light"
 
-    property string foliage: "#7c6f64"
+    property string canopy: "#7c6f64"
     property string glow: "#b57614"
     property string mist: "#d5c4a1"
     property string stars: "#fbf1c7"

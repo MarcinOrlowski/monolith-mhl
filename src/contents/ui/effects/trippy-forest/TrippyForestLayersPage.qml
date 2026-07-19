@@ -27,13 +27,13 @@ Kirigami.ScrollablePage {
 
         QtControls2.CheckBox {
             Kirigami.FormData.label: i18n("Visible:")
-            checked: page.effectConfig._showFoliage
-            onToggled: page.effectConfig._showFoliage = checked
+            checked: page.effectConfig._showCanopy
+            onToggled: page.effectConfig._showCanopy = checked
         }
         QtControls2.SpinBox {
             Kirigami.FormData.label: i18n("Density:")
             from: 0; to: 100; stepSize: 5
-            enabled: page.effectConfig._showFoliage
+            enabled: page.effectConfig._showCanopy
             value: page.effectConfig._density
             onValueModified: page.effectConfig._density = value
             textFromValue: function(value) { return value + "%" }
@@ -42,7 +42,7 @@ Kirigami.ScrollablePage {
         QtControls2.SpinBox {
             Kirigami.FormData.label: i18n("Tunnel swirl:")
             from: 0; to: 100; stepSize: 5
-            enabled: page.effectConfig._showFoliage
+            enabled: page.effectConfig._showCanopy
             value: page.effectConfig._spiral
             onValueModified: page.effectConfig._spiral = value
             textFromValue: function(value) { return value + "%" }
@@ -51,7 +51,7 @@ Kirigami.ScrollablePage {
         QtControls2.SpinBox {
             Kirigami.FormData.label: i18n("Tunnel width:")
             from: 50; to: 250; stepSize: 10
-            enabled: page.effectConfig._showFoliage
+            enabled: page.effectConfig._showCanopy
             value: page.effectConfig._tunnelWidth
             onValueModified: page.effectConfig._tunnelWidth = value
             textFromValue: function(value) { return value + "%" }
@@ -60,9 +60,18 @@ Kirigami.ScrollablePage {
         QtControls2.SpinBox {
             Kirigami.FormData.label: i18n("Depth haze:")
             from: 0; to: 100; stepSize: 5
-            enabled: page.effectConfig._showFoliage
+            enabled: page.effectConfig._showCanopy
             value: page.effectConfig._fog
             onValueModified: page.effectConfig._fog = value
+            textFromValue: function(value) { return value + "%" }
+            valueFromText: function(text) { return parseInt(text) || 0 }
+        }
+        QtControls2.SpinBox {
+            Kirigami.FormData.label: i18n("Opacity:")
+            from: 0; to: 100; stepSize: 5
+            enabled: page.effectConfig._showCanopy
+            value: page.effectConfig._canopyOpacity
+            onValueModified: page.effectConfig._canopyOpacity = value
             textFromValue: function(value) { return value + "%" }
             valueFromText: function(text) { return parseInt(text) || 0 }
         }
@@ -73,14 +82,14 @@ Kirigami.ScrollablePage {
         QtControls2.CheckBox {
             // Glow spots sit on the canopy leaves, so they need it to show.
             Kirigami.FormData.label: i18n("Visible:")
-            enabled: page.effectConfig._showFoliage
+            enabled: page.effectConfig._showCanopy
             checked: page.effectConfig._showGlow
             onToggled: page.effectConfig._showGlow = checked
         }
         QtControls2.SpinBox {
             Kirigami.FormData.label: i18n("Amount:")
             from: 0; to: 100; stepSize: 5
-            enabled: page.effectConfig._showFoliage && page.effectConfig._showGlow
+            enabled: page.effectConfig._showCanopy && page.effectConfig._showGlow
             value: page.effectConfig._glow
             onValueModified: page.effectConfig._glow = value
             textFromValue: function(value) { return value + "%" }
@@ -110,6 +119,15 @@ Kirigami.ScrollablePage {
             enabled: page.effectConfig._showVortex
             value: page.effectConfig._vortexSwirl
             onValueModified: page.effectConfig._vortexSwirl = value
+            textFromValue: function(value) { return value + "%" }
+            valueFromText: function(text) { return parseInt(text) || 0 }
+        }
+        QtControls2.SpinBox {
+            Kirigami.FormData.label: i18n("Opacity:")
+            from: 0; to: 100; stepSize: 5
+            enabled: page.effectConfig._showVortex
+            value: page.effectConfig._vortexOpacity
+            onValueModified: page.effectConfig._vortexOpacity = value
             textFromValue: function(value) { return value + "%" }
             valueFromText: function(text) { return parseInt(text) || 0 }
         }

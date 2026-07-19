@@ -19,7 +19,7 @@ QtObject {
     // Tone group for the light/dark/mixed/psychedelic cycle filter.
     property string mode: "psychedelic"
 
-    property string foliage: "#14061e"
+    property string canopy: "#14061e"
     property string glow: "#ffee00"
     property string mist: "#3a2a55"
     property string stars: "#ffffff"

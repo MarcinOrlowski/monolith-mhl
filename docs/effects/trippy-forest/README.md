@@ -57,13 +57,14 @@ settings. Layers that depend on another (glow spots sit on the canopy) are
 disabled when their parent is off.
 
 - **Canopy** — the leafy tunnel: density, **tunnel swirl** (how tightly it
-  twists), **tunnel width** (how far the foliage sits from the centre — higher
-  opens a wider tunnel mouth) and **depth haze** (how far rings dissolve into
-  the central glow).
+  twists), **tunnel width** (how far the canopy sits from the centre — higher
+  opens a wider tunnel mouth), **depth haze** (how far rings dissolve into the
+  central glow) and **opacity** to fade the whole canopy.
 - **Glow spots** — brightness/quantity of the emissive mushroom-like spots on
   the canopy.
-- **Centre glow (vortex)** — brightness and **vortex swirl** (how tightly the
-  central background whirlpool winds, independent of the tunnel).
+- **Centre glow (vortex)** — brightness, **vortex swirl** (how tightly the
+  central background whirlpool winds, independent of the tunnel) and **opacity**
+  to fade the vortex.
 - **Stars (points)**, **Beams (hyperspace)**, **Dots (twinkling stars)** — three
   space layers flying outward, each with **count** (absolute number; for beams
   the number of radial lines), **speed** (never jumps when changed), **length**
@@ -98,7 +99,7 @@ beams out into a full rainbow).
 Drop a `.qml` theme file into
 `~/.config/monolith/trippy-forest/themes.d/` and restart plasmashell. See
 `themes/example.qml` in the effect directory for the format — a theme provides
-`foliage`, `glow` and `mist` colours, an optional `stars` colour and `mode`
+`canopy`, `glow` and `mist` colours, an optional `stars` colour and `mode`
 tone (`light`/`dark`/`mixed`/`psychedelic`), plus a 6-colour `palette` that is
 wrapped around the tunnel to drive the colour flow.
 

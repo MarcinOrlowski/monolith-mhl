@@ -46,11 +46,11 @@ QtObject {
     //   when omitted. One of: "light", "dark", "mixed", "psychedelic".
     property string mode: "mixed"
 
-    // ── Foliage ───────────────────────────────────────────────────────
+    // ── Canopy ───────────────────────────────────────────────────────
     //
     // Base colour of the dark leaf silhouettes closest to the camera.
-    // Keep it dark — near foliage reads as a backlit silhouette.
-    property string foliage: "#0e3d1e"
+    // Keep it dark — near canopy reads as a backlit silhouette.
+    property string canopy: "#0e3d1e"
 
     // ── Glow ──────────────────────────────────────────────────────────
     //

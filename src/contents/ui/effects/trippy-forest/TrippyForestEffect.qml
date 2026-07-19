@@ -31,7 +31,7 @@ Item {
         transitionDuration: 4,
         cycleInRandomOrder: true,
         cycleMode: "all",
-        showFoliage: true,
+        showCanopy: true,
         showGlow: true,
         showVortex: true,
         showStars: true,
@@ -47,6 +47,8 @@ Item {
         glow: 60,
         mist: 75,
         fog: 50,
+        canopyOpacity: 100,
+        vortexOpacity: 100,
         starCount: 40,
         starSpeed: 100,
         starLength: 35,
@@ -84,6 +86,8 @@ Item {
     property real glowAmount: 0.60
     property real mistAmount: 0.75
     property real fog: 0.50
+    property real canopyOpacity: 1.0
+    property real vortexOpacity: 1.0
     property real starCount: 40
     property real starSpeed: 1.0
     property real starLength: 0.35
@@ -127,6 +131,8 @@ Item {
         glowAmount = Math.min(1.0, Math.max(0.0, s.glow / 100.0));
         mistAmount = Math.min(1.0, Math.max(0.0, s.mist / 100.0));
         fog = Math.min(1.0, Math.max(0.0, s.fog / 100.0));
+        canopyOpacity = Math.min(1.0, Math.max(0.0, s.canopyOpacity / 100.0));
+        vortexOpacity = Math.min(1.0, Math.max(0.0, s.vortexOpacity / 100.0));
         starCount = Math.max(0, s.starCount);
         starSpeed = Math.max(0.0, s.starSpeed / 100.0);
         starLength = Math.min(1.0, Math.max(0.0, s.starLength / 100.0));
@@ -244,7 +250,7 @@ Item {
 
     // --- Layer visibility ---
     property var layerKeys: [
-        "showFoliage", "showGlow", "showVortex", "showStars", "showBeams", "showDots"
+        "showCanopy", "showGlow", "showVortex", "showStars", "showBeams", "showDots"
     ]
 
     // React to any config change (JSON blob or hub-level)
@@ -484,7 +490,7 @@ Item {
         property real starTime: 0
         property real beamTime: 0
         property real dotTime: 0
-        property real showFoliage: 1.0
+        property real showCanopy: 1.0
         property real showGlow: 1.0
         property real showVortex: 1.0
         property real showStars: 1.0
@@ -506,6 +512,10 @@ Item {
         Behavior on mistAmount { NumberAnimation { duration: 700; easing.type: Easing.InOutQuad } }
         property real fog: effectRoot.fog
         Behavior on fog { NumberAnimation { duration: 700; easing.type: Easing.InOutQuad } }
+        property real canopyOpacity: effectRoot.canopyOpacity
+        Behavior on canopyOpacity { NumberAnimation { duration: 700; easing.type: Easing.InOutQuad } }
+        property real vortexOpacity: effectRoot.vortexOpacity
+        Behavior on vortexOpacity { NumberAnimation { duration: 700; easing.type: Easing.InOutQuad } }
         property real starCount: effectRoot.starCount
         property real starLength: effectRoot.starLength
         Behavior on starLength { NumberAnimation { duration: 700; easing.type: Easing.InOutQuad } }
@@ -524,8 +534,8 @@ Item {
 
         // Theme colors — order must match shader uniform block layout. Behaviors
         // cross-fade the whole scene when the theme changes.
-        property color foliageCol: "#0e3d1e"
-        Behavior on foliageCol { ColorAnimation { duration: effectRoot.transitionMs } }
+        property color canopyCol: "#0e3d1e"
+        Behavior on canopyCol { ColorAnimation { duration: effectRoot.transitionMs } }
         property color glowCol: "#2fd0b0"
         Behavior on glowCol { ColorAnimation { duration: effectRoot.transitionMs } }
         property color mistCol: "#3a6a80"

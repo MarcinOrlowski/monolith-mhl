@@ -25,7 +25,7 @@ layout(std140, binding = 0) uniform buf {
     float starTime;
     float beamTime;
     float dotTime;
-    float showFoliage;
+    float showCanopy;
     float showGlow;
     float showVortex;
     float showStars;
@@ -38,6 +38,8 @@ layout(std140, binding = 0) uniform buf {
     float glowAmount;
     float mistAmount;
     float fog;
+    float canopyOpacity;
+    float vortexOpacity;
     float starCount;
     float starLength;
     float starOpacity;
@@ -47,7 +49,7 @@ layout(std140, binding = 0) uniform buf {
     float dotCount;
     float dotOpacity;
     float dimLevel;
-    vec4 foliageCol;
+    vec4 canopyCol;
     vec4 glowCol;
     vec4 mistCol;
     vec4 starsCol;

@@ -30,7 +30,7 @@ Item {
         transitionDuration: 4,
         cycleInRandomOrder: true,
         cycleMode: "all",
-        showFoliage: true,
+        showCanopy: true,
         showGlow: true,
         showVortex: true,
         showStars: true,
@@ -46,6 +46,8 @@ Item {
         glow: 60,
         mist: 75,
         fog: 50,
+        canopyOpacity: 100,
+        vortexOpacity: 100,
         starCount: 40,
         starSpeed: 100,
         starLength: 35,
@@ -72,7 +74,7 @@ Item {
     property int _transitionDuration: 4
     property bool _cycleInRandomOrder: true
     property string _cycleMode: "all"
-    property bool _showFoliage: true
+    property bool _showCanopy: true
     property bool _showGlow: true
     property bool _showVortex: true
     property bool _showStars: true
@@ -88,6 +90,8 @@ Item {
     property int _glow: 60
     property int _mist: 75
     property int _fog: 50
+    property int _canopyOpacity: 100
+    property int _vortexOpacity: 100
     property int _starCount: 40
     property int _starSpeed: 100
     property int _starLength: 35
@@ -121,7 +125,7 @@ Item {
         _transitionDuration = s.transitionDuration
         _cycleInRandomOrder = s.cycleInRandomOrder
         _cycleMode = s.cycleMode
-        _showFoliage = s.showFoliage
+        _showCanopy = s.showCanopy
         _showGlow = s.showGlow
         _showVortex = s.showVortex
         _showStars = s.showStars
@@ -137,6 +141,8 @@ Item {
         _glow = s.glow
         _mist = s.mist
         _fog = s.fog
+        _canopyOpacity = s.canopyOpacity
+        _vortexOpacity = s.vortexOpacity
         _starCount = s.starCount
         _starSpeed = s.starSpeed
         _starLength = s.starLength
@@ -166,7 +172,7 @@ Item {
             transitionDuration: _transitionDuration,
             cycleInRandomOrder: _cycleInRandomOrder,
             cycleMode: _cycleMode,
-            showFoliage: _showFoliage,
+            showCanopy: _showCanopy,
             showGlow: _showGlow,
             showVortex: _showVortex,
             showStars: _showStars,
@@ -182,6 +188,8 @@ Item {
             glow: _glow,
             mist: _mist,
             fog: _fog,
+            canopyOpacity: _canopyOpacity,
+            vortexOpacity: _vortexOpacity,
             starCount: _starCount,
             starSpeed: _starSpeed,
             starLength: _starLength,
@@ -208,7 +216,7 @@ Item {
     on_TransitionDurationChanged: _save()
     on_CycleInRandomOrderChanged: _save()
     on_CycleModeChanged: _save()
-    on_ShowFoliageChanged: _save()
+    on_ShowCanopyChanged: _save()
     on_ShowGlowChanged: _save()
     on_ShowVortexChanged: _save()
     on_ShowStarsChanged: _save()
@@ -224,6 +232,8 @@ Item {
     on_GlowChanged: _save()
     on_MistChanged: _save()
     on_FogChanged: _save()
+    on_CanopyOpacityChanged: _save()
+    on_VortexOpacityChanged: _save()
     on_StarCountChanged: _save()
     on_StarSpeedChanged: _save()
     on_StarLengthChanged: _save()

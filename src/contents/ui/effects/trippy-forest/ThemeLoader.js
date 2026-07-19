@@ -33,7 +33,7 @@ function validateTheme(obj) {
     if (obj.mode !== undefined && ["light", "dark", "mixed", "psychedelic"].indexOf(obj.mode) === -1)
         return "mode must be one of: light, dark, mixed, psychedelic";
 
-    var singles = ["foliage", "glow", "mist"];
+    var singles = ["canopy", "glow", "mist"];
     for (var s = 0; s < singles.length; s++) {
         if (typeof obj[singles[s]] !== "string" || !parseHexColor(obj[singles[s]]))
             return singles[s] + " must be a valid #RRGGBB color";
@@ -53,7 +53,7 @@ function validateTheme(obj) {
 // Apply a loaded theme object to a ShaderEffect target (colours only — layer
 // visibility is controlled by the user settings, not the theme).
 function applyTheme(obj, target) {
-    target["foliageCol"] = obj.foliage;
+    target["canopyCol"] = obj.canopy;
     target["glowCol"] = obj.glow;
     target["mistCol"] = obj.mist;
     target["starsCol"] = (obj.stars !== undefined) ? obj.stars : "#ffffff";

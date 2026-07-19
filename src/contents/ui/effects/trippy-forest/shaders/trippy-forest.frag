@@ -25,7 +25,7 @@ layout(std140, binding = 0) uniform buf {
     float starTime;         // point-star flight accumulator (speed folded in)
     float beamTime;         // hyperspace-beam flight accumulator
     float dotTime;          // dot-star flight accumulator
-    float showFoliage;
+    float showCanopy;
     float showGlow;
     float showVortex;
     float showStars;
@@ -38,6 +38,8 @@ layout(std140, binding = 0) uniform buf {
     float glowAmount;
     float mistAmount;
     float fog;
+    float canopyOpacity;
+    float vortexOpacity;
     float starCount;
     float starLength;
     float starOpacity;
@@ -47,7 +49,7 @@ layout(std140, binding = 0) uniform buf {
     float dotCount;
     float dotOpacity;
     float dimLevel;
-    vec4 foliageCol;
+    vec4 canopyCol;
     vec4 glowCol;
     vec4 mistCol;
     vec4 starsCol;
@@ -133,7 +135,7 @@ vec3 scene(vec2 uv) {
     vec3 vortexTint = palette(fract(a / 6.2831 + whirlTime * 0.05 + 0.5));
     vec3 center = mistCol.rgb * mistAmount * (0.30 + 0.70 * cg);
     center = mix(center, center * 0.4 + vortexTint * mistAmount, (0.35 + 0.45 * swirl) * cg);
-    vec3 col = center * showVortex;
+    vec3 col = center * showVortex * vortexOpacity;
 
     // Fade the space layers around the centre so nothing meets in the middle.
     float centerHole = smoothstep(0.04, 0.18, r);
@@ -215,12 +217,12 @@ vec3 scene(vec2 uv) {
         col += clamp(dAcc, 0.0, 1.0) * centerHole * dotOpacity;
     }
 
-    // --- foliage rings, far to near (painter's order) ---
+    // --- canopy rings, far to near (painter's order) ---
     for (int i = LAYERS - 1; i >= 0; i--) {
         float fi = float(i);
         float zc = fi + 1.0 - baseZ;            // distance from camera (> 0)
         float ringId = ringBase + fi + 1.0;     // stable per-ring seed
-        // on-screen radius of this ring; tunnelWidth pushes the foliage out
+        // on-screen radius of this ring; tunnelWidth pushes the canopy out
         // (wider tunnel mouth) or pulls it in (narrower).
         float proj = (RINGSCALE * tunnelWidth) / zc;
 
@@ -247,13 +249,13 @@ vec3 scene(vec2 uv) {
         float edge = 1.0 - smoothstep(outer * 0.9, outer, r);
         // fade newly spawned far rings in via alpha instead of popping into view
         float appear = smoothstep(float(LAYERS), float(LAYERS) - 1.2, zc);
-        float cov = clamp(inner * edge * mask, 0.0, 1.0) * appear * showFoliage;
+        float cov = clamp(inner * edge * mask, 0.0, 1.0) * appear * showCanopy * canopyOpacity;
 
         // Near rings are dark backlit silhouettes; depth brings the palette colour
         // and haze, dissolving distant rings into the glowing central vortex.
         float far = clamp(zc / float(LAYERS), 0.0, 1.0);
         vec3 tint = palette(fract(aa / 6.2831 + far * 0.5 + rotTime * 0.03));
-        vec3 fol = foliageCol.rgb * (0.10 + 0.35 * far);
+        vec3 fol = canopyCol.rgb * (0.10 + 0.35 * far);
         fol = mix(fol, tint, 0.15 + 0.65 * far);
         fol = mix(fol, mistCol.rgb * mistAmount, far * fog);
 
@@ -261,7 +263,7 @@ vec3 scene(vec2 uv) {
         float rim = inner * (1.0 - smoothstep(opening * 1.02, opening * 1.10, r)) * edge;
         fol += mix(mistCol.rgb * mistAmount, tint, 0.6) * rim * (0.35 + 0.5 * far) * appear;
 
-        // sparse emissive spots (mushrooms / flowers) on the foliage
+        // sparse emissive spots (mushrooms / flowers) on the canopy
         float spotN = vnoise(pc * 10.0 + vec2(rNorm * 12.0, ringId * 5.0));
         float spot = smoothstep(0.80, 0.90, spotN) * cov;
         vec3 spotCol = mix(glowCol.rgb, tint, 0.5);

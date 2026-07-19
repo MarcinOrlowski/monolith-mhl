@@ -439,7 +439,13 @@ WallpaperItem {
 
     property string _loadedEffectUrl: ""
     function loadEffect() {
-        var url = root.effectRegistry[root.configuration.ActiveEffect] || ""
+        var reg = root.effectRegistry
+        var url = reg[root.configuration.ActiveEffect] || ""
+        if (url.toString().length === 0) {
+            // Stale/unknown effect id (e.g. after an effect was renamed) — fall
+            // back to any registered effect so the wallpaper never goes black.
+            for (var k in reg) { url = reg[k]; break }
+        }
         var urlStr = url.toString()
         if (urlStr.length > 0 && urlStr !== _loadedEffectUrl) {
             _loadedEffectUrl = urlStr

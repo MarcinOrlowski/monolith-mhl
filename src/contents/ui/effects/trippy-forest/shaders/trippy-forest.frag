@@ -139,10 +139,12 @@ vec3 scene(vec2 uv) {
     float centerHole = smoothstep(0.04, 0.18, r);
 
     // --- point starfield: sparse dots with short motion streaks, flying outward ---
+    // Colour comes from the theme palette (tinted toward the theme's star colour),
+    // so every set — spectrum, gruvbox, psychedelic … — drives it.
     if (showStars > 0.5) {
         float st = starTime * 0.16;
         float tail = 2.0 + starLength * 22.0;
-        float sSum = 0.0;
+        vec3 sAcc = vec3(0.0);
         for (int s = 0; s < STAR_MAX; s++) {
             if (float(s) >= starCount) break;
             vec2 h = hash2(float(s) * 1.7 + 3.1);
@@ -156,9 +158,10 @@ vec3 scene(vec2 uv) {
             float d = length(vec2(along / (1.0 + (1.0 - z) * tail), perp));
             float size = mix(0.004, 0.02, 1.0 - z);
             float spark = smoothstep(size, 0.0, d);
-            sSum += spark * (1.0 - z) * smoothstep(0.0, 0.12, z);
+            vec3 sc = mix(starsCol.rgb, palette(fract(h.x + starTime * 0.05)), 0.8);
+            sAcc += sc * spark * (1.0 - z) * smoothstep(0.0, 0.12, z);
         }
-        col += starsCol.rgb * clamp(sSum, 0.0, 1.0) * centerHole * starOpacity;
+        col += clamp(sAcc, 0.0, 1.0) * centerHole * starOpacity;
     }
 
     // --- hyperspace beams: many thin radial streaks flying outward to the edge ---
@@ -168,6 +171,8 @@ vec3 scene(vec2 uv) {
         float N = max(4.0, beamCount);
         float sa = (a / 6.2831 + 0.5) * N;        // angle -> line-index space
         float base = floor(sa);
+        // per-sector palette colour so a psychedelic set fans out a rainbow
+        vec3 bcol = mix(starsCol.rgb, palette(fract(base / N + beamTime * 0.03)), 0.85);
         float beams = 0.0;
         for (int k = -1; k <= 1; k++) {           // include neighbours for border lines
             float id = base + float(k);
@@ -187,13 +192,13 @@ vec3 scene(vec2 uv) {
             float bright = 0.35 + 0.65 * h.y;                         // per-line brightness
             beams += thin * radial * edgeFade * bright;
         }
-        col += starsCol.rgb * clamp(beams, 0.0, 1.4) * centerHole * beamOpacity;
+        col += bcol * clamp(beams, 0.0, 1.4) * centerHole * beamOpacity;
     }
 
     // --- dot starfield: plain round twinkling stars flying forward ---
     if (showDots > 0.5) {
         float dt2 = dotTime * 0.16;
-        float dSum = 0.0;
+        vec3 dAcc = vec3(0.0);
         for (int s = 0; s < STAR_MAX; s++) {
             if (float(s) >= dotCount) break;
             vec2 h = hash2(float(s) * 4.3 + 1.9);
@@ -204,9 +209,10 @@ vec3 scene(vec2 uv) {
             float size = mix(0.0015, 0.010, 1.0 - z);        // grows as it approaches
             float dotv = smoothstep(size, 0.0, d);
             float twinkle = 0.6 + 0.4 * sin(dotTime * 3.0 + h.x * 30.0);
-            dSum += dotv * (1.0 - z) * smoothstep(0.0, 0.1, z) * twinkle;
+            vec3 dc = mix(starsCol.rgb, palette(fract(h.x + dotTime * 0.04)), 0.5);
+            dAcc += dc * dotv * (1.0 - z) * smoothstep(0.0, 0.1, z) * twinkle;
         }
-        col += starsCol.rgb * clamp(dSum, 0.0, 1.0) * centerHole * dotOpacity;
+        col += clamp(dAcc, 0.0, 1.0) * centerHole * dotOpacity;
     }
 
     // --- foliage rings, far to near (painter's order) ---

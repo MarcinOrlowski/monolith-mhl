@@ -50,32 +50,29 @@ Everything is generated procedurally in the shader — there are no image assets
 
 ## Settings
 
-### Appearance
+### Layers
 
-- **Canopy density** — how full the leafy canopies are (fewer gaps at higher
-  values).
-- **Tunnel swirl** — how tightly the leafy tunnel twists as it recedes.
-- **Vortex swirl** — how tightly the central background whirlpool winds
-  (independent of the tunnel).
-- **Tunnel width** — how far the foliage sits from the centre; higher values
-  open up a wider tunnel mouth, lower values pull it in.
-- **Glow spots** — brightness/quantity of the emissive mushroom-like spots.
-- **Centre glow** — brightness of the misty light at the end of the tunnel.
-- **Depth haze** — how strongly distant rings dissolve into the central glow.
+Every layer is grouped into its own section with a **Visible** toggle plus its
+settings. Layers that depend on another (glow spots sit on the canopy) are
+disabled when their parent is off.
 
-**Stars (points)**, **Beams (hyperspace)** and **Dots (twinkling stars)** each
-have their own controls, active when the matching layer is on:
+- **Canopy** — the leafy tunnel: density, **tunnel swirl** (how tightly it
+  twists), **tunnel width** (how far the foliage sits from the centre — higher
+  opens a wider tunnel mouth) and **depth haze** (how far rings dissolve into
+  the central glow).
+- **Glow spots** — brightness/quantity of the emissive mushroom-like spots on
+  the canopy.
+- **Centre glow (vortex)** — brightness and **vortex swirl** (how tightly the
+  central background whirlpool winds, independent of the tunnel).
+- **Stars (points)**, **Beams (hyperspace)**, **Dots (twinkling stars)** — three
+  space layers flying outward, each with **count** (absolute number; for beams
+  the number of radial lines), **speed** (never jumps when changed), **length**
+  (stars & beams; dots are plain round points), and **opacity** to blend the
+  layer independently. All three fade out around the centre.
 
-- **count** — how many are in flight (an absolute number; for beams it is the
-  number of radial lines).
-- **speed** — how fast they fly outward toward the edges. Changing speed only
-  affects the flow from that moment on — it never jumps or restarts.
-- **length** (stars & beams) — length of the motion streaks, from short dashes
-  to long hyperspace lines. Dots are plain round points and twinkle instead.
-- **opacity** — blend each layer in or out independently.
-
-All three fade out around the centre so nothing converges to a single point,
-and their **colour** comes from the active theme.
+The space layers are coloured from the **active theme's palette**, so every set
+— spectrum, gruvbox, psychedelic … — tints them (a psychedelic set fans the
+beams out into a full rainbow).
 
 ### Theme
 
@@ -86,13 +83,6 @@ and their **colour** comes from the active theme.
   *Mixed* or *Psychedelic* themes.
 - **Transition duration** — how long each cross-fade takes.
 - **Brightness** — globally darken the effect.
-
-### Layers
-
-On/off toggles for **Canopy**, **Glow spots**, **Centre glow (vortex)**,
-**Stars (points)**, **Beams (hyperspace)** and **Dots (twinkling stars)**. Glow
-spots require the Canopy layer, so their toggle is disabled when the canopy is
-off.
 
 ### Animation
 

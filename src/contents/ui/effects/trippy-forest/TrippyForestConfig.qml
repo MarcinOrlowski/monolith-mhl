@@ -273,9 +273,8 @@ Item {
 
     // --- Page definitions for sidebar navigation ---
     readonly property var pages: [
-        { moduleId: "appearance", text: qsTr("Appearance"), icon: "preferences-desktop-color", page: "TrippyForestAppearancePage.qml" },
-        { moduleId: "theme", text: qsTr("Theme"), icon: "color-management", page: "TrippyForestThemePage.qml" },
         { moduleId: "layers", text: qsTr("Layers"), icon: "view-visible", page: "TrippyForestLayersPage.qml" },
+        { moduleId: "theme", text: qsTr("Theme"), icon: "color-management", page: "TrippyForestThemePage.qml" },
         { moduleId: "animation", text: qsTr("Animation"), icon: "media-playback-start", page: "TrippyForestAnimationPage.qml" }
     ]
 }

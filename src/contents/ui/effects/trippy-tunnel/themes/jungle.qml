@@ -12,18 +12,18 @@
 import QtQuick
 
 QtObject {
-    property string themeId: "tfm-vaporwave"
-    property string name: "Vaporwave"
+    property string themeId: "ttm-jungle"
+    property string name: "Jungle"
     property bool enabled: true
 
-    // Tone group for the light/dark/mixed/psychedelic cycle filter.
-    property string mode: "psychedelic"
+    // Tone group for the light/dark/mixed cycle filter.
+    property string mode: "dark"
 
-    property string canopy: "#1a0a2a"
-    property string glow: "#ff71ce"
-    property string mist: "#3a2a5a"
-    property string stars: "#ffffff"
+    property string canopy: "#0a2a14"
+    property string glow: "#8fc04f"
+    property string mist: "#26543a"
+    property string stars: "#d8ffa0"
 
     // 6-stop palette wrapped around the tunnel (drives the trippy colour flow)
-    property var palette: ["#ff71ce", "#b967ff", "#01cdfe", "#05ffa1", "#fffb96", "#ff6ec7"]
+    property var palette: ["#2f6b28", "#4f8a2a", "#6fae3a", "#3c7d4e", "#255f3a", "#8fc04f"]
 }

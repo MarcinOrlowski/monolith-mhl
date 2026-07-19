@@ -12,18 +12,18 @@
 import QtQuick
 
 QtObject {
-    property string themeId: "tfm-ultraviolet"
-    property string name: "Ultraviolet"
+    property string themeId: "ttm-gruvbox-dark"
+    property string name: "Gruvbox Dark"
     property bool enabled: true
 
-    // Tone group for the light/dark/mixed/psychedelic cycle filter.
-    property string mode: "psychedelic"
+    // Tone group for the light/dark/mixed cycle filter.
+    property string mode: "dark"
 
-    property string canopy: "#0e061f"
-    property string glow: "#d264ff"
-    property string mist: "#2e1a5a"
-    property string stars: "#f0e0ff"
+    property string canopy: "#1d2021"
+    property string glow: "#d79921"
+    property string mist: "#3c3836"
+    property string stars: "#ebdbb2"
 
     // 6-stop palette wrapped around the tunnel (drives the trippy colour flow)
-    property var palette: ["#7b2ff7", "#a24bff", "#d264ff", "#4b2fff", "#ff5edf", "#2fb0ff"]
+    property var palette: ["#cc241d", "#d65d0e", "#d79921", "#98971a", "#689d6a", "#b16286"]
 }

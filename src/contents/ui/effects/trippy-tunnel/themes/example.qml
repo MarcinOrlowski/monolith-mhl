@@ -1,9 +1,9 @@
 /***********************************************************************
  *
- * Monolith MHL — Example Trippy Forest theme template
+ * Monolith MHL — Example Trippy Tunnel theme template
  *
  * How to use:
- *   1. Copy this file to ~/.config/monolith/trippy-forest/themes.d/
+ *   1. Copy this file to ~/.config/monolith/trippy-tunnel/themes.d/
  *      (create the directory if it does not exist)
  *   2. Rename the copy to something like "my-theme.qml"
  *   3. Set enabled to true
@@ -19,10 +19,10 @@
  *   - palette must contain exactly 6 colors
  *
  * Reserved built-in theme IDs (do NOT reuse these):
- *   tfm-spectrum, tfm-jungle, tfm-neon, tfm-ember, tfm-abyss, tfm-aurora,
- *   tfm-gruvbox-dark, tfm-gruvbox-light, tfm-charcoal, tfm-acid,
- *   tfm-vaporwave, tfm-blotter, tfm-plasma, tfm-kaleidoscope,
- *   tfm-ultraviolet, tfm-toxic, tfm-fever, tfm-oil-slick, tfm-candy
+ *   ttm-spectrum, ttm-jungle, ttm-neon, ttm-ember, ttm-abyss, ttm-aurora,
+ *   ttm-gruvbox-dark, ttm-gruvbox-light, ttm-charcoal, ttm-acid,
+ *   ttm-vaporwave, ttm-blotter, ttm-plasma, ttm-kaleidoscope,
+ *   ttm-ultraviolet, ttm-toxic, ttm-fever, ttm-oil-slick, ttm-candy
  *
  **********************************************************************/
 

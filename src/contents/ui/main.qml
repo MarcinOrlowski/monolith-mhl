@@ -203,7 +203,7 @@ WallpaperItem {
         "rainbow-waves": Qt.resolvedUrl("effects/rainbow-waves/RainbowWavesEffect.qml"),
         "lava-lamp": Qt.resolvedUrl("effects/lava-lamp/LavaLampEffect.qml"),
         "dot-waves": Qt.resolvedUrl("effects/dot-waves/DotWavesEffect.qml"),
-        "trippy-forest": Qt.resolvedUrl("effects/trippy-forest/TrippyForestEffect.qml")
+        "trippy-tunnel": Qt.resolvedUrl("effects/trippy-tunnel/TrippyTunnelEffect.qml")
     })
 
     Loader {

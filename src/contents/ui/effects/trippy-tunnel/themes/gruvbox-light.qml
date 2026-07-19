@@ -12,18 +12,18 @@
 import QtQuick
 
 QtObject {
-    property string themeId: "tfm-acid"
-    property string name: "Acid Trip"
+    property string themeId: "ttm-gruvbox-light"
+    property string name: "Gruvbox Light"
     property bool enabled: true
 
-    // Tone group for the light/dark/mixed/psychedelic cycle filter.
-    property string mode: "psychedelic"
+    // Tone group for the light/dark/mixed cycle filter.
+    property string mode: "light"
 
-    property string canopy: "#10240a"
-    property string glow: "#ccff00"
-    property string mist: "#2a5a3a"
-    property string stars: "#eaffea"
+    property string canopy: "#7c6f64"
+    property string glow: "#b57614"
+    property string mist: "#d5c4a1"
+    property string stars: "#fbf1c7"
 
     // 6-stop palette wrapped around the tunnel (drives the trippy colour flow)
-    property var palette: ["#39ff14", "#ccff00", "#ff00ff", "#00ffff", "#ffea00", "#ff2079"]
+    property var palette: ["#9d0006", "#af3a03", "#b57614", "#79740e", "#427b58", "#8f3f71"]
 }

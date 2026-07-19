@@ -1,4 +1,4 @@
-# Trippy Forest
+# Trippy Tunnel
 
 An endless zoom into a psychedelic forest tunnel. Layered canopies of leaves
 recede toward a glowing, swirling vortex at the centre while the camera flies
@@ -121,7 +121,7 @@ beams out into a full rainbow).
 ## Custom themes
 
 Drop a `.qml` theme file into
-`~/.config/monolith/trippy-forest/themes.d/` and restart plasmashell. See
+`~/.config/monolith/trippy-tunnel/themes.d/` and restart plasmashell. See
 `themes/example.qml` in the effect directory for the format — a theme provides
 `canopy`, `glow` and `mist` colours, an optional `stars` colour and `mode`
 tone (`light`/`dark`/`mixed`/`psychedelic`), plus a 6-colour `palette` that is
@@ -129,7 +129,7 @@ wrapped around the tunnel to drive the colour flow.
 
 ## Gallery
 
-Trippy Forest effect on the default *Spectrum* theme, with no additional filters
+Trippy Tunnel effect on the default *Spectrum* theme, with no additional filters
 applied.
 
 ![Preview](img/preview-01.webp)

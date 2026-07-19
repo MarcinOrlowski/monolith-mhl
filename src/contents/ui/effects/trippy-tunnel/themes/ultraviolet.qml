@@ -12,18 +12,18 @@
 import QtQuick
 
 QtObject {
-    property string themeId: "tfm-neon"
-    property string name: "Neon"
+    property string themeId: "ttm-ultraviolet"
+    property string name: "Ultraviolet"
     property bool enabled: true
 
-    // Tone group for the light/dark/mixed cycle filter.
-    property string mode: "dark"
+    // Tone group for the light/dark/mixed/psychedelic cycle filter.
+    property string mode: "psychedelic"
 
-    property string canopy: "#160a2e"
-    property string glow: "#ff5ecb"
-    property string mist: "#3a2060"
-    property string stars: "#ffffff"
+    property string canopy: "#0e061f"
+    property string glow: "#d264ff"
+    property string mist: "#2e1a5a"
+    property string stars: "#f0e0ff"
 
     // 6-stop palette wrapped around the tunnel (drives the trippy colour flow)
-    property var palette: ["#ff33cc", "#cc33ff", "#7a3cff", "#33ccff", "#ff5ea8", "#9d4bff"]
+    property var palette: ["#7b2ff7", "#a24bff", "#d264ff", "#4b2fff", "#ff5edf", "#2fb0ff"]
 }

@@ -12,18 +12,18 @@
 import QtQuick
 
 QtObject {
-    property string themeId: "tfm-gruvbox-dark"
-    property string name: "Gruvbox Dark"
+    property string themeId: "ttm-kaleidoscope"
+    property string name: "Kaleidoscope"
     property bool enabled: true
 
-    // Tone group for the light/dark/mixed cycle filter.
-    property string mode: "dark"
+    // Tone group for the light/dark/mixed/psychedelic cycle filter.
+    property string mode: "psychedelic"
 
-    property string canopy: "#1d2021"
-    property string glow: "#d79921"
-    property string mist: "#3c3836"
-    property string stars: "#ebdbb2"
+    property string canopy: "#12081c"
+    property string glow: "#ffe600"
+    property string mist: "#2a4a58"
+    property string stars: "#ffffff"
 
     // 6-stop palette wrapped around the tunnel (drives the trippy colour flow)
-    property var palette: ["#cc241d", "#d65d0e", "#d79921", "#98971a", "#689d6a", "#b16286"]
+    property var palette: ["#ff1e56", "#ff9f1c", "#ffe600", "#2ec4b6", "#3d5aff", "#b14aed"]
 }

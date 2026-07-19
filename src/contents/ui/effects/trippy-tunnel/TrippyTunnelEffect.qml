@@ -21,9 +21,9 @@ Item {
     // --- Input from hub ---
     property var configuration: null
 
-    // --- Schema (must match TrippyForestConfig.qml) ---
+    // --- Schema (must match TrippyTunnelConfig.qml) ---
     readonly property var _defaults: ({
-        themeId: "tfm-spectrum",
+        themeId: "ttm-spectrum",
         randomInitialTheme: false,
         autoCycle: true,
         cycleInterval: 20,
@@ -165,7 +165,7 @@ Item {
     }
 
     function _readSettings() {
-        var json = configuration ? configuration.EffectTrippyForestSettings : "{}";
+        var json = configuration ? configuration.EffectTrippyTunnelSettings : "{}";
         return EffectSettings.load(json, _defaults);
     }
 
@@ -174,7 +174,7 @@ Item {
         for (var key in patch) {
             s[key] = patch[key];
         }
-        configuration.EffectTrippyForestSettings = EffectSettings.save(s);
+        configuration.EffectTrippyTunnelSettings = EffectSettings.save(s);
     }
 
     function _applySettings() {
@@ -257,8 +257,8 @@ Item {
     // --- Outputs for hub ---
     readonly property bool hasError: effect.status === ShaderEffect.Error
     readonly property string errorLog: effect.log || ""
-    readonly property string effectName: "Trippy Forest"
-    readonly property url configUrl: Qt.resolvedUrl("TrippyForestConfig.qml")
+    readonly property string effectName: "Trippy Tunnel"
+    readonly property url configUrl: Qt.resolvedUrl("TrippyTunnelConfig.qml")
 
     readonly property list<PlasmaCore.Action> effectActions: [
         PlasmaCore.Action {
@@ -338,7 +338,7 @@ Item {
     Connections {
         target: effectRoot.configuration
         function onValueChanged(key, value) {
-            if (key === "EffectTrippyForestSettings") {
+            if (key === "EffectTrippyTunnelSettings") {
                 effectRoot._applySettings();
             }
         }
@@ -601,7 +601,7 @@ Item {
     Component.onCompleted: _applySettings()
 
     // --- Shader effect ---
-    // CRITICAL: Property order must match the std140 uniform block in trippy-forest.frag
+    // CRITICAL: Property order must match the std140 uniform block in trippy-tunnel.frag
     ShaderEffect {
         id: effect
         anchors.fill: parent
@@ -717,7 +717,7 @@ Item {
             }
         }
 
-        vertexShader: "shaders/trippy-forest.vert.qsb"
-        fragmentShader: "shaders/trippy-forest.frag.qsb"
+        vertexShader: "shaders/trippy-tunnel.vert.qsb"
+        fragmentShader: "shaders/trippy-tunnel.frag.qsb"
     }
 }

@@ -12,18 +12,18 @@
 import QtQuick
 
 QtObject {
-    property string themeId: "tfm-abyss"
-    property string name: "Abyss"
+    property string themeId: "ttm-acid"
+    property string name: "Acid Trip"
     property bool enabled: true
 
-    // Tone group for the light/dark/mixed cycle filter.
-    property string mode: "dark"
+    // Tone group for the light/dark/mixed/psychedelic cycle filter.
+    property string mode: "psychedelic"
 
-    property string canopy: "#04121f"
-    property string glow: "#2fb0a8"
-    property string mist: "#123a4a"
-    property string stars: "#bfffff"
+    property string canopy: "#10240a"
+    property string glow: "#ccff00"
+    property string mist: "#2a5a3a"
+    property string stars: "#eaffea"
 
     // 6-stop palette wrapped around the tunnel (drives the trippy colour flow)
-    property var palette: ["#003b6f", "#0a6b8f", "#12a3a3", "#1ec8b0", "#0e5aa0", "#26e0d0"]
+    property var palette: ["#39ff14", "#ccff00", "#ff00ff", "#00ffff", "#ffea00", "#ff2079"]
 }

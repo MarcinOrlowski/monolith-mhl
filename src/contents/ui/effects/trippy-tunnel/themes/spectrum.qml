@@ -12,18 +12,18 @@
 import QtQuick
 
 QtObject {
-    property string themeId: "tfm-charcoal"
-    property string name: "Charcoal"
+    property string themeId: "ttm-spectrum"
+    property string name: "Spectrum"
     property bool enabled: true
 
     // Tone group for the light/dark/mixed cycle filter.
-    property string mode: "dark"
+    property string mode: "mixed"
 
-    property string canopy: "#0c0f10"
-    property string glow: "#5a6466"
-    property string mist: "#1a2022"
-    property string stars: "#cfd8da"
+    property string canopy: "#0e3d1e"
+    property string glow: "#2fd0b0"
+    property string mist: "#3a6a80"
+    property string stars: "#ffffff"
 
     // 6-stop palette wrapped around the tunnel (drives the trippy colour flow)
-    property var palette: ["#243034", "#2f3d40", "#3a4a4c", "#455658", "#22363a", "#30464a"]
+    property var palette: ["#ff2d55", "#ff9500", "#ffee33", "#34e56b", "#22c3ff", "#a45cff"]
 }

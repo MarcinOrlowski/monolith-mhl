@@ -62,7 +62,7 @@ layout(std140, binding = 0) uniform buf {
     vec4 pal5;
 };
 
-// Endless zoom into a trippy forest. Rings of leafy silhouettes recede toward a
+// Endless zoom into a trippy forest tunnel. Rings of leafy silhouettes recede toward a
 // glowing, swirling vortex at the centre. Three optional space layers fly
 // outward toward the viewer above the vortex and behind the canopy: point stars
 // (short motion streaks), hyperspace beams (many thin radial lines) and plain

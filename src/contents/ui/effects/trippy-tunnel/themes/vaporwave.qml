@@ -12,18 +12,18 @@
 import QtQuick
 
 QtObject {
-    property string themeId: "tfm-gruvbox-light"
-    property string name: "Gruvbox Light"
+    property string themeId: "ttm-vaporwave"
+    property string name: "Vaporwave"
     property bool enabled: true
 
-    // Tone group for the light/dark/mixed cycle filter.
-    property string mode: "light"
+    // Tone group for the light/dark/mixed/psychedelic cycle filter.
+    property string mode: "psychedelic"
 
-    property string canopy: "#7c6f64"
-    property string glow: "#b57614"
-    property string mist: "#d5c4a1"
-    property string stars: "#fbf1c7"
+    property string canopy: "#1a0a2a"
+    property string glow: "#ff71ce"
+    property string mist: "#3a2a5a"
+    property string stars: "#ffffff"
 
     // 6-stop palette wrapped around the tunnel (drives the trippy colour flow)
-    property var palette: ["#9d0006", "#af3a03", "#b57614", "#79740e", "#427b58", "#8f3f71"]
+    property var palette: ["#ff71ce", "#b967ff", "#01cdfe", "#05ffa1", "#fffb96", "#ff6ec7"]
 }

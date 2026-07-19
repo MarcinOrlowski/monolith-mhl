@@ -16,13 +16,13 @@ Item {
     id: effectConfig
 
     // --- JSON blob bound from hub config.qml ---
-    property string cfg_EffectTrippyForestSettings
+    property string cfg_EffectTrippyTunnelSettings
 
     property var hubConfiguration: null
 
     // --- Schema: key → default value (single source of truth) ---
     readonly property var _defaults: ({
-        themeId: "tfm-spectrum",
+        themeId: "ttm-spectrum",
         randomInitialTheme: false,
         autoCycle: true,
         cycleInterval: 20,
@@ -82,7 +82,7 @@ Item {
     })
 
     // --- Backing properties ---
-    property string _themeId: "tfm-spectrum"
+    property string _themeId: "ttm-spectrum"
     property bool _randomInitialTheme: false
     property bool _autoCycle: true
     property int _cycleInterval: 20
@@ -143,12 +143,12 @@ Item {
     // --- Load / save plumbing ---
     property bool _loading: false
 
-    onCfg_EffectTrippyForestSettingsChanged: _load()
+    onCfg_EffectTrippyTunnelSettingsChanged: _load()
     Component.onCompleted: _load()
 
     function _load() {
         _loading = true
-        var s = EffectSettings.load(cfg_EffectTrippyForestSettings, _defaults)
+        var s = EffectSettings.load(cfg_EffectTrippyTunnelSettings, _defaults)
         _themeId = s.themeId
         _randomInitialTheme = s.randomInitialTheme
         _autoCycle = s.autoCycle
@@ -211,7 +211,7 @@ Item {
 
     function _save() {
         if (_loading) return
-        cfg_EffectTrippyForestSettings = EffectSettings.save({
+        cfg_EffectTrippyTunnelSettings = EffectSettings.save({
             themeId: _themeId,
             randomInitialTheme: _randomInitialTheme,
             autoCycle: _autoCycle,
@@ -332,7 +332,7 @@ Item {
 
     // Restore all settings to their schema defaults
     function reset() {
-        cfg_EffectTrippyForestSettings = EffectSettings.save(_defaults)
+        cfg_EffectTrippyTunnelSettings = EffectSettings.save(_defaults)
     }
 
     // --- External config sync (e.g. "Set Current Theme" context menu) ---
@@ -340,7 +340,7 @@ Item {
         target: effectConfig.hubConfiguration
         enabled: effectConfig.hubConfiguration !== null
         function onValueChanged(key, value) {
-            if (key === "EffectTrippyForestSettings") {
+            if (key === "EffectTrippyTunnelSettings") {
                 effectConfig._load()
             }
         }
@@ -363,8 +363,8 @@ Item {
 
     // --- Page definitions for sidebar navigation ---
     readonly property var pages: [
-        { moduleId: "layers", text: qsTr("Layers"), icon: "view-visible", page: "TrippyForestLayersPage.qml" },
-        { moduleId: "theme", text: qsTr("Theme"), icon: "color-management", page: "TrippyForestThemePage.qml" },
-        { moduleId: "animation", text: qsTr("Animation"), icon: "media-playback-start", page: "TrippyForestAnimationPage.qml" }
+        { moduleId: "layers", text: qsTr("Layers"), icon: "view-visible", page: "TrippyTunnelLayersPage.qml" },
+        { moduleId: "theme", text: qsTr("Theme"), icon: "color-management", page: "TrippyTunnelThemePage.qml" },
+        { moduleId: "animation", text: qsTr("Animation"), icon: "media-playback-start", page: "TrippyTunnelAnimationPage.qml" }
     ]
 }

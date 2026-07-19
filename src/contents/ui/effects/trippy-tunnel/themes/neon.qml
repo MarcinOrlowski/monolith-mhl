@@ -12,18 +12,18 @@
 import QtQuick
 
 QtObject {
-    property string themeId: "tfm-oil-slick"
-    property string name: "Oil Slick"
+    property string themeId: "ttm-neon"
+    property string name: "Neon"
     property bool enabled: true
 
-    // Tone group for the light/dark/mixed/psychedelic cycle filter.
-    property string mode: "psychedelic"
+    // Tone group for the light/dark/mixed cycle filter.
+    property string mode: "dark"
 
-    property string canopy: "#06121a"
-    property string glow: "#23e0b0"
-    property string mist: "#1e2a4a"
-    property string stars: "#eafffb"
+    property string canopy: "#160a2e"
+    property string glow: "#ff5ecb"
+    property string mist: "#3a2060"
+    property string stars: "#ffffff"
 
     // 6-stop palette wrapped around the tunnel (drives the trippy colour flow)
-    property var palette: ["#00d2c6", "#6a4bff", "#ff3ea5", "#2f8fff", "#a24bff", "#23e0b0"]
+    property var palette: ["#ff33cc", "#cc33ff", "#7a3cff", "#33ccff", "#ff5ea8", "#9d4bff"]
 }

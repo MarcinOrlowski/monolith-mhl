@@ -12,18 +12,18 @@
 import QtQuick
 
 QtObject {
-    property string themeId: "tfm-kaleidoscope"
-    property string name: "Kaleidoscope"
+    property string themeId: "ttm-aurora"
+    property string name: "Aurora"
     property bool enabled: true
 
-    // Tone group for the light/dark/mixed/psychedelic cycle filter.
-    property string mode: "psychedelic"
+    // Tone group for the light/dark/mixed cycle filter.
+    property string mode: "mixed"
 
-    property string canopy: "#12081c"
-    property string glow: "#ffe600"
-    property string mist: "#2a4a58"
-    property string stars: "#ffffff"
+    property string canopy: "#08201a"
+    property string glow: "#4fd0a0"
+    property string mist: "#245a4a"
+    property string stars: "#d8fff0"
 
     // 6-stop palette wrapped around the tunnel (drives the trippy colour flow)
-    property var palette: ["#ff1e56", "#ff9f1c", "#ffe600", "#2ec4b6", "#3d5aff", "#b14aed"]
+    property var palette: ["#1fd77a", "#2ee6c8", "#33b0ff", "#a45cff", "#ff6ad5", "#5affb0"]
 }

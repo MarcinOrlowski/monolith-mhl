@@ -12,18 +12,18 @@
 import QtQuick
 
 QtObject {
-    property string themeId: "tfm-plasma"
-    property string name: "Plasma"
+    property string themeId: "ttm-toxic"
+    property string name: "Toxic"
     property bool enabled: true
 
     // Tone group for the light/dark/mixed/psychedelic cycle filter.
     property string mode: "psychedelic"
 
-    property string canopy: "#0a0a24"
-    property string glow: "#00f5d4"
-    property string mist: "#2a2a5a"
-    property string stars: "#eafcff"
+    property string canopy: "#0e1a06"
+    property string glow: "#aaff00"
+    property string mist: "#1e4a2a"
+    property string stars: "#eaffb0"
 
     // 6-stop palette wrapped around the tunnel (drives the trippy colour flow)
-    property var palette: ["#ff006e", "#8338ec", "#3a86ff", "#00f5d4", "#f15bb5", "#fee440"]
+    property var palette: ["#aaff00", "#66ff33", "#ccff33", "#00ff88", "#eaff00", "#39ff88"]
 }

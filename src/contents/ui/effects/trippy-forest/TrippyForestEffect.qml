@@ -83,7 +83,10 @@ Item {
     property int fpsLimit: 30
     property bool paused: false
 
-    property real spiral: 0.45
+    property real spiral: 0.45          // spring-smoothed value fed to the shader
+    property real spiralTarget: 0.45    // base + drift + burst steer this
+    property real spiralVel: 0.0        // spring velocity
+    property bool _swirlInit: false
     property real vortexSwirl: 0.45
     property real tunnelWidth: 1.0
     property bool swirlVary: false
@@ -111,15 +114,26 @@ Item {
 
     function togglePause() { paused = !paused }
 
-    // Continuous slow swirl: nudge the live swirl by a tiny delta each frame,
-    // reflecting at the 0/1 bounds so it drifts back and forth forever. The
-    // ShaderEffect's Behavior on `spiral` low-passes it into smooth motion.
+    // Continuous slow swirl: nudge the swirl TARGET by a tiny delta each frame,
+    // reflecting at the 0/1 bounds so it drifts back and forth forever.
     function _driftSwirl(dt) {
         if (!swirlVary) return
-        var ns = spiral + dt * swirlSpeedMult * _swirlDir
+        var ns = spiralTarget + dt * swirlSpeedMult * _swirlDir
         if (ns >= 1.0) { ns = 1.0; _swirlDir = -1 }
         else if (ns <= 0.0) { ns = 0.0; _swirlDir = 1 }
-        spiral = ns
+        spiralTarget = ns
+    }
+
+    // Critically-damped spring: ease `spiral` toward `spiralTarget`. Its velocity
+    // ramps smoothly in and out (no sharp onset), so the rotation that a swirl
+    // change induces speeds up / slows down gently instead of snapping. dt is
+    // clamped so the explicit integrator stays stable at low frame rates.
+    function _springSwirl(dt) {
+        var h = Math.min(dt, 0.04)
+        var k = 15.0
+        var c = 7.75   // ~2*sqrt(k), critical damping
+        spiralVel += ((spiralTarget - spiral) * k - spiralVel * c) * h
+        spiral += spiralVel * h
     }
 
     function _readSettings() {
@@ -144,7 +158,8 @@ Item {
         whirlSpeedMult = (s.whirlSpeed / 100.0) * _whirlBase;
 
         // Look
-        spiral = Math.min(1.0, Math.max(0.0, s.spiral / 100.0));
+        spiralTarget = Math.min(1.0, Math.max(0.0, s.spiral / 100.0));
+        if (!_swirlInit) { spiral = spiralTarget; spiralVel = 0.0; _swirlInit = true; }
         vortexSwirl = Math.min(1.0, Math.max(0.0, s.vortexSwirl / 100.0));
         tunnelWidth = Math.max(0.1, s.tunnelWidth / 100.0);
         swirlVary = s.swirlVary;
@@ -499,8 +514,8 @@ Item {
 
     // --- Tunnel-swirl auto-vary: random-walk the live swirl value every N secs,
     // stepping up to ±margin from the current value. The ShaderEffect's Behavior
-    // on `spiral` eases each jump so it drifts smoothly. Runtime only — the base
-    // setting is untouched.
+    // the spring eases each jump smoothly. Runtime only — the base setting is
+    // untouched.
     Timer {
         id: swirlVaryTimer
         running: effectRoot.swirlVary && !effectRoot.paused
@@ -508,7 +523,7 @@ Item {
         interval: Math.max(1, effectRoot.swirlVaryInterval) * 1000
         onTriggered: {
             var delta = (Math.random() * 2.0 - 1.0) * effectRoot.swirlVaryMargin
-            effectRoot.spiral = Math.min(1.0, Math.max(0.0, effectRoot.spiral + delta))
+            effectRoot.spiralTarget = Math.min(1.0, Math.max(0.0, effectRoot.spiralTarget + delta))
         }
     }
 
@@ -537,10 +552,12 @@ Item {
         property real showDots: 1.0
         // Ease look-parameter changes so pressing Apply glides to the new value
         // instead of snapping (which reads as the animation "restarting").
+        // `spiral` is spring-smoothed in the effect root (see _springSwirl) so a
+        // swirl change ramps its induced rotation gently in and out. vortexSwirl
+        // has no continuous drift, so a plain cornerless InOutSine ease suffices.
         property real spiral: effectRoot.spiral
-        Behavior on spiral { NumberAnimation { duration: 700; easing.type: Easing.InOutQuad } }
         property real vortexSwirl: effectRoot.vortexSwirl
-        Behavior on vortexSwirl { NumberAnimation { duration: 700; easing.type: Easing.InOutQuad } }
+        Behavior on vortexSwirl { NumberAnimation { duration: 1300; easing.type: Easing.InOutSine } }
         property real tunnelWidth: effectRoot.tunnelWidth
         Behavior on tunnelWidth { NumberAnimation { duration: 700; easing.type: Easing.InOutQuad } }
         property real density: effectRoot.density
@@ -606,6 +623,7 @@ Item {
                 effect.beamTime += frameTime * effectRoot.beamSpeed
                 effect.dotTime += frameTime * effectRoot.dotSpeed
                 effectRoot._driftSwirl(frameTime)
+                effectRoot._springSwirl(frameTime)
             }
         }
 
@@ -622,6 +640,7 @@ Item {
                 effect.beamTime += dt * effectRoot.beamSpeed
                 effect.dotTime += dt * effectRoot.dotSpeed
                 effectRoot._driftSwirl(dt)
+                effectRoot._springSwirl(dt)
             }
         }
 

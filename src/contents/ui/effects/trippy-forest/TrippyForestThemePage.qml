@@ -146,12 +146,31 @@ Kirigami.ScrollablePage {
         }
 
         QtControls2.ComboBox {
+            id: cycleSetCombo
             Kirigami.FormData.label: i18n("Cycle set:")
             // Restrict auto-cycle / random selection to themes of this tone.
             readonly property var _modes: ["all", "light", "dark", "mixed", "psychedelic"]
+            property bool _ready: false
             model: [i18n("All"), i18n("Light"), i18n("Dark"), i18n("Mixed"), i18n("Psychedelic")]
-            currentIndex: Math.max(0, _modes.indexOf(page.effectConfig._cycleMode))
-            onActivated: function(index) { page.effectConfig._cycleMode = _modes[index] }
+            currentIndex: -1
+            // Set the index imperatively (a bound currentIndex can be clobbered by
+            // the control) and only write the setting on a deliberate user pick —
+            // some combos emit activated() once during construction.
+            Component.onCompleted: {
+                currentIndex = Math.max(0, _modes.indexOf(page.effectConfig._cycleMode))
+                _ready = true
+            }
+            onActivated: function(index) {
+                if (cycleSetCombo._ready) {
+                    page.effectConfig._cycleMode = cycleSetCombo._modes[index]
+                }
+            }
+            Connections {
+                target: page.effectConfig
+                function on_CycleModeChanged() {
+                    cycleSetCombo.currentIndex = Math.max(0, cycleSetCombo._modes.indexOf(page.effectConfig._cycleMode))
+                }
+            }
         }
 
         RowLayout {

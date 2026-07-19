@@ -66,6 +66,7 @@ Item {
         fog: 50,
         canopyOpacity: 100,
         vortexOpacity: 100,
+        bloomShow: true,
         bloom: 70,
         bloomOsc: false,
         bloomOscRange: 20,
@@ -82,6 +83,10 @@ Item {
         bloomRadiusBurstChance: 25,
         bloomOpacity: 100,
         bloomFade: 0,
+        maskShow: false,
+        maskRadius: 30,
+        maskSoftness: 60,
+        maskOpacity: 100,
         starCount: 40,
         starSpeed: 50,
         starLength: 35,
@@ -144,6 +149,7 @@ Item {
     property int _fog: 50
     property int _canopyOpacity: 100
     property int _vortexOpacity: 100
+    property bool _bloomShow: true
     property int _bloom: 70
     property bool _bloomOsc: false
     property int _bloomOscRange: 20
@@ -160,6 +166,10 @@ Item {
     property int _bloomRadiusBurstChance: 25
     property int _bloomOpacity: 100
     property int _bloomFade: 0
+    property bool _maskShow: false
+    property int _maskRadius: 30
+    property int _maskSoftness: 60
+    property int _maskOpacity: 100
     property int _starCount: 40
     property int _starSpeed: 100
     property int _starLength: 35
@@ -229,6 +239,7 @@ Item {
         _fog = s.fog
         _canopyOpacity = s.canopyOpacity
         _vortexOpacity = s.vortexOpacity
+        _bloomShow = s.bloomShow
         _bloom = s.bloom
         _bloomOsc = s.bloomOsc
         _bloomOscRange = s.bloomOscRange
@@ -245,6 +256,10 @@ Item {
         _bloomRadiusBurstChance = s.bloomRadiusBurstChance
         _bloomOpacity = s.bloomOpacity
         _bloomFade = s.bloomFade
+        _maskShow = s.maskShow
+        _maskRadius = s.maskRadius
+        _maskSoftness = s.maskSoftness
+        _maskOpacity = s.maskOpacity
         _starCount = s.starCount
         _starSpeed = s.starSpeed
         _starLength = s.starLength
@@ -310,6 +325,7 @@ Item {
             fog: _fog,
             canopyOpacity: _canopyOpacity,
             vortexOpacity: _vortexOpacity,
+            bloomShow: _bloomShow,
             bloom: _bloom,
             bloomOsc: _bloomOsc,
             bloomOscRange: _bloomOscRange,
@@ -326,6 +342,10 @@ Item {
             bloomRadiusBurstChance: _bloomRadiusBurstChance,
             bloomOpacity: _bloomOpacity,
             bloomFade: _bloomFade,
+            maskShow: _maskShow,
+            maskRadius: _maskRadius,
+            maskSoftness: _maskSoftness,
+            maskOpacity: _maskOpacity,
             starCount: _starCount,
             starSpeed: _starSpeed,
             starLength: _starLength,
@@ -388,6 +408,7 @@ Item {
     on_FogChanged: _save()
     on_CanopyOpacityChanged: _save()
     on_VortexOpacityChanged: _save()
+    on_BloomShowChanged: _save()
     on_BloomChanged: _save()
     on_BloomOscChanged: _save()
     on_BloomOscRangeChanged: _save()
@@ -404,6 +425,10 @@ Item {
     on_BloomRadiusBurstChanceChanged: _save()
     on_BloomOpacityChanged: _save()
     on_BloomFadeChanged: _save()
+    on_MaskShowChanged: _save()
+    on_MaskRadiusChanged: _save()
+    on_MaskSoftnessChanged: _save()
+    on_MaskOpacityChanged: _save()
     on_StarCountChanged: _save()
     on_StarSpeedChanged: _save()
     on_StarLengthChanged: _save()

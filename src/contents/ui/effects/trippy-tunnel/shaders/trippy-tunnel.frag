@@ -47,6 +47,10 @@ layout(std140, binding = 0) uniform buf {
     float bloomRadius;
     float bloomOpacity;
     float bloomFade;
+    float maskShow;
+    float maskRadius;
+    float maskSoftness;
+    float maskOpacity;
     float starCount;
     float starLength;
     float starOpacity;
@@ -301,6 +305,18 @@ void main() {
 
     vec3 col = scene(uv);
     float alpha = 1.0;
+
+    // Centre mask: a flat disc of the background (mist) colour that simply paints
+    // over the point where the swirl, stars and beams converge, hiding them. Fully
+    // opaque in the middle, fading to transparent over `maskSoftness` at the rim
+    // (the soft gradient edge). Unlike bloom this adds no brightness — it just
+    // covers.
+    if (maskShow > 0.5 && maskOpacity > 0.001) {
+        float rm = length(uv);
+        float m = smoothstep(maskRadius, maskRadius - max(maskSoftness, 1e-3), rm);
+        m = clamp(m, 0.0, 1.0) * maskOpacity;
+        col = mix(col, mistCol.rgb * mistAmount, m);
+    }
 
     // Centre bloom: covers the middle where the swirl, stars and beams converge.
     // A solid inner core + amount-scaled soft halo, sized by bloomRadius, gated by

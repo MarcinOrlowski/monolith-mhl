@@ -67,6 +67,7 @@ Item {
         fog: 50,
         canopyOpacity: 100,
         vortexOpacity: 100,
+        bloomShow: true,
         bloom: 70,
         bloomOsc: false,
         bloomOscRange: 20,
@@ -83,6 +84,10 @@ Item {
         bloomRadiusBurstChance: 25,
         bloomOpacity: 100,
         bloomFade: 0,
+        maskShow: false,
+        maskRadius: 30,
+        maskSoftness: 60,
+        maskOpacity: 100,
         starCount: 40,
         starSpeed: 50,
         starLength: 35,
@@ -152,10 +157,16 @@ Item {
     property real fog: 0.50
     property real canopyOpacity: 1.0
     property real vortexOpacity: 1.0
+    property bool bloomShow: true
     property real bloomAmount: 0.70
     property real bloomRadius: 0.24
     property real bloomOpacity: 1.0
     property real bloomFade: 0.0
+    // Centre mask: flat background-coloured disc that hides the convergence.
+    property bool maskShow: false
+    property real maskRadius: 0.18
+    property real maskSoftness: 0.11
+    property real maskOpacity: 1.0
     // Bloom amount oscillation (bounded around its base, like the hole).
     property real bloomAmountBase: 0.70
     property real _bloomAmountBasePrev: -999
@@ -171,6 +182,8 @@ Item {
     property real bloomRadiusOscTarget: 0.24
     property real bloomRadiusSmooth: 0.24
     property real bloomRadiusBurstOff: 0.0
+    property real bloomRadiusBurstPeak: 0.0   // attack target for the current burst
+    property bool _bloomBurstRising: false    // true during the rapid attack phase
     property bool bloomRadiusOsc: false
     property real bloomRadiusOscRangeUv: 0.12
     property int bloomRadiusOscInterval: 10
@@ -223,12 +236,19 @@ Item {
     // their sum, so a burst rides on top of the oscillation and fades out on its
     // own without disturbing it.
     function _tickBloomRadius(dt) {
+        var h = Math.min(dt, 0.1)
         var tc = Math.max(0.05, paramTransitionMs / 1000.0)
-        var k = 1.0 - Math.exp(-Math.min(dt, 0.1) / tc)
+        var k = 1.0 - Math.exp(-h / tc)
         bloomRadiusSmooth += (bloomRadiusOscTarget - bloomRadiusSmooth) * k
-        if (Math.abs(bloomRadiusBurstOff) > 0.0004) {
-            bloomRadiusBurstOff *= Math.exp(-Math.min(dt, 0.1) / 1.4)   // ~1.4s decay
-            if (Math.abs(bloomRadiusBurstOff) < 0.0004) bloomRadiusBurstOff = 0.0
+        // Burst envelope: a quick (rapid) attack ramps the offset up to its peak,
+        // then a long decay eases it back to zero — like a star flaring and fading.
+        if (_bloomBurstRising) {
+            var ka = 1.0 - Math.exp(-h / 0.09)                 // ~90ms attack
+            bloomRadiusBurstOff += (bloomRadiusBurstPeak - bloomRadiusBurstOff) * ka
+            if (bloomRadiusBurstOff >= bloomRadiusBurstPeak * 0.97) _bloomBurstRising = false
+        } else if (bloomRadiusBurstOff > 0.0004) {
+            bloomRadiusBurstOff *= Math.exp(-h / 2.0)           // ~2s long decay
+            if (bloomRadiusBurstOff < 0.0004) bloomRadiusBurstOff = 0.0
         }
         bloomRadius = Math.min(0.6, Math.max(0.0, bloomRadiusSmooth + bloomRadiusBurstOff))
     }
@@ -291,6 +311,7 @@ Item {
         // stops at the deepest good value instead of the degrading zone.
         depth = 0.20 + Math.min(1.0, Math.max(0.0, s.depth / 100.0)) * 0.65;
         ringSpinVary = Math.max(0.0, s.ringSpin / 100.0);
+        bloomShow = s.bloomShow;
         bloomAmountBase = Math.min(1.0, Math.max(0.0, s.bloom / 100.0));
         if (bloomAmountBase !== _bloomAmountBasePrev) { _bloomAmountBasePrev = bloomAmountBase; bloomAmount = bloomAmountBase; }
         bloomOsc = s.bloomOsc;
@@ -305,6 +326,8 @@ Item {
             bloomRadiusOscTarget = bloomRadiusBase;
             bloomRadiusSmooth = bloomRadiusBase;
             bloomRadiusBurstOff = 0.0;
+            bloomRadiusBurstPeak = 0.0;
+            _bloomBurstRising = false;
             bloomRadius = bloomRadiusBase;
         }
         bloomRadiusOsc = s.bloomRadiusOsc;
@@ -319,6 +342,12 @@ Item {
 
         bloomOpacity = Math.min(1.0, Math.max(0.0, s.bloomOpacity / 100.0));
         bloomFade = Math.min(1.0, Math.max(0.0, s.bloomFade / 100.0));
+
+        maskShow = s.maskShow;
+        maskRadius = Math.min(1.0, Math.max(0.0, s.maskRadius / 100.0)) * 0.6;
+        // Softness is a fraction of the radius, so the gradient scales with the disc.
+        maskSoftness = maskRadius * Math.min(1.0, Math.max(0.0, s.maskSoftness / 100.0));
+        maskOpacity = Math.min(1.0, Math.max(0.0, s.maskOpacity / 100.0));
         starCount = Math.max(0, s.starCount);
         starSpeed = Math.max(0.0, s.starSpeed / 100.0);
         starLength = Math.min(1.0, Math.max(0.0, s.starLength / 100.0));
@@ -727,7 +756,7 @@ Item {
         repeat: true
         interval: Math.max(1, effectRoot.bloomRadiusOscInterval) * 1000
         onTriggered: {
-            if (Math.abs(effectRoot.bloomRadiusBurstOff) > 0.0004) return   // burst fading -> skip
+            if (effectRoot._bloomBurstRising || effectRoot.bloomRadiusBurstOff > 0.0004) return   // burst active -> skip
             if (Math.random() * 100.0 >= effectRoot.bloomRadiusOscChance) return
             var d = (Math.random() * 2.0 - 1.0) * effectRoot.bloomRadiusOscRangeUv
             effectRoot.bloomRadiusOscTarget = Math.min(0.6, Math.max(0.0, effectRoot.bloomRadiusBase + d))
@@ -745,7 +774,8 @@ Item {
         onTriggered: {
             if (Math.random() * 100.0 >= effectRoot.bloomRadiusBurstChance) return
             var d = Math.random() * effectRoot.bloomRadiusBurstMarginUv   // grow only (+), like a star burst
-            effectRoot.bloomRadiusBurstOff = d
+            effectRoot.bloomRadiusBurstPeak = d       // rapid attack ramps to this, then long decay
+            effectRoot._bloomBurstRising = true
         }
     }
 
@@ -804,10 +834,18 @@ Item {
         // bloomRadius is smoothed per-frame in the effect root (oscillation ease +
         // decaying burst), so no Behavior here — it would fight the frame updates.
         property real bloomRadius: effectRoot.bloomRadius
-        property real bloomOpacity: effectRoot.bloomOpacity
+        // Master bloom toggle folds into opacity: off -> 0 -> shader skips bloom.
+        property real bloomOpacity: effectRoot.bloomShow ? effectRoot.bloomOpacity : 0.0
         Behavior on bloomOpacity { NumberAnimation { duration: effectRoot.paramTransitionMs; easing.type: Easing.InOutQuad } }
         property real bloomFade: effectRoot.bloomFade
         Behavior on bloomFade { NumberAnimation { duration: effectRoot.paramTransitionMs; easing.type: Easing.InOutQuad } }
+        property real maskShow: effectRoot.maskShow ? 1.0 : 0.0
+        property real maskRadius: effectRoot.maskRadius
+        Behavior on maskRadius { NumberAnimation { duration: effectRoot.paramTransitionMs; easing.type: Easing.InOutQuad } }
+        property real maskSoftness: effectRoot.maskSoftness
+        Behavior on maskSoftness { NumberAnimation { duration: effectRoot.paramTransitionMs; easing.type: Easing.InOutQuad } }
+        property real maskOpacity: effectRoot.maskOpacity
+        Behavior on maskOpacity { NumberAnimation { duration: effectRoot.paramTransitionMs; easing.type: Easing.InOutQuad } }
         property real starCount: effectRoot.starCount
         property real starLength: effectRoot.starLength
         Behavior on starLength { NumberAnimation { duration: effectRoot.paramTransitionMs; easing.type: Easing.InOutQuad } }
@@ -832,10 +870,10 @@ Item {
         Behavior on glowCol { ColorAnimation { duration: effectRoot.transitionMs } }
         property color mistCol: "#3a6a80"
         Behavior on mistCol { ColorAnimation { duration: effectRoot.transitionMs } }
-        property color bloomColor: "#ffffff"
-        Behavior on bloomColor { ColorAnimation { duration: effectRoot.transitionMs } }
         property color starsCol: "#ffffff"
         Behavior on starsCol { ColorAnimation { duration: effectRoot.transitionMs } }
+        property color bloomColor: "#ffffff"
+        Behavior on bloomColor { ColorAnimation { duration: effectRoot.transitionMs } }
         property color pal0: "#ff2d55"
         Behavior on pal0 { ColorAnimation { duration: effectRoot.transitionMs } }
         property color pal1: "#ff9500"

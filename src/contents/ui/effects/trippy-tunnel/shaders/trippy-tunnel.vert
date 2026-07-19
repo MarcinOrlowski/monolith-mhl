@@ -47,6 +47,10 @@ layout(std140, binding = 0) uniform buf {
     float bloomRadius;
     float bloomOpacity;
     float bloomFade;
+    float maskShow;
+    float maskRadius;
+    float maskSoftness;
+    float maskOpacity;
     float starCount;
     float starLength;
     float starOpacity;

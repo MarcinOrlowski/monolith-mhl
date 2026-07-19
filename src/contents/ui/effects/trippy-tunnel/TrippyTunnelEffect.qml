@@ -660,8 +660,7 @@ Item {
         Behavior on holeRadius { NumberAnimation { duration: effectRoot.paramTransitionMs; easing.type: Easing.InOutQuad } }
         property real depth: effectRoot.depth
         Behavior on depth { NumberAnimation { duration: effectRoot.paramTransitionMs; easing.type: Easing.InOutQuad } }
-        property real ringSpinVary: effectRoot.ringSpinVary
-        Behavior on ringSpinVary { NumberAnimation { duration: effectRoot.paramTransitionMs; easing.type: Easing.InOutQuad } }
+        property real spinVaryTime: 0   // accumulated per-ring rotation differential
         property real density: effectRoot.density
         Behavior on density { NumberAnimation { duration: effectRoot.paramTransitionMs; easing.type: Easing.InOutQuad } }
         property real glowAmount: effectRoot.glowAmount
@@ -728,6 +727,7 @@ Item {
                 effect.starTime += frameTime * effectRoot.starSpeed
                 effect.beamTime += frameTime * effectRoot.beamSpeed
                 effect.dotTime += frameTime * effectRoot.dotSpeed
+                effect.spinVaryTime += frameTime * effectRoot.rotSpeedMult * effectRoot.ringSpinVary
                 effectRoot._driftSwirl(frameTime)
                 effectRoot._springSwirl(frameTime)
             }
@@ -745,6 +745,7 @@ Item {
                 effect.starTime += dt * effectRoot.starSpeed
                 effect.beamTime += dt * effectRoot.beamSpeed
                 effect.dotTime += dt * effectRoot.dotSpeed
+                effect.spinVaryTime += dt * effectRoot.rotSpeedMult * effectRoot.ringSpinVary
                 effectRoot._driftSwirl(dt)
                 effectRoot._springSwirl(dt)
             }

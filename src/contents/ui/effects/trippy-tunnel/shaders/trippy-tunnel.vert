@@ -36,7 +36,7 @@ layout(std140, binding = 0) uniform buf {
     float tunnelWidth;
     float holeRadius;
     float depth;
-    float ringSpinVary;
+    float spinVaryTime;
     float density;
     float glowAmount;
     float mistAmount;

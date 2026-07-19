@@ -36,7 +36,7 @@ layout(std140, binding = 0) uniform buf {
     float tunnelWidth;
     float holeRadius;
     float depth;
-    float ringSpinVary;
+    float spinVaryTime;
     float density;
     float glowAmount;
     float mistAmount;
@@ -237,10 +237,11 @@ vec3 scene(vec2 uv) {
         float proj = RINGSCALE * tunnelWidth * exp(-(zc - 1.0) * depth);
 
         // angular twist grows with distance -> nested mouths form a spiral; the
-        // whole tunnel rotates with rotTime, each ring at a slightly randomised
-        // speed (ringSpinVary) so they don't all spin in lockstep.
-        float ringSpeed = 1.0 + (hash2(ringId * 7.7).x - 0.5) * 2.0 * ringSpinVary;
-        float aa = a + spiral * zc * 1.1 + rotTime * ringSpeed;
+        // whole tunnel rotates with rotTime, plus a per-ring differential drift
+        // (spinVaryTime accumulates the extra rotation) so rings don't spin in
+        // lockstep — and changing the variance never jerks the rotation.
+        float ringOff = (hash2(ringId * 7.7).x - 0.5) * 2.0 * spinVaryTime;
+        float aa = a + spiral * zc * 1.1 + rotTime + ringOff;
         vec2 pc = vec2(cos(aa), sin(aa));       // periodic (no seam) around the ring
         float rNorm = (r - holeRadius) / proj;  // radial position within this ring
 

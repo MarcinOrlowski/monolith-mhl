@@ -38,22 +38,27 @@ Item {
         showBeams: true,
         showDots: true,
         speedIndex: 3,
-        rotSpeed: 25,
+        rotSpeed: 15,
         whirlSpeed: -35,
         spiral: 45,
         vortexSwirl: 45,
         tunnelWidth: 100,
+        widthOsc: false,
+        widthOscRange: 20,
+        widthOscInterval: 10,
+        widthOscChance: 50,
         holeRadius: 25,
-        holeOsc: false,
-        holeOscRange: 20,
-        holeOscInterval: 10,
-        holeOscChance: 50,
-        swirlVary: false,
-        swirlSpeed: 20,
-        swirlBurst: false,
-        swirlVaryMargin: 10,
-        swirlVaryInterval: 8,
-        swirlVaryChance: 100,
+        holeOsc: true,
+        holeOscRange: 5,
+        holeOscInterval: 120,
+        holeOscChance: 25,
+        swirlVary: true,
+        swirlSpeed: 10,
+        swirlBurst: true,
+        swirlVaryMargin: 40,
+        swirlVaryInterval: 120,
+        swirlVaryChance: 25,
+        transitionTime: 10,
         density: 60,
         glow: 60,
         mist: 75,
@@ -61,15 +66,15 @@ Item {
         canopyOpacity: 100,
         vortexOpacity: 100,
         starCount: 40,
-        starSpeed: 100,
+        starSpeed: 50,
         starLength: 35,
-        starOpacity: 100,
+        starOpacity: 65,
         beamCount: 220,
-        beamSpeed: 100,
+        beamSpeed: 20,
         beamLength: 45,
-        beamOpacity: 100,
+        beamOpacity: 50,
         dotCount: 60,
-        dotSpeed: 100,
+        dotSpeed: 60,
         dotOpacity: 100,
         fpsCap: true,
         fpsLimit: 30,
@@ -86,6 +91,7 @@ Item {
     property real rotSpeedMult: 0.125
     property real whirlSpeedMult: -0.175
     property real dimLevel: 1.0
+    property real paramTransitionMs: 1000   // how long a value change takes to settle
     property bool fpsCap: true
     property int fpsLimit: 30
     property bool paused: false
@@ -95,7 +101,12 @@ Item {
     property real spiralVel: 0.0        // spring velocity
     property bool _swirlInit: false
     property real vortexSwirl: 0.45
-    property real tunnelWidth: 1.0
+    property real tunnelWidth: 1.0        // runtime value fed to the shader
+    property real tunnelWidthBase: 1.0    // initial value; oscillation ranges around THIS
+    property bool widthOsc: false
+    property real widthOscRangeMult: 0.20 // ± oscillation range (uv multiplier)
+    property int widthOscInterval: 10
+    property int widthOscChance: 50
     property real holeRadius: 0.11        // runtime value fed to the shader
     property real holeRadiusBase: 0.11    // initial value; oscillation ranges around THIS
     property bool holeOsc: false
@@ -146,8 +157,9 @@ Item {
     // integrator stays stable at low frame rates.
     function _springSwirl(dt) {
         var h = Math.min(dt, 0.04)
-        var k = 9.0
-        var c = 6.0    // ~2*sqrt(k), critical damping
+        var T = Math.max(0.1, paramTransitionMs / 1000.0)   // target settle time (s)
+        var k = Math.min(150.0, 25.0 / (T * T))             // (5/T)^2, capped for stability
+        var c = 2.0 * Math.sqrt(k)                          // critical damping
         spiralVel += ((spiralTarget - spiral) * k - spiralVel * c) * h
         spiral += spiralVel * h
     }
@@ -177,7 +189,12 @@ Item {
         spiralTarget = Math.min(1.0, Math.max(0.0, s.spiral / 100.0));
         if (!_swirlInit) { spiral = spiralTarget; spiralVel = 0.0; _swirlInit = true; }
         vortexSwirl = Math.min(1.0, Math.max(0.0, s.vortexSwirl / 100.0));
-        tunnelWidth = Math.max(0.1, s.tunnelWidth / 100.0);
+        tunnelWidthBase = Math.max(0.1, s.tunnelWidth / 100.0);
+        tunnelWidth = tunnelWidthBase;   // re-centre on the (new) initial value
+        widthOsc = s.widthOsc;
+        widthOscRangeMult = Math.max(0.0, s.widthOscRange / 100.0);
+        widthOscInterval = Math.max(1, s.widthOscInterval);
+        widthOscChance = Math.max(0, Math.min(100, s.widthOscChance));
         holeRadiusBase = Math.min(0.45, Math.max(0.0, s.holeRadius / 100.0 * 0.45));
         holeRadius = holeRadiusBase;   // re-centre on the (new) initial value
         holeOsc = s.holeOsc;
@@ -226,6 +243,7 @@ Item {
         fpsCap = s.fpsCap;
         fpsLimit = s.fpsLimit;
         dimLevel = s.dimCap ? s.dimLevel / 100.0 : 1.0;
+        paramTransitionMs = Math.max(100, s.transitionTime * 100);
 
         // Layer visibility
         for (var i = 0; i < layerKeys.length; i++) {
@@ -552,6 +570,19 @@ Item {
         }
     }
 
+    // Oscillate the tunnel width around its INITIAL value (bounded, like the hole).
+    Timer {
+        id: widthOscTimer
+        running: effectRoot.widthOsc && !effectRoot.paused
+        repeat: true
+        interval: Math.max(1, effectRoot.widthOscInterval) * 1000
+        onTriggered: {
+            if (Math.random() * 100.0 >= effectRoot.widthOscChance) return
+            var d = (Math.random() * 2.0 - 1.0) * effectRoot.widthOscRangeMult
+            effectRoot.tunnelWidth = Math.min(2.5, Math.max(0.5, effectRoot.tunnelWidthBase + d))
+        }
+    }
+
     // Oscillate the centre hole around its INITIAL value (not the current one),
     // so the range is bounded and it can never creep down to 0. The ShaderEffect's
     // Behavior on holeRadius eases each jump. Runtime only.
@@ -597,36 +628,36 @@ Item {
         // has no continuous drift, so a plain cornerless InOutSine ease suffices.
         property real spiral: effectRoot.spiral
         property real vortexSwirl: effectRoot.vortexSwirl
-        Behavior on vortexSwirl { NumberAnimation { duration: 1300; easing.type: Easing.InOutSine } }
+        Behavior on vortexSwirl { NumberAnimation { duration: effectRoot.paramTransitionMs; easing.type: Easing.InOutSine } }
         property real tunnelWidth: effectRoot.tunnelWidth
-        Behavior on tunnelWidth { NumberAnimation { duration: 700; easing.type: Easing.InOutQuad } }
+        Behavior on tunnelWidth { NumberAnimation { duration: effectRoot.paramTransitionMs; easing.type: Easing.InOutQuad } }
         property real holeRadius: effectRoot.holeRadius
-        Behavior on holeRadius { NumberAnimation { duration: 700; easing.type: Easing.InOutQuad } }
+        Behavior on holeRadius { NumberAnimation { duration: effectRoot.paramTransitionMs; easing.type: Easing.InOutQuad } }
         property real density: effectRoot.density
-        Behavior on density { NumberAnimation { duration: 700; easing.type: Easing.InOutQuad } }
+        Behavior on density { NumberAnimation { duration: effectRoot.paramTransitionMs; easing.type: Easing.InOutQuad } }
         property real glowAmount: effectRoot.glowAmount
-        Behavior on glowAmount { NumberAnimation { duration: 700; easing.type: Easing.InOutQuad } }
+        Behavior on glowAmount { NumberAnimation { duration: effectRoot.paramTransitionMs; easing.type: Easing.InOutQuad } }
         property real mistAmount: effectRoot.mistAmount
-        Behavior on mistAmount { NumberAnimation { duration: 700; easing.type: Easing.InOutQuad } }
+        Behavior on mistAmount { NumberAnimation { duration: effectRoot.paramTransitionMs; easing.type: Easing.InOutQuad } }
         property real fog: effectRoot.fog
-        Behavior on fog { NumberAnimation { duration: 700; easing.type: Easing.InOutQuad } }
+        Behavior on fog { NumberAnimation { duration: effectRoot.paramTransitionMs; easing.type: Easing.InOutQuad } }
         property real canopyOpacity: effectRoot.canopyOpacity
-        Behavior on canopyOpacity { NumberAnimation { duration: 700; easing.type: Easing.InOutQuad } }
+        Behavior on canopyOpacity { NumberAnimation { duration: effectRoot.paramTransitionMs; easing.type: Easing.InOutQuad } }
         property real vortexOpacity: effectRoot.vortexOpacity
-        Behavior on vortexOpacity { NumberAnimation { duration: 700; easing.type: Easing.InOutQuad } }
+        Behavior on vortexOpacity { NumberAnimation { duration: effectRoot.paramTransitionMs; easing.type: Easing.InOutQuad } }
         property real starCount: effectRoot.starCount
         property real starLength: effectRoot.starLength
-        Behavior on starLength { NumberAnimation { duration: 700; easing.type: Easing.InOutQuad } }
+        Behavior on starLength { NumberAnimation { duration: effectRoot.paramTransitionMs; easing.type: Easing.InOutQuad } }
         property real starOpacity: effectRoot.starOpacity
-        Behavior on starOpacity { NumberAnimation { duration: 700; easing.type: Easing.InOutQuad } }
+        Behavior on starOpacity { NumberAnimation { duration: effectRoot.paramTransitionMs; easing.type: Easing.InOutQuad } }
         property real beamCount: effectRoot.beamCount
         property real beamLength: effectRoot.beamLength
-        Behavior on beamLength { NumberAnimation { duration: 700; easing.type: Easing.InOutQuad } }
+        Behavior on beamLength { NumberAnimation { duration: effectRoot.paramTransitionMs; easing.type: Easing.InOutQuad } }
         property real beamOpacity: effectRoot.beamOpacity
-        Behavior on beamOpacity { NumberAnimation { duration: 700; easing.type: Easing.InOutQuad } }
+        Behavior on beamOpacity { NumberAnimation { duration: effectRoot.paramTransitionMs; easing.type: Easing.InOutQuad } }
         property real dotCount: effectRoot.dotCount
         property real dotOpacity: effectRoot.dotOpacity
-        Behavior on dotOpacity { NumberAnimation { duration: 700; easing.type: Easing.InOutQuad } }
+        Behavior on dotOpacity { NumberAnimation { duration: effectRoot.paramTransitionMs; easing.type: Easing.InOutQuad } }
         property real dimLevel: effectRoot.dimLevel
         Behavior on dimLevel { NumberAnimation { duration: effectRoot.transitionMs } }
 

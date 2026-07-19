@@ -107,6 +107,42 @@ Kirigami.ScrollablePage {
             textFromValue: function(value) { return value + "%" }
             valueFromText: function(text) { return parseInt(text) || 100 }
         }
+        RowLayout {
+            Kirigami.FormData.label: i18n("Oscillate width:")
+            QtControls2.CheckBox {
+                enabled: page.effectConfig._showCanopy
+                checked: page.effectConfig._widthOsc
+                onToggled: page.effectConfig._widthOsc = checked
+            }
+            QtControls2.Label { text: i18n("by") }
+            QtControls2.SpinBox {
+                // range is ± this, measured from the INITIAL Tunnel width value
+                enabled: page.effectConfig._showCanopy && page.effectConfig._widthOsc
+                from: 0; to: 100; stepSize: 5
+                value: page.effectConfig._widthOscRange
+                onValueModified: page.effectConfig._widthOscRange = value
+                textFromValue: function(value) { return "±" + value + "%" }
+                valueFromText: function(text) { return parseInt(text) || 0 }
+            }
+            QtControls2.Label { text: i18n("every") }
+            QtControls2.SpinBox {
+                enabled: page.effectConfig._showCanopy && page.effectConfig._widthOsc
+                from: 1; to: 120; stepSize: 1
+                value: page.effectConfig._widthOscInterval
+                onValueModified: page.effectConfig._widthOscInterval = value
+                textFromValue: function(value) { return value + " s" }
+                valueFromText: function(text) { return parseInt(text) || 1 }
+            }
+            QtControls2.Label { text: i18n("prob.") }
+            QtControls2.SpinBox {
+                enabled: page.effectConfig._showCanopy && page.effectConfig._widthOsc
+                from: 0; to: 100; stepSize: 5
+                value: page.effectConfig._widthOscChance
+                onValueModified: page.effectConfig._widthOscChance = value
+                textFromValue: function(value) { return value + "%" }
+                valueFromText: function(text) { return parseInt(text) || 0 }
+            }
+        }
         QtControls2.SpinBox {
             Kirigami.FormData.label: i18n("Centre hole:")
             from: 0; to: 100; stepSize: 5

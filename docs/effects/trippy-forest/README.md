@@ -72,6 +72,10 @@ disabled when their parent is off.
     applied to the **centre hole**, but the range is measured from the *initial*
     Centre hole value (clamped 0–100 %), so it stays bounded and never creeps
     down to zero.
+  - **Oscillate width** — the same bounded roll applied to the **tunnel width**.
+
+  Each burst/oscillation picks a *uniform random* value in ±range (so it can land
+  anywhere in that band, not just the extremes).
 
   Every swirl change — manual, drift or burst — is spring-smoothed so the
   rotation it induces eases gently in and out instead of snapping.
@@ -110,6 +114,8 @@ beams out into a full rainbow).
   reverses direction).
 - **Vortex rotation** — signed spin speed of the central whirl; defaults to the
   opposite direction of the tunnel.
+- **Value transition** — how long a changed value (swirl, hole, width,
+  opacities, …) takes to ease to its new setting.
 - **FPS cap** — limit the animation frame rate to save power.
 
 ## Custom themes

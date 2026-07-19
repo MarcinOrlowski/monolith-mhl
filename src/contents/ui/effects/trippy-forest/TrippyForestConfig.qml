@@ -37,22 +37,27 @@ Item {
         showBeams: true,
         showDots: true,
         speedIndex: 3,
-        rotSpeed: 25,
+        rotSpeed: 15,
         whirlSpeed: -35,
         spiral: 45,
         vortexSwirl: 45,
         tunnelWidth: 100,
+        widthOsc: false,
+        widthOscRange: 20,
+        widthOscInterval: 10,
+        widthOscChance: 50,
         holeRadius: 25,
-        holeOsc: false,
-        holeOscRange: 20,
-        holeOscInterval: 10,
-        holeOscChance: 50,
-        swirlVary: false,
-        swirlSpeed: 20,
-        swirlBurst: false,
-        swirlVaryMargin: 10,
-        swirlVaryInterval: 8,
-        swirlVaryChance: 100,
+        holeOsc: true,
+        holeOscRange: 5,
+        holeOscInterval: 120,
+        holeOscChance: 25,
+        swirlVary: true,
+        swirlSpeed: 10,
+        swirlBurst: true,
+        swirlVaryMargin: 40,
+        swirlVaryInterval: 120,
+        swirlVaryChance: 25,
+        transitionTime: 10,
         density: 60,
         glow: 60,
         mist: 75,
@@ -60,15 +65,15 @@ Item {
         canopyOpacity: 100,
         vortexOpacity: 100,
         starCount: 40,
-        starSpeed: 100,
+        starSpeed: 50,
         starLength: 35,
-        starOpacity: 100,
+        starOpacity: 65,
         beamCount: 220,
-        beamSpeed: 100,
+        beamSpeed: 20,
         beamLength: 45,
-        beamOpacity: 100,
+        beamOpacity: 50,
         dotCount: 60,
-        dotSpeed: 100,
+        dotSpeed: 60,
         dotOpacity: 100,
         fpsCap: true,
         fpsLimit: 30,
@@ -97,6 +102,10 @@ Item {
     property int _spiral: 45
     property int _vortexSwirl: 45
     property int _tunnelWidth: 100
+    property bool _widthOsc: false
+    property int _widthOscRange: 20
+    property int _widthOscInterval: 10
+    property int _widthOscChance: 50
     property int _holeRadius: 25
     property bool _holeOsc: false
     property int _holeOscRange: 20
@@ -108,6 +117,7 @@ Item {
     property int _swirlVaryMargin: 10
     property int _swirlVaryInterval: 8
     property int _swirlVaryChance: 100
+    property int _transitionTime: 10
     property int _density: 60
     property int _glow: 60
     property int _mist: 75
@@ -159,6 +169,10 @@ Item {
         _spiral = s.spiral
         _vortexSwirl = s.vortexSwirl
         _tunnelWidth = s.tunnelWidth
+        _widthOsc = s.widthOsc
+        _widthOscRange = s.widthOscRange
+        _widthOscInterval = s.widthOscInterval
+        _widthOscChance = s.widthOscChance
         _holeRadius = s.holeRadius
         _holeOsc = s.holeOsc
         _holeOscRange = s.holeOscRange
@@ -170,6 +184,7 @@ Item {
         _swirlVaryMargin = s.swirlVaryMargin
         _swirlVaryInterval = s.swirlVaryInterval
         _swirlVaryChance = s.swirlVaryChance
+        _transitionTime = s.transitionTime
         _density = s.density
         _glow = s.glow
         _mist = s.mist
@@ -217,6 +232,10 @@ Item {
             spiral: _spiral,
             vortexSwirl: _vortexSwirl,
             tunnelWidth: _tunnelWidth,
+            widthOsc: _widthOsc,
+            widthOscRange: _widthOscRange,
+            widthOscInterval: _widthOscInterval,
+            widthOscChance: _widthOscChance,
             holeRadius: _holeRadius,
             holeOsc: _holeOsc,
             holeOscRange: _holeOscRange,
@@ -228,6 +247,7 @@ Item {
             swirlVaryMargin: _swirlVaryMargin,
             swirlVaryInterval: _swirlVaryInterval,
             swirlVaryChance: _swirlVaryChance,
+            transitionTime: _transitionTime,
             density: _density,
             glow: _glow,
             mist: _mist,
@@ -272,6 +292,10 @@ Item {
     on_SpiralChanged: _save()
     on_VortexSwirlChanged: _save()
     on_TunnelWidthChanged: _save()
+    on_WidthOscChanged: _save()
+    on_WidthOscRangeChanged: _save()
+    on_WidthOscIntervalChanged: _save()
+    on_WidthOscChanceChanged: _save()
     on_HoleRadiusChanged: _save()
     on_HoleOscChanged: _save()
     on_HoleOscRangeChanged: _save()
@@ -283,6 +307,7 @@ Item {
     on_SwirlVaryMarginChanged: _save()
     on_SwirlVaryIntervalChanged: _save()
     on_SwirlVaryChanceChanged: _save()
+    on_TransitionTimeChanged: _save()
     on_DensityChanged: _save()
     on_GlowChanged: _save()
     on_MistChanged: _save()

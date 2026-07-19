@@ -53,6 +53,17 @@ Kirigami.ScrollablePage {
             opacity: 0.7
         }
 
+        QtControls2.SpinBox {
+            // How long a changed value (swirl, hole, width, opacities, …) takes
+            // to ease to its new setting.
+            Kirigami.FormData.label: i18n("Value transition:")
+            from: 1; to: 50; stepSize: 1
+            value: page.effectConfig._transitionTime
+            onValueModified: page.effectConfig._transitionTime = value
+            textFromValue: function(value) { return (value / 10).toFixed(1) + " s" }
+            valueFromText: function(text) { return Math.round((parseFloat(text) || 1.0) * 10) }
+        }
+
         RowLayout {
             Kirigami.FormData.label: i18n("FPS cap:")
             QtControls2.CheckBox {

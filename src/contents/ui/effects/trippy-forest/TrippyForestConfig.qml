@@ -45,8 +45,10 @@ Item {
         holeRadius: 25,
         swirlVary: false,
         swirlSpeed: 20,
+        swirlBurst: false,
         swirlVaryMargin: 10,
         swirlVaryInterval: 8,
+        swirlVaryChance: 100,
         density: 60,
         glow: 60,
         mist: 75,
@@ -94,8 +96,10 @@ Item {
     property int _holeRadius: 25
     property bool _swirlVary: false
     property int _swirlSpeed: 20
+    property bool _swirlBurst: false
     property int _swirlVaryMargin: 10
     property int _swirlVaryInterval: 8
+    property int _swirlVaryChance: 100
     property int _density: 60
     property int _glow: 60
     property int _mist: 75
@@ -150,8 +154,10 @@ Item {
         _holeRadius = s.holeRadius
         _swirlVary = s.swirlVary
         _swirlSpeed = s.swirlSpeed
+        _swirlBurst = s.swirlBurst
         _swirlVaryMargin = s.swirlVaryMargin
         _swirlVaryInterval = s.swirlVaryInterval
+        _swirlVaryChance = s.swirlVaryChance
         _density = s.density
         _glow = s.glow
         _mist = s.mist
@@ -202,8 +208,10 @@ Item {
             holeRadius: _holeRadius,
             swirlVary: _swirlVary,
             swirlSpeed: _swirlSpeed,
+            swirlBurst: _swirlBurst,
             swirlVaryMargin: _swirlVaryMargin,
             swirlVaryInterval: _swirlVaryInterval,
+            swirlVaryChance: _swirlVaryChance,
             density: _density,
             glow: _glow,
             mist: _mist,
@@ -251,8 +259,10 @@ Item {
     on_HoleRadiusChanged: _save()
     on_SwirlVaryChanged: _save()
     on_SwirlSpeedChanged: _save()
+    on_SwirlBurstChanged: _save()
     on_SwirlVaryMarginChanged: _save()
     on_SwirlVaryIntervalChanged: _save()
+    on_SwirlVaryChanceChanged: _save()
     on_DensityChanged: _save()
     on_GlowChanged: _save()
     on_MistChanged: _save()

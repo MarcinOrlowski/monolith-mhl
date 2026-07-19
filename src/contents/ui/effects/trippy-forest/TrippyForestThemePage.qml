@@ -33,6 +33,7 @@ Kirigami.ScrollablePage {
                         next--
                     }
                     themeCombo.currentIndex = next
+                    themeCombo.selectThemeIndex(next)
                 }
             }
 
@@ -62,20 +63,24 @@ Kirigami.ScrollablePage {
                     }
                     return page.effectConfig.findThemeIndex(page.effectConfig._themeId) + themesOffset;
                 })
-                onCurrentIndexChanged: {
-                    if (currentIndex < 0 || currentIndex === separatorIndex || !page.effectConfig.themeScanner.ready) {
+                // Write the setting only on a deliberate user pick — NOT on the
+                // programmatic index changes that happen while the theme model
+                // populates (those would otherwise save the wrong theme).
+                function selectThemeIndex(idx) {
+                    if (idx < 0 || idx === separatorIndex || !page.effectConfig.themeScanner.ready) {
                         return
                     }
-                    if (currentIndex === randomThemeIndex) {
+                    if (idx === randomThemeIndex) {
                         page.effectConfig._randomInitialTheme = true
-                    } else if (currentIndex >= themesOffset) {
+                    } else if (idx >= themesOffset) {
                         page.effectConfig._randomInitialTheme = false
-                        var themeIdx = currentIndex - themesOffset;
+                        var themeIdx = idx - themesOffset;
                         if (themeIdx >= 0 && themeIdx < page.effectConfig.themeScanner.themeList.count) {
                             page.effectConfig._themeId = page.effectConfig.themeScanner.themeList.get(themeIdx).themeId
                         }
                     }
                 }
+                onActivated: function(index) { themeCombo.selectThemeIndex(index) }
 
                 delegate: QtControls2.ItemDelegate {
                     required property int index
@@ -101,6 +106,7 @@ Kirigami.ScrollablePage {
                         next++
                     }
                     themeCombo.currentIndex = next;
+                    themeCombo.selectThemeIndex(next)
                 }
             }
         }

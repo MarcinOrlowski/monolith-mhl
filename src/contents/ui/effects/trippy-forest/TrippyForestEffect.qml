@@ -46,8 +46,10 @@ Item {
         holeRadius: 25,
         swirlVary: false,
         swirlSpeed: 20,
+        swirlBurst: false,
         swirlVaryMargin: 10,
         swirlVaryInterval: 8,
+        swirlVaryChance: 100,
         density: 60,
         glow: 60,
         mist: 75,
@@ -91,11 +93,13 @@ Item {
     property real vortexSwirl: 0.45
     property real tunnelWidth: 1.0
     property real holeRadius: 0.11
-    property bool swirlVary: false
+    property bool swirlVary: false        // continuous drift enable
     property real swirlSpeedMult: 0.012   // continuous swirl drift (0..1 units / sec)
     property int _swirlDir: 1              // drift direction, reflects at the bounds
+    property bool swirlBurst: false       // periodic burst enable
     property real swirlVaryMargin: 0.10   // burst size: fraction of the 0..1 swirl range
-    property int swirlVaryInterval: 8     // seconds between bursts
+    property int swirlVaryInterval: 8     // seconds between burst rolls
+    property int swirlVaryChance: 100     // percent chance each roll actually bursts
     property real density: 0.60
     property real glowAmount: 0.60
     property real mistAmount: 0.75
@@ -168,8 +172,10 @@ Item {
         holeRadius = Math.min(0.45, Math.max(0.0, s.holeRadius / 100.0 * 0.45));
         swirlVary = s.swirlVary;
         swirlSpeedMult = Math.max(0.0, s.swirlSpeed / 100.0) * 0.06;
+        swirlBurst = s.swirlBurst;
         swirlVaryMargin = Math.max(0.0, s.swirlVaryMargin / 100.0);
         swirlVaryInterval = Math.max(1, s.swirlVaryInterval);
+        swirlVaryChance = Math.max(0, Math.min(100, s.swirlVaryChance));
         density = Math.min(1.0, Math.max(0.0, s.density / 100.0));
         glowAmount = Math.min(1.0, Math.max(0.0, s.glow / 100.0));
         mistAmount = Math.min(1.0, Math.max(0.0, s.mist / 100.0));
@@ -522,10 +528,11 @@ Item {
     // untouched.
     Timer {
         id: swirlVaryTimer
-        running: effectRoot.swirlVary && !effectRoot.paused
+        running: effectRoot.swirlBurst && !effectRoot.paused
         repeat: true
         interval: Math.max(1, effectRoot.swirlVaryInterval) * 1000
         onTriggered: {
+            if (Math.random() * 100.0 >= effectRoot.swirlVaryChance) return   // probability gate
             var delta = (Math.random() * 2.0 - 1.0) * effectRoot.swirlVaryMargin
             effectRoot.spiralTarget = Math.min(1.0, Math.max(0.0, effectRoot.spiralTarget + delta))
         }

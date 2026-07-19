@@ -45,6 +45,8 @@ layout(std140, binding = 0) uniform buf {
     float vortexOpacity;
     float bloomAmount;
     float bloomRadius;
+    float bloomOpacity;
+    float bloomFade;
     float starCount;
     float starLength;
     float starOpacity;
@@ -58,6 +60,7 @@ layout(std140, binding = 0) uniform buf {
     vec4 glowCol;
     vec4 mistCol;
     vec4 starsCol;
+    vec4 bloomColor;
     vec4 pal0;
     vec4 pal1;
     vec4 pal2;

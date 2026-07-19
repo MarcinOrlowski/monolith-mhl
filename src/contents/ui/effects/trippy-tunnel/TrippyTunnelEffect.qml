@@ -69,6 +69,8 @@ Item {
         vortexOpacity: 100,
         bloom: 70,
         bloomRadius: 40,
+        bloomOpacity: 100,
+        bloomFade: 0,
         starCount: 40,
         starSpeed: 50,
         starLength: 35,
@@ -140,6 +142,8 @@ Item {
     property real vortexOpacity: 1.0
     property real bloomAmount: 0.70
     property real bloomRadius: 0.24
+    property real bloomOpacity: 1.0
+    property real bloomFade: 0.0
     property real starCount: 40
     property real starSpeed: 1.0
     property real starLength: 0.35
@@ -238,6 +242,8 @@ Item {
         ringSpinVary = Math.max(0.0, s.ringSpin / 100.0);
         bloomAmount = Math.min(1.0, Math.max(0.0, s.bloom / 100.0));
         bloomRadius = Math.min(1.0, Math.max(0.0, s.bloomRadius / 100.0)) * 0.6;
+        bloomOpacity = Math.min(1.0, Math.max(0.0, s.bloomOpacity / 100.0));
+        bloomFade = Math.min(1.0, Math.max(0.0, s.bloomFade / 100.0));
         starCount = Math.max(0, s.starCount);
         starSpeed = Math.max(0.0, s.starSpeed / 100.0);
         starLength = Math.min(1.0, Math.max(0.0, s.starLength / 100.0));
@@ -677,6 +683,10 @@ Item {
         Behavior on bloomAmount { NumberAnimation { duration: effectRoot.paramTransitionMs; easing.type: Easing.InOutQuad } }
         property real bloomRadius: effectRoot.bloomRadius
         Behavior on bloomRadius { NumberAnimation { duration: effectRoot.paramTransitionMs; easing.type: Easing.InOutQuad } }
+        property real bloomOpacity: effectRoot.bloomOpacity
+        Behavior on bloomOpacity { NumberAnimation { duration: effectRoot.paramTransitionMs; easing.type: Easing.InOutQuad } }
+        property real bloomFade: effectRoot.bloomFade
+        Behavior on bloomFade { NumberAnimation { duration: effectRoot.paramTransitionMs; easing.type: Easing.InOutQuad } }
         property real starCount: effectRoot.starCount
         property real starLength: effectRoot.starLength
         Behavior on starLength { NumberAnimation { duration: effectRoot.paramTransitionMs; easing.type: Easing.InOutQuad } }
@@ -701,6 +711,8 @@ Item {
         Behavior on glowCol { ColorAnimation { duration: effectRoot.transitionMs } }
         property color mistCol: "#3a6a80"
         Behavior on mistCol { ColorAnimation { duration: effectRoot.transitionMs } }
+        property color bloomColor: "#ffffff"
+        Behavior on bloomColor { ColorAnimation { duration: effectRoot.transitionMs } }
         property color starsCol: "#ffffff"
         Behavior on starsCol { ColorAnimation { duration: effectRoot.transitionMs } }
         property color pal0: "#ff2d55"

@@ -45,6 +45,8 @@ layout(std140, binding = 0) uniform buf {
     float vortexOpacity;
     float bloomAmount;
     float bloomRadius;
+    float bloomOpacity;
+    float bloomFade;
     float starCount;
     float starLength;
     float starOpacity;
@@ -58,6 +60,7 @@ layout(std140, binding = 0) uniform buf {
     vec4 glowCol;
     vec4 mistCol;
     vec4 starsCol;
+    vec4 bloomColor;
     vec4 pal0;
     vec4 pal1;
     vec4 pal2;
@@ -289,16 +292,6 @@ vec3 scene(vec2 uv) {
         col += spotCol * spot * glowAmount * showGlow * (0.4 + 0.6 * far);
     }
 
-    // Centre bloom: a bright glow over the middle that hides where the swirl,
-    // stars and beams converge. A solid inner core always fully covers the exact
-    // convergence point, while `bloomAmount` sets the surrounding soft halo.
-    if (bloomAmount > 0.001) {
-        float t = smoothstep(bloomRadius, 0.0, r);          // 0 at edge, 1 at centre
-        float b = pow(t, 1.7) * bloomAmount + smoothstep(0.55, 1.0, t);
-        vec3 bloomCol = mix(mistCol.rgb, vec3(1.0), 0.6);   // bright, theme-tinted
-        col = mix(col, bloomCol, clamp(b, 0.0, 1.0));
-    }
-
     return col;
 }
 
@@ -307,8 +300,22 @@ void main() {
     vec2 uv = (coord * res - 0.5 * res) / res.y;   // centred, aspect via height
 
     vec3 col = scene(uv);
+    float alpha = 1.0;
+
+    // Centre bloom: covers the middle where the swirl, stars and beams converge.
+    // A solid inner core + amount-scaled soft halo, sized by bloomRadius, gated by
+    // bloomOpacity. bloomFade blends between a bright theme-coloured glow (0) and
+    // fading the covered area out to transparency (1).
+    if (bloomOpacity > 0.001) {
+        float r = length(uv);
+        float t = smoothstep(bloomRadius, 0.0, r);          // 0 at edge, 1 at centre
+        float shape = pow(t, 1.7) * bloomAmount + smoothstep(0.55, 1.0, t);
+        shape = clamp(shape, 0.0, 1.0) * bloomOpacity;
+        col = mix(col, bloomColor.rgb, shape * (1.0 - bloomFade));
+        alpha = 1.0 - shape * bloomFade;
+    }
 
     col *= dimLevel;
     col = clamp(col, 0.0, 1.0);
-    fragColor = vec4(col, 1.0) * qt_Opacity;
+    fragColor = vec4(col * alpha, alpha) * qt_Opacity;   // premultiplied for the fade
 }

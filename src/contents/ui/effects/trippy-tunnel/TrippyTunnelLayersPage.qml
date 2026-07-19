@@ -285,9 +285,28 @@ Kirigami.ScrollablePage {
         QtControls2.SpinBox {
             Kirigami.FormData.label: i18n("Bloom radius:")
             from: 0; to: 100; stepSize: 5
-            enabled: page.effectConfig._bloom > 0
+            enabled: page.effectConfig._bloomOpacity > 0
             value: page.effectConfig._bloomRadius
             onValueModified: page.effectConfig._bloomRadius = value
+            textFromValue: function(value) { return value + "%" }
+            valueFromText: function(text) { return parseInt(text) || 0 }
+        }
+        QtControls2.SpinBox {
+            Kirigami.FormData.label: i18n("Bloom opacity:")
+            from: 0; to: 100; stepSize: 5
+            value: page.effectConfig._bloomOpacity
+            onValueModified: page.effectConfig._bloomOpacity = value
+            textFromValue: function(value) { return value + "%" }
+            valueFromText: function(text) { return parseInt(text) || 0 }
+        }
+        QtControls2.SpinBox {
+            // 0 = bright theme-coloured glow, 100 = fade the covered area to
+            // transparency instead of colouring it.
+            Kirigami.FormData.label: i18n("Bloom fade:")
+            from: 0; to: 100; stepSize: 5
+            enabled: page.effectConfig._bloomOpacity > 0
+            value: page.effectConfig._bloomFade
+            onValueModified: page.effectConfig._bloomFade = value
             textFromValue: function(value) { return value + "%" }
             valueFromText: function(text) { return parseInt(text) || 0 }
         }

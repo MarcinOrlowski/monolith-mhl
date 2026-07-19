@@ -23,6 +23,7 @@ QtObject {
     property string glow: "#d79921"
     property string mist: "#3c3836"
     property string stars: "#ebdbb2"
+    property string bloom: "#fbf1c7"
 
     // 6-stop palette wrapped around the tunnel (drives the trippy colour flow)
     property var palette: ["#cc241d", "#d65d0e", "#d79921", "#98971a", "#689d6a", "#b16286"]

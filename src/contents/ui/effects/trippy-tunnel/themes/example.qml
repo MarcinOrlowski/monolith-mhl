@@ -71,6 +71,10 @@ QtObject {
     // omitted. Bright / near-white values read best as stars.
     property string stars: "#ffffff"
 
+    // Colour of the central bloom (the glow that covers the convergence point).
+    // Optional — defaults to white. A vivid colour is fun on psychedelic sets.
+    property string bloom: "#ffffff"
+
     // ── Palette ───────────────────────────────────────────────────────
     //
     // Exactly 6 colours forming a smooth loop that is wrapped around the

@@ -40,6 +40,8 @@ function validateTheme(obj) {
     }
     if (obj.stars !== undefined && !parseHexColor(obj.stars))
         return "stars must be a valid #RRGGBB color";
+    if (obj.bloom !== undefined && !parseHexColor(obj.bloom))
+        return "bloom must be a valid #RRGGBB color";
 
     if (!Array.isArray(obj.palette) || obj.palette.length !== 6)
         return "palette must be an array of 6 colors";
@@ -57,6 +59,7 @@ function applyTheme(obj, target) {
     target["glowCol"] = obj.glow;
     target["mistCol"] = obj.mist;
     target["starsCol"] = (obj.stars !== undefined) ? obj.stars : "#ffffff";
+    target["bloomColor"] = (obj.bloom !== undefined) ? obj.bloom : "#ffffff";
     for (var i = 0; i < 6; i++)
         target["pal" + i] = obj.palette[i];
 }

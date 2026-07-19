@@ -68,6 +68,8 @@ Item {
         vortexOpacity: 100,
         bloom: 70,
         bloomRadius: 40,
+        bloomOpacity: 100,
+        bloomFade: 0,
         starCount: 40,
         starSpeed: 50,
         starLength: 35,
@@ -132,6 +134,8 @@ Item {
     property int _vortexOpacity: 100
     property int _bloom: 70
     property int _bloomRadius: 40
+    property int _bloomOpacity: 100
+    property int _bloomFade: 0
     property int _starCount: 40
     property int _starSpeed: 100
     property int _starLength: 35
@@ -203,6 +207,8 @@ Item {
         _vortexOpacity = s.vortexOpacity
         _bloom = s.bloom
         _bloomRadius = s.bloomRadius
+        _bloomOpacity = s.bloomOpacity
+        _bloomFade = s.bloomFade
         _starCount = s.starCount
         _starSpeed = s.starSpeed
         _starLength = s.starLength
@@ -270,6 +276,8 @@ Item {
             vortexOpacity: _vortexOpacity,
             bloom: _bloom,
             bloomRadius: _bloomRadius,
+            bloomOpacity: _bloomOpacity,
+            bloomFade: _bloomFade,
             starCount: _starCount,
             starSpeed: _starSpeed,
             starLength: _starLength,
@@ -334,6 +342,8 @@ Item {
     on_VortexOpacityChanged: _save()
     on_BloomChanged: _save()
     on_BloomRadiusChanged: _save()
+    on_BloomOpacityChanged: _save()
+    on_BloomFadeChanged: _save()
     on_StarCountChanged: _save()
     on_StarSpeedChanged: _save()
     on_StarLengthChanged: _save()

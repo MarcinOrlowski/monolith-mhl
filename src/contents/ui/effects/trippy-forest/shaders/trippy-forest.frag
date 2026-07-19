@@ -32,6 +32,8 @@ layout(std140, binding = 0) uniform buf {
     float showBeams;
     float showDots;
     float spiral;
+    float vortexSwirl;
+    float tunnelWidth;
     float density;
     float glowAmount;
     float mistAmount;
@@ -123,10 +125,10 @@ vec3 scene(vec2 uv) {
     float ringBase = floor(scroll);
 
     // --- central mist / counter-swirling vortex glow (deepest layer) ---
-    // `spiral` sets how tightly the vortex arms wind (log-radius frequency), so
-    // it is a visible control rather than a mere phase offset.
+    // `vortexSwirl` sets how tightly the vortex arms wind (log-radius frequency),
+    // independent of the tunnel's `spiral` twist.
     float cg = smoothstep(1.0, 0.0, r);
-    float swirl = 0.5 + 0.5 * sin(ARMS * a + log(r) * (2.0 + spiral * 14.0) + whirlTime * 1.5);
+    float swirl = 0.5 + 0.5 * sin(ARMS * a + log(r) * (2.0 + vortexSwirl * 14.0) + whirlTime * 1.5);
     swirl = pow(swirl, 2.0);
     vec3 vortexTint = palette(fract(a / 6.2831 + whirlTime * 0.05 + 0.5));
     vec3 center = mistCol.rgb * mistAmount * (0.30 + 0.70 * cg);
@@ -212,7 +214,9 @@ vec3 scene(vec2 uv) {
         float fi = float(i);
         float zc = fi + 1.0 - baseZ;            // distance from camera (> 0)
         float ringId = ringBase + fi + 1.0;     // stable per-ring seed
-        float proj = RINGSCALE / zc;            // on-screen radius of this ring
+        // on-screen radius of this ring; tunnelWidth pushes the foliage out
+        // (wider tunnel mouth) or pulls it in (narrower).
+        float proj = (RINGSCALE * tunnelWidth) / zc;
 
         // angular twist grows with distance -> nested mouths form a spiral; the
         // whole tunnel also rotates with rotTime. Higher `spiral` = tighter tunnel.

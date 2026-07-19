@@ -41,6 +41,8 @@ Item {
         rotSpeed: 25,
         whirlSpeed: -35,
         spiral: 45,
+        vortexSwirl: 45,
+        tunnelWidth: 100,
         density: 60,
         glow: 60,
         mist: 75,
@@ -76,6 +78,8 @@ Item {
     property bool paused: false
 
     property real spiral: 0.45
+    property real vortexSwirl: 0.45
+    property real tunnelWidth: 1.0
     property real density: 0.60
     property real glowAmount: 0.60
     property real mistAmount: 0.75
@@ -117,6 +121,8 @@ Item {
 
         // Look
         spiral = Math.min(1.0, Math.max(0.0, s.spiral / 100.0));
+        vortexSwirl = Math.min(1.0, Math.max(0.0, s.vortexSwirl / 100.0));
+        tunnelWidth = Math.max(0.1, s.tunnelWidth / 100.0);
         density = Math.min(1.0, Math.max(0.0, s.density / 100.0));
         glowAmount = Math.min(1.0, Math.max(0.0, s.glow / 100.0));
         mistAmount = Math.min(1.0, Math.max(0.0, s.mist / 100.0));
@@ -488,6 +494,10 @@ Item {
         // instead of snapping (which reads as the animation "restarting").
         property real spiral: effectRoot.spiral
         Behavior on spiral { NumberAnimation { duration: 700; easing.type: Easing.InOutQuad } }
+        property real vortexSwirl: effectRoot.vortexSwirl
+        Behavior on vortexSwirl { NumberAnimation { duration: 700; easing.type: Easing.InOutQuad } }
+        property real tunnelWidth: effectRoot.tunnelWidth
+        Behavior on tunnelWidth { NumberAnimation { duration: 700; easing.type: Easing.InOutQuad } }
         property real density: effectRoot.density
         Behavior on density { NumberAnimation { duration: 700; easing.type: Easing.InOutQuad } }
         property real glowAmount: effectRoot.glowAmount

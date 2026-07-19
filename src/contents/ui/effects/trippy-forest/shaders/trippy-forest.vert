@@ -32,6 +32,8 @@ layout(std140, binding = 0) uniform buf {
     float showBeams;
     float showDots;
     float spiral;
+    float vortexSwirl;
+    float tunnelWidth;
     float density;
     float glowAmount;
     float mistAmount;

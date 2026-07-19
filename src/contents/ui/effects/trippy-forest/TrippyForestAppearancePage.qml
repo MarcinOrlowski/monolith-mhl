@@ -32,12 +32,30 @@ Kirigami.ScrollablePage {
         }
 
         QtControls2.SpinBox {
-            Kirigami.FormData.label: i18n("Swirl:")
+            Kirigami.FormData.label: i18n("Tunnel swirl:")
             from: 0; to: 100; stepSize: 5
             value: page.effectConfig._spiral
             onValueModified: page.effectConfig._spiral = value
             textFromValue: function(value) { return value + "%" }
             valueFromText: function(text) { return parseInt(text) || 0 }
+        }
+
+        QtControls2.SpinBox {
+            Kirigami.FormData.label: i18n("Vortex swirl:")
+            from: 0; to: 100; stepSize: 5
+            value: page.effectConfig._vortexSwirl
+            onValueModified: page.effectConfig._vortexSwirl = value
+            textFromValue: function(value) { return value + "%" }
+            valueFromText: function(text) { return parseInt(text) || 0 }
+        }
+
+        QtControls2.SpinBox {
+            Kirigami.FormData.label: i18n("Tunnel width:")
+            from: 50; to: 250; stepSize: 10
+            value: page.effectConfig._tunnelWidth
+            onValueModified: page.effectConfig._tunnelWidth = value
+            textFromValue: function(value) { return value + "%" }
+            valueFromText: function(text) { return parseInt(text) || 100 }
         }
 
         QtControls2.SpinBox {

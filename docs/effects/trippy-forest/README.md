@@ -54,8 +54,11 @@ Everything is generated procedurally in the shader — there are no image assets
 
 - **Canopy density** — how full the leafy canopies are (fewer gaps at higher
   values).
-- **Swirl** — how tightly the tunnel and central vortex spiral (loose, nearly
-  radial arms at low values; a tight whirlpool at high values).
+- **Tunnel swirl** — how tightly the leafy tunnel twists as it recedes.
+- **Vortex swirl** — how tightly the central background whirlpool winds
+  (independent of the tunnel).
+- **Tunnel width** — how far the foliage sits from the centre; higher values
+  open up a wider tunnel mouth, lower values pull it in.
 - **Glow spots** — brightness/quantity of the emissive mushroom-like spots.
 - **Centre glow** — brightness of the misty light at the end of the tunnel.
 - **Depth haze** — how strongly distant rings dissolve into the central glow.

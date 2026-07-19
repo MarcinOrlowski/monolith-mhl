@@ -40,6 +40,8 @@ Item {
         rotSpeed: 25,
         whirlSpeed: -35,
         spiral: 45,
+        vortexSwirl: 45,
+        tunnelWidth: 100,
         density: 60,
         glow: 60,
         mist: 75,
@@ -80,6 +82,8 @@ Item {
     property int _rotSpeed: 25
     property int _whirlSpeed: -35
     property int _spiral: 45
+    property int _vortexSwirl: 45
+    property int _tunnelWidth: 100
     property int _density: 60
     property int _glow: 60
     property int _mist: 75
@@ -127,6 +131,8 @@ Item {
         _rotSpeed = s.rotSpeed
         _whirlSpeed = s.whirlSpeed
         _spiral = s.spiral
+        _vortexSwirl = s.vortexSwirl
+        _tunnelWidth = s.tunnelWidth
         _density = s.density
         _glow = s.glow
         _mist = s.mist
@@ -170,6 +176,8 @@ Item {
             rotSpeed: _rotSpeed,
             whirlSpeed: _whirlSpeed,
             spiral: _spiral,
+            vortexSwirl: _vortexSwirl,
+            tunnelWidth: _tunnelWidth,
             density: _density,
             glow: _glow,
             mist: _mist,
@@ -210,6 +218,8 @@ Item {
     on_RotSpeedChanged: _save()
     on_WhirlSpeedChanged: _save()
     on_SpiralChanged: _save()
+    on_VortexSwirlChanged: _save()
+    on_TunnelWidthChanged: _save()
     on_DensityChanged: _save()
     on_GlowChanged: _save()
     on_MistChanged: _save()

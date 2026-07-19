@@ -158,7 +158,7 @@ vec3 scene(vec2 uv) {
             float sang = h.x * 6.2831 + rotTime * 0.15;
             float z = fract(h.y - st);                       // 1 -> 0: centre -> edge (outward)
             vec2 rdir = vec2(cos(sang), sin(sang));
-            vec2 sp = rdir * (0.95 * pow(1.0 - z, 1.6));
+            vec2 sp = rdir * (1.15 * pow(1.0 - z, 1.6));   // reach past the corners before recycling
             vec2 dv = uv - sp;
             float along = dot(dv, rdir);
             float perp = dot(dv, vec2(-rdir.y, rdir.x));
@@ -189,13 +189,15 @@ vec3 scene(vec2 uv) {
             float across = sa - bcenter;
             float thin = exp(-across * across * 40.0);       // thin angular line
             if (thin < 0.003) continue;
-            // head grows 0 -> 1 over the cycle, so the streak flies outward
+            // head grows outward over the cycle. It runs past the screen corners
+            // (~1.02) so a beam stays lit until it truly leaves the frame, then
+            // fades off-screen before recycling — no early on-screen vanishing.
             float t = fract(h2.x + beamTime * 0.16 * (0.5 + h.y));
-            float head = pow(t, 0.7);
+            float head = pow(t, 0.7) * 1.35;
             float tailLen = (0.04 + beamLength * 0.7) * (0.5 + h2.y);  // per-line length
             float radial = smoothstep(head - tailLen, head, r)
                          * (1.0 - smoothstep(head, head + 0.02, r));
-            float edgeFade = 1.0 - smoothstep(0.92, 1.08, head);      // fade out at recycle
+            float edgeFade = 1.0 - smoothstep(1.12, 1.35, head);      // fade out off-screen
             float bright = 0.35 + 0.65 * h.y;                         // per-line brightness
             beams += thin * radial * edgeFade * bright;
         }

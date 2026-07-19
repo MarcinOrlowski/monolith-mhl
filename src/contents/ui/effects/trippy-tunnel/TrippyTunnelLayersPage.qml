@@ -374,7 +374,7 @@ Kirigami.ScrollablePage {
                 from: 0; to: 100; stepSize: 5
                 value: page.effectConfig._bloomRadiusBurstMargin
                 onValueModified: page.effectConfig._bloomRadiusBurstMargin = value
-                textFromValue: function(value) { return "±" + value + "%" }
+                textFromValue: function(value) { return "+" + value + "%" }
                 valueFromText: function(text) { return parseInt(text) || 0 }
             }
             QtControls2.Label { text: i18n("every") }

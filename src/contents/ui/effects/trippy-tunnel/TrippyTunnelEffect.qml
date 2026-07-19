@@ -297,6 +297,7 @@ Item {
         bloomOscRangeF = Math.max(0.0, s.bloomOscRange / 100.0);
         bloomOscInterval = Math.max(1, s.bloomOscInterval);
         bloomOscChance = Math.max(0, Math.min(100, s.bloomOscChance));
+        if (!bloomOsc) bloomAmount = bloomAmountBase;   // osc off -> settle back to base
 
         bloomRadiusBase = Math.min(1.0, Math.max(0.0, s.bloomRadius / 100.0)) * 0.6;
         if (bloomRadiusBase !== _bloomRadiusBasePrev) {
@@ -310,6 +311,7 @@ Item {
         bloomRadiusOscRangeUv = Math.max(0.0, s.bloomRadiusOscRange / 100.0) * 0.6;
         bloomRadiusOscInterval = Math.max(1, s.bloomRadiusOscInterval);
         bloomRadiusOscChance = Math.max(0, Math.min(100, s.bloomRadiusOscChance));
+        if (!bloomRadiusOsc) bloomRadiusOscTarget = bloomRadiusBase;   // osc off -> ease back to base
         bloomRadiusBurst = s.bloomRadiusBurst;
         bloomRadiusBurstMarginUv = Math.max(0.0, s.bloomRadiusBurstMargin / 100.0) * 0.6;
         bloomRadiusBurstInterval = Math.max(1, s.bloomRadiusBurstInterval);
@@ -742,7 +744,7 @@ Item {
         interval: Math.max(1, effectRoot.bloomRadiusBurstInterval) * 1000
         onTriggered: {
             if (Math.random() * 100.0 >= effectRoot.bloomRadiusBurstChance) return
-            var d = (Math.random() * 2.0 - 1.0) * effectRoot.bloomRadiusBurstMarginUv
+            var d = Math.random() * effectRoot.bloomRadiusBurstMarginUv   // grow only (+), like a star burst
             effectRoot.bloomRadiusBurstOff = d
         }
     }

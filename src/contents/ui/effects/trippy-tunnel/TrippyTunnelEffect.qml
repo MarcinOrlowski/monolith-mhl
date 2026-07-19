@@ -59,12 +59,15 @@ Item {
         swirlVaryInterval: 120,
         swirlVaryChance: 25,
         transitionTime: 10,
+        layerCount: 9,
         density: 60,
         glow: 60,
         mist: 75,
         fog: 50,
         canopyOpacity: 100,
         vortexOpacity: 100,
+        bloom: 70,
+        bloomRadius: 40,
         starCount: 40,
         starSpeed: 50,
         starLength: 35,
@@ -120,12 +123,15 @@ Item {
     property real swirlVaryMargin: 0.10   // burst size: fraction of the 0..1 swirl range
     property int swirlVaryInterval: 8     // seconds between burst rolls
     property int swirlVaryChance: 100     // percent chance each roll actually bursts
+    property real layerCount: 9.0
     property real density: 0.60
     property real glowAmount: 0.60
     property real mistAmount: 0.75
     property real fog: 0.50
     property real canopyOpacity: 1.0
     property real vortexOpacity: 1.0
+    property real bloomAmount: 0.70
+    property real bloomRadius: 0.24
     property real starCount: 40
     property real starSpeed: 1.0
     property real starLength: 0.35
@@ -213,6 +219,9 @@ Item {
         fog = Math.min(1.0, Math.max(0.0, s.fog / 100.0));
         canopyOpacity = Math.min(1.0, Math.max(0.0, s.canopyOpacity / 100.0));
         vortexOpacity = Math.min(1.0, Math.max(0.0, s.vortexOpacity / 100.0));
+        layerCount = Math.max(2, Math.min(24, s.layerCount));
+        bloomAmount = Math.min(1.0, Math.max(0.0, s.bloom / 100.0));
+        bloomRadius = Math.min(1.0, Math.max(0.0, s.bloomRadius / 100.0)) * 0.6;
         starCount = Math.max(0, s.starCount);
         starSpeed = Math.max(0.0, s.starSpeed / 100.0);
         starLength = Math.min(1.0, Math.max(0.0, s.starLength / 100.0));
@@ -633,6 +642,8 @@ Item {
         Behavior on tunnelWidth { NumberAnimation { duration: effectRoot.paramTransitionMs; easing.type: Easing.InOutQuad } }
         property real holeRadius: effectRoot.holeRadius
         Behavior on holeRadius { NumberAnimation { duration: effectRoot.paramTransitionMs; easing.type: Easing.InOutQuad } }
+        property real layerCount: effectRoot.layerCount
+        Behavior on layerCount { NumberAnimation { duration: effectRoot.paramTransitionMs; easing.type: Easing.InOutQuad } }
         property real density: effectRoot.density
         Behavior on density { NumberAnimation { duration: effectRoot.paramTransitionMs; easing.type: Easing.InOutQuad } }
         property real glowAmount: effectRoot.glowAmount
@@ -645,6 +656,10 @@ Item {
         Behavior on canopyOpacity { NumberAnimation { duration: effectRoot.paramTransitionMs; easing.type: Easing.InOutQuad } }
         property real vortexOpacity: effectRoot.vortexOpacity
         Behavior on vortexOpacity { NumberAnimation { duration: effectRoot.paramTransitionMs; easing.type: Easing.InOutQuad } }
+        property real bloomAmount: effectRoot.bloomAmount
+        Behavior on bloomAmount { NumberAnimation { duration: effectRoot.paramTransitionMs; easing.type: Easing.InOutQuad } }
+        property real bloomRadius: effectRoot.bloomRadius
+        Behavior on bloomRadius { NumberAnimation { duration: effectRoot.paramTransitionMs; easing.type: Easing.InOutQuad } }
         property real starCount: effectRoot.starCount
         property real starLength: effectRoot.starLength
         Behavior on starLength { NumberAnimation { duration: effectRoot.paramTransitionMs; easing.type: Easing.InOutQuad } }

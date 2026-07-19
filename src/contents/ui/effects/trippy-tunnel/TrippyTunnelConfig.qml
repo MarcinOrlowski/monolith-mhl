@@ -58,12 +58,15 @@ Item {
         swirlVaryInterval: 120,
         swirlVaryChance: 25,
         transitionTime: 10,
+        layerCount: 9,
         density: 60,
         glow: 60,
         mist: 75,
         fog: 50,
         canopyOpacity: 100,
         vortexOpacity: 100,
+        bloom: 70,
+        bloomRadius: 40,
         starCount: 40,
         starSpeed: 50,
         starLength: 35,
@@ -118,12 +121,15 @@ Item {
     property int _swirlVaryInterval: 8
     property int _swirlVaryChance: 100
     property int _transitionTime: 10
+    property int _layerCount: 9
     property int _density: 60
     property int _glow: 60
     property int _mist: 75
     property int _fog: 50
     property int _canopyOpacity: 100
     property int _vortexOpacity: 100
+    property int _bloom: 70
+    property int _bloomRadius: 40
     property int _starCount: 40
     property int _starSpeed: 100
     property int _starLength: 35
@@ -185,12 +191,15 @@ Item {
         _swirlVaryInterval = s.swirlVaryInterval
         _swirlVaryChance = s.swirlVaryChance
         _transitionTime = s.transitionTime
+        _layerCount = s.layerCount
         _density = s.density
         _glow = s.glow
         _mist = s.mist
         _fog = s.fog
         _canopyOpacity = s.canopyOpacity
         _vortexOpacity = s.vortexOpacity
+        _bloom = s.bloom
+        _bloomRadius = s.bloomRadius
         _starCount = s.starCount
         _starSpeed = s.starSpeed
         _starLength = s.starLength
@@ -248,12 +257,15 @@ Item {
             swirlVaryInterval: _swirlVaryInterval,
             swirlVaryChance: _swirlVaryChance,
             transitionTime: _transitionTime,
+            layerCount: _layerCount,
             density: _density,
             glow: _glow,
             mist: _mist,
             fog: _fog,
             canopyOpacity: _canopyOpacity,
             vortexOpacity: _vortexOpacity,
+            bloom: _bloom,
+            bloomRadius: _bloomRadius,
             starCount: _starCount,
             starSpeed: _starSpeed,
             starLength: _starLength,
@@ -308,12 +320,15 @@ Item {
     on_SwirlVaryIntervalChanged: _save()
     on_SwirlVaryChanceChanged: _save()
     on_TransitionTimeChanged: _save()
+    on_LayerCountChanged: _save()
     on_DensityChanged: _save()
     on_GlowChanged: _save()
     on_MistChanged: _save()
     on_FogChanged: _save()
     on_CanopyOpacityChanged: _save()
     on_VortexOpacityChanged: _save()
+    on_BloomChanged: _save()
+    on_BloomRadiusChanged: _save()
     on_StarCountChanged: _save()
     on_StarSpeedChanged: _save()
     on_StarLengthChanged: _save()

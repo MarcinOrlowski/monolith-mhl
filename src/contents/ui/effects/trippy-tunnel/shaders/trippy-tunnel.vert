@@ -35,12 +35,15 @@ layout(std140, binding = 0) uniform buf {
     float vortexSwirl;
     float tunnelWidth;
     float holeRadius;
+    float layerCount;
     float density;
     float glowAmount;
     float mistAmount;
     float fog;
     float canopyOpacity;
     float vortexOpacity;
+    float bloomAmount;
+    float bloomRadius;
     float starCount;
     float starLength;
     float starOpacity;

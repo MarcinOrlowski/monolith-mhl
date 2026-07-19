@@ -40,6 +40,14 @@ Kirigami.ScrollablePage {
             valueFromText: function(text) { return parseInt(text) || 0 }
         }
         QtControls2.SpinBox {
+            // Number of depth rings — higher = denser canopy and a deeper tunnel.
+            Kirigami.FormData.label: i18n("Layers:")
+            from: 2; to: 24; stepSize: 1
+            enabled: page.effectConfig._showCanopy
+            value: page.effectConfig._layerCount
+            onValueModified: page.effectConfig._layerCount = value
+        }
+        QtControls2.SpinBox {
             Kirigami.FormData.label: i18n("Tunnel swirl:")
             from: 0; to: 100; stepSize: 5
             enabled: page.effectConfig._showCanopy
@@ -259,6 +267,25 @@ Kirigami.ScrollablePage {
             enabled: page.effectConfig._showVortex
             value: page.effectConfig._vortexOpacity
             onValueModified: page.effectConfig._vortexOpacity = value
+            textFromValue: function(value) { return value + "%" }
+            valueFromText: function(text) { return parseInt(text) || 0 }
+        }
+        QtControls2.SpinBox {
+            // Soft bright glow over the centre that hides where the swirl, stars
+            // and beams converge.
+            Kirigami.FormData.label: i18n("Centre bloom:")
+            from: 0; to: 100; stepSize: 5
+            value: page.effectConfig._bloom
+            onValueModified: page.effectConfig._bloom = value
+            textFromValue: function(value) { return value + "%" }
+            valueFromText: function(text) { return parseInt(text) || 0 }
+        }
+        QtControls2.SpinBox {
+            Kirigami.FormData.label: i18n("Bloom radius:")
+            from: 0; to: 100; stepSize: 5
+            enabled: page.effectConfig._bloom > 0
+            value: page.effectConfig._bloomRadius
+            onValueModified: page.effectConfig._bloomRadius = value
             textFromValue: function(value) { return value + "%" }
             valueFromText: function(text) { return parseInt(text) || 0 }
         }

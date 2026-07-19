@@ -9,9 +9,9 @@ counter-rotates.
 
 - Seamless infinite zoom
 
-- Independent tunnel rotation and counter-rotating central vortex, each with its own signed speed.
+- Independent tunnel rotation and counter-rotating central vortex,
 
-- Colour themes with the same auto-cycling and cross-fade machinery as the other effects
+- Colour themes with the same auto-cycling and cross-fade machinery,
 
 - 19 bundled themes grouped by tone:
 
@@ -41,8 +41,8 @@ Everything is generated procedurally in the shader - there are no image assets.
 Every layer is grouped into its own section with a **Visible** toggle plus its settings. Layers that
 depend on another (glow spots sit on the canopy) are disabled when their parent is off.
 
-- **Canopy** - the leafy tunnel: density, **layers** (number of depth rings - more rings = denser
-  canopy and a deeper tunnel), **tunnel swirl** (how tightly it twists), **tunnel width** (how far
+- **Canopy** - the leafy tunnel: density, **depth** (how sharply the rings recede toward the centre -
+  higher makes a deeper tunnel), **tunnel swirl** (how tightly it twists), **tunnel width** (how far
   the canopy sits from the centre - higher opens a wider tunnel mouth), **centre hole** (radius of
   the clear opening at the centre where the canopy stops and the vortex shows through), **depth
   haze**
@@ -77,9 +77,8 @@ depend on another (glow spots sit on the canopy) are disabled when their parent 
   (stars & beams; dots are plain round points), and **opacity** to blend the layer independently.
   All three fade out around the centre.
 
-The space layers are coloured from the **active theme's palette**, so every set
-(spectrum, gruvbox, psychedelic, and so on) tints them; a psychedelic set fans
-the beams out into a full rainbow.
+The space layers are coloured from the **active theme's palette**, so every set (spectrum, gruvbox,
+psychedelic, and so on) tints them; a psychedelic set fans the beams out into a full rainbow.
 
 ### Theme
 

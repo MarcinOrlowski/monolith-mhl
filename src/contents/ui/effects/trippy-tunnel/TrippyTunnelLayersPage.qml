@@ -40,12 +40,14 @@ Kirigami.ScrollablePage {
             valueFromText: function(text) { return parseInt(text) || 0 }
         }
         QtControls2.SpinBox {
-            // Number of depth rings — higher = denser canopy and a deeper tunnel.
-            Kirigami.FormData.label: i18n("Layers:")
-            from: 2; to: 24; stepSize: 1
+            // How fast rings recede toward the centre — higher = deeper tunnel.
+            Kirigami.FormData.label: i18n("Depth:")
+            from: 0; to: 100; stepSize: 5
             enabled: page.effectConfig._showCanopy
-            value: page.effectConfig._layerCount
-            onValueModified: page.effectConfig._layerCount = value
+            value: page.effectConfig._depth
+            onValueModified: page.effectConfig._depth = value
+            textFromValue: function(value) { return value + "%" }
+            valueFromText: function(text) { return parseInt(text) || 0 }
         }
         QtControls2.SpinBox {
             Kirigami.FormData.label: i18n("Tunnel swirl:")

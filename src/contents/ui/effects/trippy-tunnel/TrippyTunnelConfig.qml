@@ -58,7 +58,7 @@ Item {
         swirlVaryInterval: 120,
         swirlVaryChance: 25,
         transitionTime: 10,
-        layerCount: 9,
+        depth: 55,
         density: 60,
         glow: 60,
         mist: 75,
@@ -121,7 +121,7 @@ Item {
     property int _swirlVaryInterval: 8
     property int _swirlVaryChance: 100
     property int _transitionTime: 10
-    property int _layerCount: 9
+    property int _depth: 55
     property int _density: 60
     property int _glow: 60
     property int _mist: 75
@@ -191,7 +191,7 @@ Item {
         _swirlVaryInterval = s.swirlVaryInterval
         _swirlVaryChance = s.swirlVaryChance
         _transitionTime = s.transitionTime
-        _layerCount = s.layerCount
+        _depth = s.depth
         _density = s.density
         _glow = s.glow
         _mist = s.mist
@@ -257,7 +257,7 @@ Item {
             swirlVaryInterval: _swirlVaryInterval,
             swirlVaryChance: _swirlVaryChance,
             transitionTime: _transitionTime,
-            layerCount: _layerCount,
+            depth: _depth,
             density: _density,
             glow: _glow,
             mist: _mist,
@@ -320,7 +320,7 @@ Item {
     on_SwirlVaryIntervalChanged: _save()
     on_SwirlVaryChanceChanged: _save()
     on_TransitionTimeChanged: _save()
-    on_LayerCountChanged: _save()
+    on_DepthChanged: _save()
     on_DensityChanged: _save()
     on_GlowChanged: _save()
     on_MistChanged: _save()

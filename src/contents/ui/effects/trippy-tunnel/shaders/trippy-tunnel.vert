@@ -35,7 +35,7 @@ layout(std140, binding = 0) uniform buf {
     float vortexSwirl;
     float tunnelWidth;
     float holeRadius;
-    float layerCount;
+    float depth;
     float density;
     float glowAmount;
     float mistAmount;

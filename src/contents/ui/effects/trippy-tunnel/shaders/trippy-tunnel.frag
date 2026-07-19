@@ -35,7 +35,7 @@ layout(std140, binding = 0) uniform buf {
     float vortexSwirl;
     float tunnelWidth;
     float holeRadius;
-    float layerCount;
+    float depth;
     float density;
     float glowAmount;
     float mistAmount;
@@ -73,7 +73,7 @@ layout(std140, binding = 0) uniform buf {
 // retroactively rescales time. Colours come from the active theme's palette.
 // Everything is procedural (no textures).
 
-const int LAYER_MAX = 24;     // max depth slices; layerCount gates how many run
+const int LAYERS = 9;         // depth slices composited per pixel
 const float ZOOM = 0.22;      // rings advanced per time unit
 const float RINGSCALE = 0.55; // projected radius = RINGSCALE / distance
 const float ARMS = 5.0;       // vortex spiral-arm count
@@ -225,15 +225,15 @@ vec3 scene(vec2 uv) {
     }
 
     // --- canopy rings, far to near (painter's order) ---
-    float nLayers = clamp(layerCount, 2.0, float(LAYER_MAX));
-    for (int i = LAYER_MAX - 1; i >= 0; i--) {
-        if (float(i) >= nLayers) continue;      // only run the requested count
+    for (int i = LAYERS - 1; i >= 0; i--) {
         float fi = float(i);
         float zc = fi + 1.0 - baseZ;            // distance from camera (> 0)
         float ringId = ringBase + fi + 1.0;     // stable per-ring seed
-        // on-screen radius of this ring; tunnelWidth pushes the canopy out
-        // (wider tunnel mouth) or pulls it in (narrower).
-        float proj = (RINGSCALE * tunnelWidth) / zc;
+        // Exponential recession: each ring is a constant ratio smaller than the
+        // previous one, so the tunnel reads as genuinely deep rather than a few
+        // bunched rings. `depth` sets how fast rings shrink toward the vanishing
+        // hole; tunnelWidth scales the overall mouth.
+        float proj = RINGSCALE * tunnelWidth * exp(-(zc - 1.0) * depth);
 
         // angular twist grows with distance -> nested mouths form a spiral; the
         // whole tunnel also rotates with rotTime. Higher `spiral` = tighter tunnel.
@@ -258,12 +258,12 @@ vec3 scene(vec2 uv) {
         float inner = smoothstep(opening, opening * 1.04, r);
         float edge = 1.0 - smoothstep(outer * 0.9, outer, r);
         // fade newly spawned far rings in via alpha instead of popping into view
-        float appear = smoothstep(nLayers, nLayers - 1.2, zc);
+        float appear = smoothstep(float(LAYERS), float(LAYERS) - 1.2, zc);
         float cov = clamp(inner * edge * mask, 0.0, 1.0) * appear * showCanopy * canopyOpacity;
 
         // Near rings are dark backlit silhouettes; depth brings the palette colour
         // and haze, dissolving distant rings into the glowing central vortex.
-        float far = clamp(zc / nLayers, 0.0, 1.0);
+        float far = clamp(zc / float(LAYERS), 0.0, 1.0);
         vec3 tint = palette(fract(aa / 6.2831 + far * 0.5 + rotTime * 0.03));
         vec3 fol = canopyCol.rgb * (0.10 + 0.35 * far);
         fol = mix(fol, tint, 0.15 + 0.65 * far);

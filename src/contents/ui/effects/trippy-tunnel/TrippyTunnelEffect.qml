@@ -59,7 +59,7 @@ Item {
         swirlVaryInterval: 120,
         swirlVaryChance: 25,
         transitionTime: 10,
-        layerCount: 9,
+        depth: 55,
         density: 60,
         glow: 60,
         mist: 75,
@@ -129,7 +129,7 @@ Item {
     property real swirlVaryMargin: 0.10   // burst size: fraction of the 0..1 swirl range
     property int swirlVaryInterval: 8     // seconds between burst rolls
     property int swirlVaryChance: 100     // percent chance each roll actually bursts
-    property real layerCount: 9.0
+    property real depth: 0.62            // exponential ring recession rate
     property real density: 0.60
     property real glowAmount: 0.60
     property real mistAmount: 0.75
@@ -229,7 +229,7 @@ Item {
         fog = Math.min(1.0, Math.max(0.0, s.fog / 100.0));
         canopyOpacity = Math.min(1.0, Math.max(0.0, s.canopyOpacity / 100.0));
         vortexOpacity = Math.min(1.0, Math.max(0.0, s.vortexOpacity / 100.0));
-        layerCount = Math.max(2, Math.min(24, s.layerCount));
+        depth = 0.15 + Math.min(1.0, Math.max(0.0, s.depth / 100.0)) * 0.85;
         bloomAmount = Math.min(1.0, Math.max(0.0, s.bloom / 100.0));
         bloomRadius = Math.min(1.0, Math.max(0.0, s.bloomRadius / 100.0)) * 0.6;
         starCount = Math.max(0, s.starCount);
@@ -652,8 +652,8 @@ Item {
         Behavior on tunnelWidth { NumberAnimation { duration: effectRoot.paramTransitionMs; easing.type: Easing.InOutQuad } }
         property real holeRadius: effectRoot.holeRadius
         Behavior on holeRadius { NumberAnimation { duration: effectRoot.paramTransitionMs; easing.type: Easing.InOutQuad } }
-        property real layerCount: effectRoot.layerCount
-        Behavior on layerCount { NumberAnimation { duration: effectRoot.paramTransitionMs; easing.type: Easing.InOutQuad } }
+        property real depth: effectRoot.depth
+        Behavior on depth { NumberAnimation { duration: effectRoot.paramTransitionMs; easing.type: Easing.InOutQuad } }
         property real density: effectRoot.density
         Behavior on density { NumberAnimation { duration: effectRoot.paramTransitionMs; easing.type: Easing.InOutQuad } }
         property real glowAmount: effectRoot.glowAmount

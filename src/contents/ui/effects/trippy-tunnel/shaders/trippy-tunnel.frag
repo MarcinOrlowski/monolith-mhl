@@ -257,9 +257,12 @@ vec3 scene(vec2 uv) {
 
         float inner = smoothstep(opening, opening * 1.04, r);
         float edge = 1.0 - smoothstep(outer * 0.9, outer, r);
-        // fade newly spawned far rings in via alpha instead of popping into view
+        // fade newly spawned far rings in, and fade the nearest ring out before
+        // it recycles — it can't always grow fully off-screen first, so without
+        // this it lingers at the edge and pops (visible when depth changes).
         float appear = smoothstep(float(LAYERS), float(LAYERS) - 1.2, zc);
-        float cov = clamp(inner * edge * mask, 0.0, 1.0) * appear * showCanopy * canopyOpacity;
+        float exitFade = smoothstep(0.0, 0.45, zc);
+        float cov = clamp(inner * edge * mask, 0.0, 1.0) * appear * exitFade * showCanopy * canopyOpacity;
 
         // Near rings are dark backlit silhouettes; depth brings the palette colour
         // and haze, dissolving distant rings into the glowing central vortex.

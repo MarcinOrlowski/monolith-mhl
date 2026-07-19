@@ -129,7 +129,7 @@ Item {
     property real swirlVaryMargin: 0.10   // burst size: fraction of the 0..1 swirl range
     property int swirlVaryInterval: 8     // seconds between burst rolls
     property int swirlVaryChance: 100     // percent chance each roll actually bursts
-    property real depth: 0.62            // exponential ring recession rate
+    property real depth: 0.56            // exponential ring recession rate
     property real density: 0.60
     property real glowAmount: 0.60
     property real mistAmount: 0.75
@@ -229,7 +229,10 @@ Item {
         fog = Math.min(1.0, Math.max(0.0, s.fog / 100.0));
         canopyOpacity = Math.min(1.0, Math.max(0.0, s.canopyOpacity / 100.0));
         vortexOpacity = Math.min(1.0, Math.max(0.0, s.vortexOpacity / 100.0));
-        depth = 0.15 + Math.min(1.0, Math.max(0.0, s.depth / 100.0)) * 0.85;
+        // Map 0..100 % across the USABLE recession range: above ~0.85 the far
+        // rings collapse into the hole and the tunnel reads emptier, so 100 %
+        // stops at the deepest good value instead of the degrading zone.
+        depth = 0.20 + Math.min(1.0, Math.max(0.0, s.depth / 100.0)) * 0.65;
         bloomAmount = Math.min(1.0, Math.max(0.0, s.bloom / 100.0));
         bloomRadius = Math.min(1.0, Math.max(0.0, s.bloomRadius / 100.0)) * 0.6;
         starCount = Math.max(0, s.starCount);

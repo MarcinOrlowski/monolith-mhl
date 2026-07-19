@@ -59,6 +59,7 @@ Item {
         swirlVaryChance: 25,
         transitionTime: 10,
         depth: 55,
+        ringSpin: 5,
         density: 60,
         glow: 60,
         mist: 75,
@@ -122,6 +123,7 @@ Item {
     property int _swirlVaryChance: 100
     property int _transitionTime: 10
     property int _depth: 55
+    property int _ringSpin: 5
     property int _density: 60
     property int _glow: 60
     property int _mist: 75
@@ -192,6 +194,7 @@ Item {
         _swirlVaryChance = s.swirlVaryChance
         _transitionTime = s.transitionTime
         _depth = s.depth
+        _ringSpin = s.ringSpin
         _density = s.density
         _glow = s.glow
         _mist = s.mist
@@ -258,6 +261,7 @@ Item {
             swirlVaryChance: _swirlVaryChance,
             transitionTime: _transitionTime,
             depth: _depth,
+            ringSpin: _ringSpin,
             density: _density,
             glow: _glow,
             mist: _mist,
@@ -321,6 +325,7 @@ Item {
     on_SwirlVaryChanceChanged: _save()
     on_TransitionTimeChanged: _save()
     on_DepthChanged: _save()
+    on_RingSpinChanged: _save()
     on_DensityChanged: _save()
     on_GlowChanged: _save()
     on_MistChanged: _save()

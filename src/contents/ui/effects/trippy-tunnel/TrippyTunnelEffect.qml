@@ -60,6 +60,7 @@ Item {
         swirlVaryChance: 25,
         transitionTime: 10,
         depth: 55,
+        ringSpin: 5,
         density: 60,
         glow: 60,
         mist: 75,
@@ -130,6 +131,7 @@ Item {
     property int swirlVaryInterval: 8     // seconds between burst rolls
     property int swirlVaryChance: 100     // percent chance each roll actually bursts
     property real depth: 0.56            // exponential ring recession rate
+    property real ringSpinVary: 0.05     // per-ring rotation-speed randomisation
     property real density: 0.60
     property real glowAmount: 0.60
     property real mistAmount: 0.75
@@ -233,6 +235,7 @@ Item {
         // rings collapse into the hole and the tunnel reads emptier, so 100 %
         // stops at the deepest good value instead of the degrading zone.
         depth = 0.20 + Math.min(1.0, Math.max(0.0, s.depth / 100.0)) * 0.65;
+        ringSpinVary = Math.max(0.0, s.ringSpin / 100.0);
         bloomAmount = Math.min(1.0, Math.max(0.0, s.bloom / 100.0));
         bloomRadius = Math.min(1.0, Math.max(0.0, s.bloomRadius / 100.0)) * 0.6;
         starCount = Math.max(0, s.starCount);
@@ -657,6 +660,8 @@ Item {
         Behavior on holeRadius { NumberAnimation { duration: effectRoot.paramTransitionMs; easing.type: Easing.InOutQuad } }
         property real depth: effectRoot.depth
         Behavior on depth { NumberAnimation { duration: effectRoot.paramTransitionMs; easing.type: Easing.InOutQuad } }
+        property real ringSpinVary: effectRoot.ringSpinVary
+        Behavior on ringSpinVary { NumberAnimation { duration: effectRoot.paramTransitionMs; easing.type: Easing.InOutQuad } }
         property real density: effectRoot.density
         Behavior on density { NumberAnimation { duration: effectRoot.paramTransitionMs; easing.type: Easing.InOutQuad } }
         property real glowAmount: effectRoot.glowAmount

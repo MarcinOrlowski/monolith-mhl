@@ -94,6 +94,8 @@ psychedelic, and so on) tints them; a psychedelic set fans the beams out into a 
 
 - **Zoom speed** - how fast the camera flies into the tunnel.
 - **Tunnel rotation** - signed spin speed of the whole tunnel (negative reverses direction).
+- **Ring spin variance** - randomises each ring's rotation speed by ± this amount, so the rings
+  don't all spin in lockstep.
 - **Vortex rotation** - signed spin speed of the central whirl; defaults to the opposite direction
   of the tunnel.
 - **Value transition** - how long a changed value (swirl, hole, width, opacities, …) takes to ease

@@ -36,6 +36,16 @@ Kirigami.ScrollablePage {
             textFromValue: function(value) { return value + "%" }
             valueFromText: function(text) { return parseInt(text) || 0 }
         }
+        QtControls2.SpinBox {
+            // Randomise each ring's rotation speed by ± this, so they don't all
+            // spin in lockstep.
+            Kirigami.FormData.label: i18n("Ring spin variance:")
+            from: 0; to: 50; stepSize: 1
+            value: page.effectConfig._ringSpin
+            onValueModified: page.effectConfig._ringSpin = value
+            textFromValue: function(value) { return "±" + value + "%" }
+            valueFromText: function(text) { return parseInt(text) || 0 }
+        }
 
         QtControls2.SpinBox {
             Kirigami.FormData.label: i18n("Vortex rotation:")

@@ -20,6 +20,17 @@ Kirigami.ScrollablePage {
     required property var effectConfig
 
     Kirigami.FormLayout {
+        QtControls2.SpinBox {
+            Kirigami.FormData.label: i18n("Density:")
+            from: 0; to: 100; stepSize: 5
+            value: page.effectConfig._density
+            onValueModified: page.effectConfig._density = value
+            textFromValue: function(value) { return value + "%" }
+            valueFromText: function(text) { return parseInt(text) || 0 }
+        }
+
+        Kirigami.Separator { Kirigami.FormData.isSection: true }
+
         QtControls2.CheckBox {
             Kirigami.FormData.label: i18n("Depth fog:")
             text: i18n("Haze the distant shapes into the background light")

@@ -22,15 +22,15 @@ layout(std140, binding = 0) uniform buf {
     float iHeight;
     float density;
     float dimLevel;
-    float leafColorR;
-    float leafColorG;
-    float leafColorB;
-    float bgColorR;
-    float bgColorG;
-    float bgColorB;
-    float lightColorR;
-    float lightColorG;
-    float lightColorB;
+    float cellColorR;
+    float cellColorG;
+    float cellColorB;
+    float mediumColorR;
+    float mediumColorG;
+    float mediumColorB;
+    float illumColorR;
+    float illumColorG;
+    float illumColorB;
     float showFog;
     float showRays;
     float showParticles;
@@ -95,9 +95,9 @@ void main() {
     float aspect = iWidth / max(iHeight, 1.0);
     vec2 p = (coord - 0.5) * vec2(aspect, 1.0);      // centered, focal point at 0
 
-    vec3 fog   = vec3(bgColorR, bgColorG, bgColorB);
-    vec3 leafC = vec3(leafColorR, leafColorG, leafColorB);
-    vec3 light = vec3(lightColorR, lightColorG, lightColorB);
+    vec3 fog   = vec3(mediumColorR, mediumColorG, mediumColorB);
+    vec3 leafC = vec3(cellColorR, cellColorG, cellColorB);
+    vec3 light = vec3(illumColorR, illumColorG, illumColorB);
 
     // --- Background: gradient + light punching through at the focal point ---
     vec3 col = mix(fog * 0.65, fog * 1.1, smoothstep(0.0, 1.0, coord.y));

@@ -22,10 +22,14 @@ Item {
 
     // --- Schema: key → default value (single source of truth) ---
     readonly property var _defaults: ({
+        themeId: "mzm-chlorophyll",
+        randomInitialTheme: true,
+        autoCycle: true,
+        cycleInterval: 15,
+        cycleIntervalUnit: 1,
+        transitionDuration: 3,
+        cycleInRandomOrder: true,
         density: 60,
-        leafColor: "#3a8a2e",
-        bgColor: "#0b241a",
-        lightColor: "#d2eca0",
         showFog: true,
         showRays: true,
         showParticles: true,
@@ -40,10 +44,14 @@ Item {
     })
 
     // --- Backing properties ---
+    property string _themeId: "mzm-chlorophyll"
+    property bool _randomInitialTheme: true
+    property bool _autoCycle: true
+    property int _cycleInterval: 15
+    property int _cycleIntervalUnit: 1
+    property int _transitionDuration: 3
+    property bool _cycleInRandomOrder: true
     property int _density: 60
-    property string _leafColor: "#3a8a2e"
-    property string _bgColor: "#0b241a"
-    property string _lightColor: "#d2eca0"
     property bool _showFog: true
     property bool _showRays: true
     property bool _showParticles: true
@@ -65,10 +73,14 @@ Item {
     function _load() {
         _loading = true
         var s = EffectSettings.load(cfg_EffectMicroscopeZoomSettings, _defaults)
+        _themeId = s.themeId
+        _randomInitialTheme = s.randomInitialTheme
+        _autoCycle = s.autoCycle
+        _cycleInterval = s.cycleInterval
+        _cycleIntervalUnit = s.cycleIntervalUnit
+        _transitionDuration = s.transitionDuration
+        _cycleInRandomOrder = s.cycleInRandomOrder
         _density = s.density
-        _leafColor = s.leafColor
-        _bgColor = s.bgColor
-        _lightColor = s.lightColor
         _showFog = s.showFog
         _showRays = s.showRays
         _showParticles = s.showParticles
@@ -86,10 +98,14 @@ Item {
     function _save() {
         if (_loading) return
         cfg_EffectMicroscopeZoomSettings = EffectSettings.save({
+            themeId: _themeId,
+            randomInitialTheme: _randomInitialTheme,
+            autoCycle: _autoCycle,
+            cycleInterval: _cycleInterval,
+            cycleIntervalUnit: _cycleIntervalUnit,
+            transitionDuration: _transitionDuration,
+            cycleInRandomOrder: _cycleInRandomOrder,
             density: _density,
-            leafColor: _leafColor,
-            bgColor: _bgColor,
-            lightColor: _lightColor,
             showFog: _showFog,
             showRays: _showRays,
             showParticles: _showParticles,
@@ -104,10 +120,14 @@ Item {
         })
     }
 
+    on_ThemeIdChanged: _save()
+    on_RandomInitialThemeChanged: _save()
+    on_AutoCycleChanged: _save()
+    on_CycleIntervalChanged: _save()
+    on_CycleIntervalUnitChanged: _save()
+    on_TransitionDurationChanged: _save()
+    on_CycleInRandomOrderChanged: _save()
     on_DensityChanged: _save()
-    on_LeafColorChanged: _save()
-    on_BgColorChanged: _save()
-    on_LightColorChanged: _save()
     on_ShowFogChanged: _save()
     on_ShowRaysChanged: _save()
     on_ShowParticlesChanged: _save()
@@ -125,9 +145,35 @@ Item {
         cfg_EffectMicroscopeZoomSettings = EffectSettings.save(_defaults)
     }
 
+    // --- External config sync (e.g. "Set Current Theme" context menu) ---
+    Connections {
+        target: effectConfig.hubConfiguration
+        enabled: effectConfig.hubConfiguration !== null
+        function onValueChanged(key, value) {
+            if (key === "EffectMicroscopeZoomSettings") {
+                effectConfig._load()
+            }
+        }
+    }
+
+    // --- Theme scanner (shared by pages) ---
+    readonly property alias themeScanner: themeScanner
+    ThemeScanner {
+        id: themeScanner
+    }
+
+    function findThemeIndex(themeId) {
+        for (var i = 0; i < themeScanner.themeList.count; i++) {
+            if (themeScanner.themeList.get(i).themeId === themeId) {
+                return i
+            }
+        }
+        return 0
+    }
+
     // --- Page definitions for sidebar navigation ---
     readonly property var pages: [
-        { moduleId: "appearance", text: qsTr("Appearance"), icon: "preferences-desktop-color", page: "MicroscopeZoomAppearancePage.qml" },
+        { moduleId: "theme", text: qsTr("Theme"), icon: "preferences-desktop-color", page: "MicroscopeZoomThemePage.qml" },
         { moduleId: "scene", text: qsTr("Scene"), icon: "view-visible", page: "MicroscopeZoomScenePage.qml" },
         { moduleId: "animation", text: qsTr("Animation"), icon: "media-playback-start", page: "MicroscopeZoomAnimationPage.qml" }
     ]

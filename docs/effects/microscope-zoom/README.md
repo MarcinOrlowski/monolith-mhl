@@ -10,7 +10,9 @@ shape position and shade is randomized, so the sample never repeats.
 
 - Forward-only zoom at a fixed, adjustable pace (no camera shake).
 - Layered "looming" shapes that fake depth for a real sense of pushing inward.
-- Custom shape, background and light colors (greenish by default).
+- Bundled microscopy-stain color themes (Chlorophyll, H&E, Gram, Fluorescence,
+  Dark Field, Cyanotype, Amber) with optional auto-cycling and smooth cross-fades.
+- Drop-in custom themes.
 - Adjustable density.
 - Floating dust with independent amount and size controls.
 - Scene toggles: depth fog, light rays fanning from the focal point, floating
@@ -26,23 +28,36 @@ Microscope Zoom effect on default settings, with no additional filters applied.
 ![Preview](img/preview.webp)
 
 Microscope Zoom effect on default settings, with filters:
-HUE Shift, Blur and Scanlines enabled
+HUE Shift, Blur and Scanlines enabled.
 
-![Preview](img/preview-filters.webp)
+![Preview 1](img/preview-filters-01.webp)
+
+Microscope Zoom effect on default settings, with filters:
+RGB Offset and Scanlines enabled.
+
+![Preview 2](img/preview-filters-02.webp)
 
 ## Settings
 
-### Appearance
+### Theme
 
-- **Density** — how busy/full each looming sheet of cells is.
-- **Cell color** — the main specimen tone; lighter/darker shades are derived
-  from it automatically.
-- **Medium color** — the deep background the far cells haze into.
-- **Illumination color** — the backlight glow at the focal point and the color
-  of the light rays and dust.
+Colors come from themes (like the other effects) rather than manual pickers.
+Each theme sets three colors: the specimen (cell), the background medium, and
+the backlight illumination.
+
+- **Initial theme** — pick a bundled theme, or **Random** to start on a random
+  one each session.
+- **Auto-cycle themes** — automatically switch themes on an interval (seconds or
+  minutes).
+- **Cycle in random order** — shuffle rather than cycling in list order.
+- **Transition duration** — how long the color cross-fade between themes takes.
+
+Themes can also be cycled from the desktop context menu (Next / Previous
+Wallpaper Theme, Set Current Theme).
 
 ### Scene
 
+- **Density** — how busy/full each looming sheet of cells is.
 - **Depth fog** — hazes distant shapes into the background light for added depth.
 - **Light rays** — beams fanning out from the focal point.
 - **Floating dust** — motes streaming past the lens.

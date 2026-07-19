@@ -202,7 +202,8 @@ WallpaperItem {
     readonly property var effectRegistry: ({
         "rainbow-waves": Qt.resolvedUrl("effects/rainbow-waves/RainbowWavesEffect.qml"),
         "lava-lamp": Qt.resolvedUrl("effects/lava-lamp/LavaLampEffect.qml"),
-        "dot-waves": Qt.resolvedUrl("effects/dot-waves/DotWavesEffect.qml")
+        "dot-waves": Qt.resolvedUrl("effects/dot-waves/DotWavesEffect.qml"),
+        "jungle-walk": Qt.resolvedUrl("effects/jungle-walk/JungleWalkEffect.qml")
     })
 
     Loader {

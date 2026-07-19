@@ -2,6 +2,7 @@
 
 ## v1.3.0 (TBD)
 
+- New "Jungle Walk" effect: an endless, constant-speed forward walk through cartoon jungle undergrowth.
 - Extended Dot Waves effect with additional "Shine" highlight layer.
 - Fixed Rainbow Waves effect resetting layer visibility on every theme transition.
 - Fixed Mask filter in Invert mode filling the whole screen when padding ≥ half the tile size.

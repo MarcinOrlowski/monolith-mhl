@@ -43,6 +43,10 @@ Item {
         spiral: 45,
         vortexSwirl: 45,
         tunnelWidth: 100,
+        swirlVary: false,
+        swirlSpeed: 20,
+        swirlVaryMargin: 10,
+        swirlVaryInterval: 8,
         density: 60,
         glow: 60,
         mist: 75,
@@ -82,6 +86,11 @@ Item {
     property real spiral: 0.45
     property real vortexSwirl: 0.45
     property real tunnelWidth: 1.0
+    property bool swirlVary: false
+    property real swirlSpeedMult: 0.012   // continuous swirl drift (0..1 units / sec)
+    property int _swirlDir: 1              // drift direction, reflects at the bounds
+    property real swirlVaryMargin: 0.10   // burst size: fraction of the 0..1 swirl range
+    property int swirlVaryInterval: 8     // seconds between bursts
     property real density: 0.60
     property real glowAmount: 0.60
     property real mistAmount: 0.75
@@ -101,6 +110,17 @@ Item {
     property real dotOpacity: 1.0
 
     function togglePause() { paused = !paused }
+
+    // Continuous slow swirl: nudge the live swirl by a tiny delta each frame,
+    // reflecting at the 0/1 bounds so it drifts back and forth forever. The
+    // ShaderEffect's Behavior on `spiral` low-passes it into smooth motion.
+    function _driftSwirl(dt) {
+        if (!swirlVary) return
+        var ns = spiral + dt * swirlSpeedMult * _swirlDir
+        if (ns >= 1.0) { ns = 1.0; _swirlDir = -1 }
+        else if (ns <= 0.0) { ns = 0.0; _swirlDir = 1 }
+        spiral = ns
+    }
 
     function _readSettings() {
         var json = configuration ? configuration.EffectTrippyForestSettings : "{}";
@@ -127,6 +147,10 @@ Item {
         spiral = Math.min(1.0, Math.max(0.0, s.spiral / 100.0));
         vortexSwirl = Math.min(1.0, Math.max(0.0, s.vortexSwirl / 100.0));
         tunnelWidth = Math.max(0.1, s.tunnelWidth / 100.0);
+        swirlVary = s.swirlVary;
+        swirlSpeedMult = Math.max(0.0, s.swirlSpeed / 100.0) * 0.06;
+        swirlVaryMargin = Math.max(0.0, s.swirlVaryMargin / 100.0);
+        swirlVaryInterval = Math.max(1, s.swirlVaryInterval);
         density = Math.min(1.0, Math.max(0.0, s.density / 100.0));
         glowAmount = Math.min(1.0, Math.max(0.0, s.glow / 100.0));
         mistAmount = Math.min(1.0, Math.max(0.0, s.mist / 100.0));
@@ -473,6 +497,21 @@ Item {
         onTriggered: effectRoot.cycleInRandomOrder ? effectRoot.cycleToRandomTheme() : effectRoot.cycleToNextTheme()
     }
 
+    // --- Tunnel-swirl auto-vary: random-walk the live swirl value every N secs,
+    // stepping up to ±margin from the current value. The ShaderEffect's Behavior
+    // on `spiral` eases each jump so it drifts smoothly. Runtime only — the base
+    // setting is untouched.
+    Timer {
+        id: swirlVaryTimer
+        running: effectRoot.swirlVary && !effectRoot.paused
+        repeat: true
+        interval: Math.max(1, effectRoot.swirlVaryInterval) * 1000
+        onTriggered: {
+            var delta = (Math.random() * 2.0 - 1.0) * effectRoot.swirlVaryMargin
+            effectRoot.spiral = Math.min(1.0, Math.max(0.0, effectRoot.spiral + delta))
+        }
+    }
+
     Component.onCompleted: _applySettings()
 
     // --- Shader effect ---
@@ -566,6 +605,7 @@ Item {
                 effect.starTime += frameTime * effectRoot.starSpeed
                 effect.beamTime += frameTime * effectRoot.beamSpeed
                 effect.dotTime += frameTime * effectRoot.dotSpeed
+                effectRoot._driftSwirl(frameTime)
             }
         }
 
@@ -581,6 +621,7 @@ Item {
                 effect.starTime += dt * effectRoot.starSpeed
                 effect.beamTime += dt * effectRoot.beamSpeed
                 effect.dotTime += dt * effectRoot.dotSpeed
+                effectRoot._driftSwirl(dt)
             }
         }
 

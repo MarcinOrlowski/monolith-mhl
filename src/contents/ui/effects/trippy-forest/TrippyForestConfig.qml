@@ -42,6 +42,10 @@ Item {
         spiral: 45,
         vortexSwirl: 45,
         tunnelWidth: 100,
+        swirlVary: false,
+        swirlSpeed: 20,
+        swirlVaryMargin: 10,
+        swirlVaryInterval: 8,
         density: 60,
         glow: 60,
         mist: 75,
@@ -86,6 +90,10 @@ Item {
     property int _spiral: 45
     property int _vortexSwirl: 45
     property int _tunnelWidth: 100
+    property bool _swirlVary: false
+    property int _swirlSpeed: 20
+    property int _swirlVaryMargin: 10
+    property int _swirlVaryInterval: 8
     property int _density: 60
     property int _glow: 60
     property int _mist: 75
@@ -137,6 +145,10 @@ Item {
         _spiral = s.spiral
         _vortexSwirl = s.vortexSwirl
         _tunnelWidth = s.tunnelWidth
+        _swirlVary = s.swirlVary
+        _swirlSpeed = s.swirlSpeed
+        _swirlVaryMargin = s.swirlVaryMargin
+        _swirlVaryInterval = s.swirlVaryInterval
         _density = s.density
         _glow = s.glow
         _mist = s.mist
@@ -184,6 +196,10 @@ Item {
             spiral: _spiral,
             vortexSwirl: _vortexSwirl,
             tunnelWidth: _tunnelWidth,
+            swirlVary: _swirlVary,
+            swirlSpeed: _swirlSpeed,
+            swirlVaryMargin: _swirlVaryMargin,
+            swirlVaryInterval: _swirlVaryInterval,
             density: _density,
             glow: _glow,
             mist: _mist,
@@ -228,6 +244,10 @@ Item {
     on_SpiralChanged: _save()
     on_VortexSwirlChanged: _save()
     on_TunnelWidthChanged: _save()
+    on_SwirlVaryChanged: _save()
+    on_SwirlSpeedChanged: _save()
+    on_SwirlVaryMarginChanged: _save()
+    on_SwirlVaryIntervalChanged: _save()
     on_DensityChanged: _save()
     on_GlowChanged: _save()
     on_MistChanged: _save()

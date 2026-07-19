@@ -60,6 +60,9 @@ disabled when their parent is off.
   twists), **tunnel width** (how far the canopy sits from the centre — higher
   opens a wider tunnel mouth), **depth haze** (how far rings dissolve into the
   central glow) and **opacity** to fade the whole canopy.
+  - **Auto-swirl** — when enabled, the tunnel swirl drifts continuously at the
+    chosen **speed** (small smooth steps), and every so often gets a **burst**:
+    a larger ±margin jump every N seconds that eases smoothly into place.
 - **Glow spots** — brightness/quantity of the emissive mushroom-like spots on
   the canopy.
 - **Centre glow (vortex)** — brightness, **vortex swirl** (how tightly the

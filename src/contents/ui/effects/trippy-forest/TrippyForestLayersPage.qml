@@ -48,6 +48,42 @@ Kirigami.ScrollablePage {
             textFromValue: function(value) { return value + "%" }
             valueFromText: function(text) { return parseInt(text) || 0 }
         }
+        RowLayout {
+            Kirigami.FormData.label: i18n("Auto-swirl:")
+            QtControls2.CheckBox {
+                enabled: page.effectConfig._showCanopy
+                checked: page.effectConfig._swirlVary
+                onToggled: page.effectConfig._swirlVary = checked
+            }
+            QtControls2.SpinBox {
+                enabled: page.effectConfig._showCanopy && page.effectConfig._swirlVary
+                from: 0; to: 100; stepSize: 5
+                value: page.effectConfig._swirlSpeed
+                onValueModified: page.effectConfig._swirlSpeed = value
+                textFromValue: function(value) { return i18n("speed %1%", value) }
+                valueFromText: function(text) { return parseInt(text) || 0 }
+            }
+        }
+        RowLayout {
+            Kirigami.FormData.label: i18n("Swirl burst:")
+            QtControls2.SpinBox {
+                enabled: page.effectConfig._showCanopy && page.effectConfig._swirlVary
+                from: 0; to: 50; stepSize: 5
+                value: page.effectConfig._swirlVaryMargin
+                onValueModified: page.effectConfig._swirlVaryMargin = value
+                textFromValue: function(value) { return "±" + value + "%" }
+                valueFromText: function(text) { return parseInt(text) || 0 }
+            }
+            QtControls2.Label { text: i18n("every") }
+            QtControls2.SpinBox {
+                enabled: page.effectConfig._showCanopy && page.effectConfig._swirlVary
+                from: 1; to: 120; stepSize: 1
+                value: page.effectConfig._swirlVaryInterval
+                onValueModified: page.effectConfig._swirlVaryInterval = value
+                textFromValue: function(value) { return value + " s" }
+                valueFromText: function(text) { return parseInt(text) || 1 }
+            }
+        }
         QtControls2.SpinBox {
             Kirigami.FormData.label: i18n("Tunnel width:")
             from: 50; to: 250; stepSize: 10

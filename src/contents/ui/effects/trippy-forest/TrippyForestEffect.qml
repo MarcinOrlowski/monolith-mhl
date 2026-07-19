@@ -43,6 +43,7 @@ Item {
         spiral: 45,
         vortexSwirl: 45,
         tunnelWidth: 100,
+        holeRadius: 25,
         swirlVary: false,
         swirlSpeed: 20,
         swirlVaryMargin: 10,
@@ -89,6 +90,7 @@ Item {
     property bool _swirlInit: false
     property real vortexSwirl: 0.45
     property real tunnelWidth: 1.0
+    property real holeRadius: 0.11
     property bool swirlVary: false
     property real swirlSpeedMult: 0.012   // continuous swirl drift (0..1 units / sec)
     property int _swirlDir: 1              // drift direction, reflects at the bounds
@@ -117,7 +119,7 @@ Item {
     // Continuous slow swirl: nudge the swirl TARGET by a tiny delta each frame,
     // reflecting at the 0/1 bounds so it drifts back and forth forever.
     function _driftSwirl(dt) {
-        if (!swirlVary) return
+        if (!swirlVary || swirlSpeedMult <= 0.0) return   // speed 0 -> no drift
         var ns = spiralTarget + dt * swirlSpeedMult * _swirlDir
         if (ns >= 1.0) { ns = 1.0; _swirlDir = -1 }
         else if (ns <= 0.0) { ns = 0.0; _swirlDir = 1 }
@@ -125,13 +127,14 @@ Item {
     }
 
     // Critically-damped spring: ease `spiral` toward `spiralTarget`. Its velocity
-    // ramps smoothly in and out (no sharp onset), so the rotation that a swirl
-    // change induces speeds up / slows down gently instead of snapping. dt is
-    // clamped so the explicit integrator stays stable at low frame rates.
+    // ramps smoothly in and out (no sharp onset), so the rotation that ANY swirl
+    // change induces — manual edit, continuous drift, or a burst — speeds up /
+    // slows down gently instead of snapping. dt is clamped so the explicit
+    // integrator stays stable at low frame rates.
     function _springSwirl(dt) {
         var h = Math.min(dt, 0.04)
-        var k = 15.0
-        var c = 7.75   // ~2*sqrt(k), critical damping
+        var k = 9.0
+        var c = 6.0    // ~2*sqrt(k), critical damping
         spiralVel += ((spiralTarget - spiral) * k - spiralVel * c) * h
         spiral += spiralVel * h
     }
@@ -162,6 +165,7 @@ Item {
         if (!_swirlInit) { spiral = spiralTarget; spiralVel = 0.0; _swirlInit = true; }
         vortexSwirl = Math.min(1.0, Math.max(0.0, s.vortexSwirl / 100.0));
         tunnelWidth = Math.max(0.1, s.tunnelWidth / 100.0);
+        holeRadius = Math.min(0.45, Math.max(0.0, s.holeRadius / 100.0 * 0.45));
         swirlVary = s.swirlVary;
         swirlSpeedMult = Math.max(0.0, s.swirlSpeed / 100.0) * 0.06;
         swirlVaryMargin = Math.max(0.0, s.swirlVaryMargin / 100.0);
@@ -560,6 +564,8 @@ Item {
         Behavior on vortexSwirl { NumberAnimation { duration: 1300; easing.type: Easing.InOutSine } }
         property real tunnelWidth: effectRoot.tunnelWidth
         Behavior on tunnelWidth { NumberAnimation { duration: 700; easing.type: Easing.InOutQuad } }
+        property real holeRadius: effectRoot.holeRadius
+        Behavior on holeRadius { NumberAnimation { duration: 700; easing.type: Easing.InOutQuad } }
         property real density: effectRoot.density
         Behavior on density { NumberAnimation { duration: 700; easing.type: Easing.InOutQuad } }
         property real glowAmount: effectRoot.glowAmount

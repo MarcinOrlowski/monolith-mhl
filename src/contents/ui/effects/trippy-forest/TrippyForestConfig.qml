@@ -42,6 +42,7 @@ Item {
         spiral: 45,
         vortexSwirl: 45,
         tunnelWidth: 100,
+        holeRadius: 25,
         swirlVary: false,
         swirlSpeed: 20,
         swirlVaryMargin: 10,
@@ -90,6 +91,7 @@ Item {
     property int _spiral: 45
     property int _vortexSwirl: 45
     property int _tunnelWidth: 100
+    property int _holeRadius: 25
     property bool _swirlVary: false
     property int _swirlSpeed: 20
     property int _swirlVaryMargin: 10
@@ -145,6 +147,7 @@ Item {
         _spiral = s.spiral
         _vortexSwirl = s.vortexSwirl
         _tunnelWidth = s.tunnelWidth
+        _holeRadius = s.holeRadius
         _swirlVary = s.swirlVary
         _swirlSpeed = s.swirlSpeed
         _swirlVaryMargin = s.swirlVaryMargin
@@ -196,6 +199,7 @@ Item {
             spiral: _spiral,
             vortexSwirl: _vortexSwirl,
             tunnelWidth: _tunnelWidth,
+            holeRadius: _holeRadius,
             swirlVary: _swirlVary,
             swirlSpeed: _swirlSpeed,
             swirlVaryMargin: _swirlVaryMargin,
@@ -244,6 +248,7 @@ Item {
     on_SpiralChanged: _save()
     on_VortexSwirlChanged: _save()
     on_TunnelWidthChanged: _save()
+    on_HoleRadiusChanged: _save()
     on_SwirlVaryChanged: _save()
     on_SwirlSpeedChanged: _save()
     on_SwirlVaryMarginChanged: _save()

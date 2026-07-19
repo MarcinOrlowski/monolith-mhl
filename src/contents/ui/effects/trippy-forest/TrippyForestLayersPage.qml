@@ -60,7 +60,7 @@ Kirigami.ScrollablePage {
                 from: 0; to: 100; stepSize: 5
                 value: page.effectConfig._swirlSpeed
                 onValueModified: page.effectConfig._swirlSpeed = value
-                textFromValue: function(value) { return i18n("speed %1%", value) }
+                textFromValue: function(value) { return value === 0 ? i18n("off") : i18n("speed %1%", value) }
                 valueFromText: function(text) { return parseInt(text) || 0 }
             }
         }
@@ -92,6 +92,15 @@ Kirigami.ScrollablePage {
             onValueModified: page.effectConfig._tunnelWidth = value
             textFromValue: function(value) { return value + "%" }
             valueFromText: function(text) { return parseInt(text) || 100 }
+        }
+        QtControls2.SpinBox {
+            Kirigami.FormData.label: i18n("Centre hole:")
+            from: 0; to: 100; stepSize: 5
+            enabled: page.effectConfig._showCanopy
+            value: page.effectConfig._holeRadius
+            onValueModified: page.effectConfig._holeRadius = value
+            textFromValue: function(value) { return value + "%" }
+            valueFromText: function(text) { return parseInt(text) || 0 }
         }
         QtControls2.SpinBox {
             Kirigami.FormData.label: i18n("Depth haze:")

@@ -34,6 +34,7 @@ layout(std140, binding = 0) uniform buf {
     float spiral;
     float vortexSwirl;
     float tunnelWidth;
+    float holeRadius;
     float density;
     float glowAmount;
     float mistAmount;
@@ -137,8 +138,9 @@ vec3 scene(vec2 uv) {
     center = mix(center, center * 0.4 + vortexTint * mistAmount, (0.35 + 0.45 * swirl) * cg);
     vec3 col = center * showVortex * vortexOpacity;
 
-    // Fade the space layers around the centre so nothing meets in the middle.
-    float centerHole = smoothstep(0.04, 0.18, r);
+    // Fade the space layers around the very centre so beams don't converge to a
+    // single bright point.
+    float centerHole = smoothstep(0.03, 0.12, r);
 
     // --- point starfield: sparse dots with short motion streaks, flying outward ---
     // Colour comes from the theme palette (tinted toward the theme's star colour),
@@ -230,13 +232,14 @@ vec3 scene(vec2 uv) {
         // whole tunnel also rotates with rotTime. Higher `spiral` = tighter tunnel.
         float aa = a + spiral * zc * 1.1 + rotTime;
         vec2 pc = vec2(cos(aa), sin(aa));       // periodic (no seam) around the ring
-        float rNorm = r / proj;                 // radial position within this ring
+        float rNorm = (r - holeRadius) / proj;  // radial position within this ring
 
-        // ragged tunnel mouth + outer extent, both scaled by projection
+        // ragged tunnel mouth + outer extent, scaled by projection and pushed out
+        // by holeRadius so the tunnel converges to a real central hole, not a point.
         float op = 0.50 + 0.14 * fbm(pc * 3.0 + ringId * 1.7)
                         + 0.09 * fbm(pc * 9.0 + ringId * 4.0);
-        float opening = proj * op;
-        float outer = proj * 1.8;
+        float opening = holeRadius + proj * op;
+        float outer = holeRadius + proj * 1.8;
 
         // leafy canopy: noise indexed by BOTH angle and radius so clumps read as
         // leaves rather than radial streaks.

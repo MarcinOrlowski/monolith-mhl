@@ -58,11 +58,15 @@ disabled when their parent is off.
 
 - **Canopy** — the leafy tunnel: density, **tunnel swirl** (how tightly it
   twists), **tunnel width** (how far the canopy sits from the centre — higher
-  opens a wider tunnel mouth), **depth haze** (how far rings dissolve into the
-  central glow) and **opacity** to fade the whole canopy.
+  opens a wider tunnel mouth), **centre hole** (radius of the clear opening at
+  the centre where the canopy stops and the vortex shows through), **depth haze**
+  (how far rings dissolve into the central glow) and **opacity** to fade the
+  whole canopy.
   - **Auto-swirl** — when enabled, the tunnel swirl drifts continuously at the
-    chosen **speed** (small smooth steps), and every so often gets a **burst**:
-    a larger ±margin jump every N seconds that eases smoothly into place.
+    chosen **speed** (small smooth steps; `0` = off, no drift), and every so
+    often gets a **burst**: a larger ±margin jump every N seconds. Every swirl
+    change — manual, drift or burst — is spring-smoothed so the rotation it
+    induces eases gently in and out instead of snapping.
 - **Glow spots** — brightness/quantity of the emissive mushroom-like spots on
   the canopy.
 - **Centre glow (vortex)** — brightness, **vortex swirl** (how tightly the

@@ -67,7 +67,19 @@ Item {
         canopyOpacity: 100,
         vortexOpacity: 100,
         bloom: 70,
+        bloomOsc: false,
+        bloomOscRange: 20,
+        bloomOscInterval: 10,
+        bloomOscChance: 50,
         bloomRadius: 40,
+        bloomRadiusOsc: false,
+        bloomRadiusOscRange: 20,
+        bloomRadiusOscInterval: 10,
+        bloomRadiusOscChance: 50,
+        bloomRadiusBurst: false,
+        bloomRadiusBurstMargin: 30,
+        bloomRadiusBurstInterval: 120,
+        bloomRadiusBurstChance: 25,
         bloomOpacity: 100,
         bloomFade: 0,
         starCount: 40,
@@ -133,7 +145,19 @@ Item {
     property int _canopyOpacity: 100
     property int _vortexOpacity: 100
     property int _bloom: 70
+    property bool _bloomOsc: false
+    property int _bloomOscRange: 20
+    property int _bloomOscInterval: 10
+    property int _bloomOscChance: 50
     property int _bloomRadius: 40
+    property bool _bloomRadiusOsc: false
+    property int _bloomRadiusOscRange: 20
+    property int _bloomRadiusOscInterval: 10
+    property int _bloomRadiusOscChance: 50
+    property bool _bloomRadiusBurst: false
+    property int _bloomRadiusBurstMargin: 30
+    property int _bloomRadiusBurstInterval: 120
+    property int _bloomRadiusBurstChance: 25
     property int _bloomOpacity: 100
     property int _bloomFade: 0
     property int _starCount: 40
@@ -206,7 +230,19 @@ Item {
         _canopyOpacity = s.canopyOpacity
         _vortexOpacity = s.vortexOpacity
         _bloom = s.bloom
+        _bloomOsc = s.bloomOsc
+        _bloomOscRange = s.bloomOscRange
+        _bloomOscInterval = s.bloomOscInterval
+        _bloomOscChance = s.bloomOscChance
         _bloomRadius = s.bloomRadius
+        _bloomRadiusOsc = s.bloomRadiusOsc
+        _bloomRadiusOscRange = s.bloomRadiusOscRange
+        _bloomRadiusOscInterval = s.bloomRadiusOscInterval
+        _bloomRadiusOscChance = s.bloomRadiusOscChance
+        _bloomRadiusBurst = s.bloomRadiusBurst
+        _bloomRadiusBurstMargin = s.bloomRadiusBurstMargin
+        _bloomRadiusBurstInterval = s.bloomRadiusBurstInterval
+        _bloomRadiusBurstChance = s.bloomRadiusBurstChance
         _bloomOpacity = s.bloomOpacity
         _bloomFade = s.bloomFade
         _starCount = s.starCount
@@ -275,7 +311,19 @@ Item {
             canopyOpacity: _canopyOpacity,
             vortexOpacity: _vortexOpacity,
             bloom: _bloom,
+            bloomOsc: _bloomOsc,
+            bloomOscRange: _bloomOscRange,
+            bloomOscInterval: _bloomOscInterval,
+            bloomOscChance: _bloomOscChance,
             bloomRadius: _bloomRadius,
+            bloomRadiusOsc: _bloomRadiusOsc,
+            bloomRadiusOscRange: _bloomRadiusOscRange,
+            bloomRadiusOscInterval: _bloomRadiusOscInterval,
+            bloomRadiusOscChance: _bloomRadiusOscChance,
+            bloomRadiusBurst: _bloomRadiusBurst,
+            bloomRadiusBurstMargin: _bloomRadiusBurstMargin,
+            bloomRadiusBurstInterval: _bloomRadiusBurstInterval,
+            bloomRadiusBurstChance: _bloomRadiusBurstChance,
             bloomOpacity: _bloomOpacity,
             bloomFade: _bloomFade,
             starCount: _starCount,

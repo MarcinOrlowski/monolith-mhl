@@ -68,7 +68,19 @@ Item {
         canopyOpacity: 100,
         vortexOpacity: 100,
         bloom: 70,
+        bloomOsc: false,
+        bloomOscRange: 20,
+        bloomOscInterval: 10,
+        bloomOscChance: 50,
         bloomRadius: 40,
+        bloomRadiusOsc: false,
+        bloomRadiusOscRange: 20,
+        bloomRadiusOscInterval: 10,
+        bloomRadiusOscChance: 50,
+        bloomRadiusBurst: false,
+        bloomRadiusBurstMargin: 30,
+        bloomRadiusBurstInterval: 120,
+        bloomRadiusBurstChance: 25,
         bloomOpacity: 100,
         bloomFade: 0,
         starCount: 40,
@@ -144,6 +156,29 @@ Item {
     property real bloomRadius: 0.24
     property real bloomOpacity: 1.0
     property real bloomFade: 0.0
+    // Bloom amount oscillation (bounded around its base, like the hole).
+    property real bloomAmountBase: 0.70
+    property real _bloomAmountBasePrev: -999
+    property bool bloomOsc: false
+    property real bloomOscRangeF: 0.10
+    property int bloomOscInterval: 10
+    property int bloomOscChance: 50
+    // Bloom radius oscillation + burst. Osc drives the value it "should have";
+    // a burst is a temporary offset that decays back to that osc value, and osc
+    // ticks are skipped while a burst is still fading.
+    property real bloomRadiusBase: 0.24
+    property real _bloomRadiusBasePrev: -999
+    property real bloomRadiusOscTarget: 0.24
+    property real bloomRadiusSmooth: 0.24
+    property real bloomRadiusBurstOff: 0.0
+    property bool bloomRadiusOsc: false
+    property real bloomRadiusOscRangeUv: 0.12
+    property int bloomRadiusOscInterval: 10
+    property int bloomRadiusOscChance: 50
+    property bool bloomRadiusBurst: false
+    property real bloomRadiusBurstMarginUv: 0.18
+    property int bloomRadiusBurstInterval: 10
+    property int bloomRadiusBurstChance: 50
     property real starCount: 40
     property real starSpeed: 1.0
     property real starLength: 0.35
@@ -180,6 +215,22 @@ Item {
         var c = 2.0 * Math.sqrt(k)                          // critical damping
         spiralVel += ((spiralTarget - spiral) * k - spiralVel * c) * h
         spiral += spiralVel * h
+    }
+
+    // Per-frame model for the bloom radius: `bloomRadiusSmooth` eases toward the
+    // oscillation target (paramTransition-paced), while `bloomRadiusBurstOff` is a
+    // temporary jolt that decays independently back to zero. The shader value is
+    // their sum, so a burst rides on top of the oscillation and fades out on its
+    // own without disturbing it.
+    function _tickBloomRadius(dt) {
+        var tc = Math.max(0.05, paramTransitionMs / 1000.0)
+        var k = 1.0 - Math.exp(-Math.min(dt, 0.1) / tc)
+        bloomRadiusSmooth += (bloomRadiusOscTarget - bloomRadiusSmooth) * k
+        if (Math.abs(bloomRadiusBurstOff) > 0.0004) {
+            bloomRadiusBurstOff *= Math.exp(-Math.min(dt, 0.1) / 1.4)   // ~1.4s decay
+            if (Math.abs(bloomRadiusBurstOff) < 0.0004) bloomRadiusBurstOff = 0.0
+        }
+        bloomRadius = Math.min(0.6, Math.max(0.0, bloomRadiusSmooth + bloomRadiusBurstOff))
     }
 
     function _readSettings() {
@@ -240,8 +291,30 @@ Item {
         // stops at the deepest good value instead of the degrading zone.
         depth = 0.20 + Math.min(1.0, Math.max(0.0, s.depth / 100.0)) * 0.65;
         ringSpinVary = Math.max(0.0, s.ringSpin / 100.0);
-        bloomAmount = Math.min(1.0, Math.max(0.0, s.bloom / 100.0));
-        bloomRadius = Math.min(1.0, Math.max(0.0, s.bloomRadius / 100.0)) * 0.6;
+        bloomAmountBase = Math.min(1.0, Math.max(0.0, s.bloom / 100.0));
+        if (bloomAmountBase !== _bloomAmountBasePrev) { _bloomAmountBasePrev = bloomAmountBase; bloomAmount = bloomAmountBase; }
+        bloomOsc = s.bloomOsc;
+        bloomOscRangeF = Math.max(0.0, s.bloomOscRange / 100.0);
+        bloomOscInterval = Math.max(1, s.bloomOscInterval);
+        bloomOscChance = Math.max(0, Math.min(100, s.bloomOscChance));
+
+        bloomRadiusBase = Math.min(1.0, Math.max(0.0, s.bloomRadius / 100.0)) * 0.6;
+        if (bloomRadiusBase !== _bloomRadiusBasePrev) {
+            _bloomRadiusBasePrev = bloomRadiusBase;
+            bloomRadiusOscTarget = bloomRadiusBase;
+            bloomRadiusSmooth = bloomRadiusBase;
+            bloomRadiusBurstOff = 0.0;
+            bloomRadius = bloomRadiusBase;
+        }
+        bloomRadiusOsc = s.bloomRadiusOsc;
+        bloomRadiusOscRangeUv = Math.max(0.0, s.bloomRadiusOscRange / 100.0) * 0.6;
+        bloomRadiusOscInterval = Math.max(1, s.bloomRadiusOscInterval);
+        bloomRadiusOscChance = Math.max(0, Math.min(100, s.bloomRadiusOscChance));
+        bloomRadiusBurst = s.bloomRadiusBurst;
+        bloomRadiusBurstMarginUv = Math.max(0.0, s.bloomRadiusBurstMargin / 100.0) * 0.6;
+        bloomRadiusBurstInterval = Math.max(1, s.bloomRadiusBurstInterval);
+        bloomRadiusBurstChance = Math.max(0, Math.min(100, s.bloomRadiusBurstChance));
+
         bloomOpacity = Math.min(1.0, Math.max(0.0, s.bloomOpacity / 100.0));
         bloomFade = Math.min(1.0, Math.max(0.0, s.bloomFade / 100.0));
         starCount = Math.max(0, s.starCount);
@@ -629,6 +702,51 @@ Item {
         }
     }
 
+    // Oscillate the centre-bloom AMOUNT around its INITIAL value (bounded, like the
+    // hole). The ShaderEffect's Behavior on bloomAmount eases each jump.
+    Timer {
+        id: bloomOscTimer
+        running: effectRoot.bloomOsc && !effectRoot.paused
+        repeat: true
+        interval: Math.max(1, effectRoot.bloomOscInterval) * 1000
+        onTriggered: {
+            if (Math.random() * 100.0 >= effectRoot.bloomOscChance) return
+            var d = (Math.random() * 2.0 - 1.0) * effectRoot.bloomOscRangeF
+            effectRoot.bloomAmount = Math.min(1.0, Math.max(0.0, effectRoot.bloomAmountBase + d))
+        }
+    }
+
+    // Oscillate the bloom RADIUS around its initial value by moving the per-frame
+    // ease target. Skipped while a burst is still fading, so the burst's decay is
+    // never disturbed (per spec).
+    Timer {
+        id: bloomRadiusOscTimer
+        running: effectRoot.bloomRadiusOsc && !effectRoot.paused
+        repeat: true
+        interval: Math.max(1, effectRoot.bloomRadiusOscInterval) * 1000
+        onTriggered: {
+            if (Math.abs(effectRoot.bloomRadiusBurstOff) > 0.0004) return   // burst fading -> skip
+            if (Math.random() * 100.0 >= effectRoot.bloomRadiusOscChance) return
+            var d = (Math.random() * 2.0 - 1.0) * effectRoot.bloomRadiusOscRangeUv
+            effectRoot.bloomRadiusOscTarget = Math.min(0.6, Math.max(0.0, effectRoot.bloomRadiusBase + d))
+        }
+    }
+
+    // Burst the bloom RADIUS: a one-off jolt off the CURRENT value that then decays
+    // back to whatever the oscillation says it should be (handled per-frame in
+    // _tickBloomRadius). Independent of oscillation.
+    Timer {
+        id: bloomRadiusBurstTimer
+        running: effectRoot.bloomRadiusBurst && !effectRoot.paused
+        repeat: true
+        interval: Math.max(1, effectRoot.bloomRadiusBurstInterval) * 1000
+        onTriggered: {
+            if (Math.random() * 100.0 >= effectRoot.bloomRadiusBurstChance) return
+            var d = (Math.random() * 2.0 - 1.0) * effectRoot.bloomRadiusBurstMarginUv
+            effectRoot.bloomRadiusBurstOff = d
+        }
+    }
+
     Component.onCompleted: _applySettings()
 
     // --- Shader effect ---
@@ -681,8 +799,9 @@ Item {
         Behavior on vortexOpacity { NumberAnimation { duration: effectRoot.paramTransitionMs; easing.type: Easing.InOutQuad } }
         property real bloomAmount: effectRoot.bloomAmount
         Behavior on bloomAmount { NumberAnimation { duration: effectRoot.paramTransitionMs; easing.type: Easing.InOutQuad } }
+        // bloomRadius is smoothed per-frame in the effect root (oscillation ease +
+        // decaying burst), so no Behavior here — it would fight the frame updates.
         property real bloomRadius: effectRoot.bloomRadius
-        Behavior on bloomRadius { NumberAnimation { duration: effectRoot.paramTransitionMs; easing.type: Easing.InOutQuad } }
         property real bloomOpacity: effectRoot.bloomOpacity
         Behavior on bloomOpacity { NumberAnimation { duration: effectRoot.paramTransitionMs; easing.type: Easing.InOutQuad } }
         property real bloomFade: effectRoot.bloomFade
@@ -742,6 +861,7 @@ Item {
                 effect.spinVaryTime += frameTime * effectRoot.rotSpeedMult * effectRoot.ringSpinVary
                 effectRoot._driftSwirl(frameTime)
                 effectRoot._springSwirl(frameTime)
+                effectRoot._tickBloomRadius(frameTime)
             }
         }
 
@@ -760,6 +880,7 @@ Item {
                 effect.spinVaryTime += dt * effectRoot.rotSpeedMult * effectRoot.ringSpinVary
                 effectRoot._driftSwirl(dt)
                 effectRoot._springSwirl(dt)
+                effectRoot._tickBloomRadius(dt)
             }
         }
 

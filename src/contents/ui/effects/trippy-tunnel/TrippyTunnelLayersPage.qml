@@ -282,6 +282,41 @@ Kirigami.ScrollablePage {
             textFromValue: function(value) { return value + "%" }
             valueFromText: function(text) { return parseInt(text) || 0 }
         }
+        RowLayout {
+            // Bounded roll around the INITIAL Centre bloom value, like Oscillate hole.
+            Kirigami.FormData.label: i18n("Oscillate bloom:")
+            QtControls2.CheckBox {
+                enabled: page.effectConfig._bloomOpacity > 0
+                checked: page.effectConfig._bloomOsc
+                onToggled: page.effectConfig._bloomOsc = checked
+            }
+            QtControls2.SpinBox {
+                enabled: page.effectConfig._bloomOpacity > 0 && page.effectConfig._bloomOsc
+                from: 0; to: 100; stepSize: 5
+                value: page.effectConfig._bloomOscRange
+                onValueModified: page.effectConfig._bloomOscRange = value
+                textFromValue: function(value) { return "±" + value + "%" }
+                valueFromText: function(text) { return parseInt(text) || 0 }
+            }
+            QtControls2.Label { text: i18n("every") }
+            QtControls2.SpinBox {
+                enabled: page.effectConfig._bloomOpacity > 0 && page.effectConfig._bloomOsc
+                from: 1; to: 120; stepSize: 1
+                value: page.effectConfig._bloomOscInterval
+                onValueModified: page.effectConfig._bloomOscInterval = value
+                textFromValue: function(value) { return value + " s" }
+                valueFromText: function(text) { return parseInt(text) || 1 }
+            }
+            QtControls2.Label { text: i18n("prob.") }
+            QtControls2.SpinBox {
+                enabled: page.effectConfig._bloomOpacity > 0 && page.effectConfig._bloomOsc
+                from: 0; to: 100; stepSize: 5
+                value: page.effectConfig._bloomOscChance
+                onValueModified: page.effectConfig._bloomOscChance = value
+                textFromValue: function(value) { return value + "%" }
+                valueFromText: function(text) { return parseInt(text) || 0 }
+            }
+        }
         QtControls2.SpinBox {
             Kirigami.FormData.label: i18n("Bloom radius:")
             from: 0; to: 100; stepSize: 5
@@ -290,6 +325,76 @@ Kirigami.ScrollablePage {
             onValueModified: page.effectConfig._bloomRadius = value
             textFromValue: function(value) { return value + "%" }
             valueFromText: function(text) { return parseInt(text) || 0 }
+        }
+        RowLayout {
+            // Bounded roll around the INITIAL Bloom radius value.
+            Kirigami.FormData.label: i18n("Oscillate radius:")
+            QtControls2.CheckBox {
+                enabled: page.effectConfig._bloomOpacity > 0
+                checked: page.effectConfig._bloomRadiusOsc
+                onToggled: page.effectConfig._bloomRadiusOsc = checked
+            }
+            QtControls2.SpinBox {
+                enabled: page.effectConfig._bloomOpacity > 0 && page.effectConfig._bloomRadiusOsc
+                from: 0; to: 100; stepSize: 5
+                value: page.effectConfig._bloomRadiusOscRange
+                onValueModified: page.effectConfig._bloomRadiusOscRange = value
+                textFromValue: function(value) { return "±" + value + "%" }
+                valueFromText: function(text) { return parseInt(text) || 0 }
+            }
+            QtControls2.Label { text: i18n("every") }
+            QtControls2.SpinBox {
+                enabled: page.effectConfig._bloomOpacity > 0 && page.effectConfig._bloomRadiusOsc
+                from: 1; to: 120; stepSize: 1
+                value: page.effectConfig._bloomRadiusOscInterval
+                onValueModified: page.effectConfig._bloomRadiusOscInterval = value
+                textFromValue: function(value) { return value + " s" }
+                valueFromText: function(text) { return parseInt(text) || 1 }
+            }
+            QtControls2.Label { text: i18n("prob.") }
+            QtControls2.SpinBox {
+                enabled: page.effectConfig._bloomOpacity > 0 && page.effectConfig._bloomRadiusOsc
+                from: 0; to: 100; stepSize: 5
+                value: page.effectConfig._bloomRadiusOscChance
+                onValueModified: page.effectConfig._bloomRadiusOscChance = value
+                textFromValue: function(value) { return value + "%" }
+                valueFromText: function(text) { return parseInt(text) || 0 }
+            }
+        }
+        RowLayout {
+            // One-off jolt off the CURRENT radius that decays back to the osc value.
+            Kirigami.FormData.label: i18n("Radius burst:")
+            QtControls2.CheckBox {
+                enabled: page.effectConfig._bloomOpacity > 0
+                checked: page.effectConfig._bloomRadiusBurst
+                onToggled: page.effectConfig._bloomRadiusBurst = checked
+            }
+            QtControls2.SpinBox {
+                enabled: page.effectConfig._bloomOpacity > 0 && page.effectConfig._bloomRadiusBurst
+                from: 0; to: 100; stepSize: 5
+                value: page.effectConfig._bloomRadiusBurstMargin
+                onValueModified: page.effectConfig._bloomRadiusBurstMargin = value
+                textFromValue: function(value) { return "±" + value + "%" }
+                valueFromText: function(text) { return parseInt(text) || 0 }
+            }
+            QtControls2.Label { text: i18n("every") }
+            QtControls2.SpinBox {
+                enabled: page.effectConfig._bloomOpacity > 0 && page.effectConfig._bloomRadiusBurst
+                from: 1; to: 120; stepSize: 1
+                value: page.effectConfig._bloomRadiusBurstInterval
+                onValueModified: page.effectConfig._bloomRadiusBurstInterval = value
+                textFromValue: function(value) { return value + " s" }
+                valueFromText: function(text) { return parseInt(text) || 1 }
+            }
+            QtControls2.Label { text: i18n("prob.") }
+            QtControls2.SpinBox {
+                enabled: page.effectConfig._bloomOpacity > 0 && page.effectConfig._bloomRadiusBurst
+                from: 0; to: 100; stepSize: 5
+                value: page.effectConfig._bloomRadiusBurstChance
+                onValueModified: page.effectConfig._bloomRadiusBurstChance = value
+                textFromValue: function(value) { return value + "%" }
+                valueFromText: function(text) { return parseInt(text) || 0 }
+            }
         }
         QtControls2.SpinBox {
             Kirigami.FormData.label: i18n("Bloom opacity:")

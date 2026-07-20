@@ -34,6 +34,20 @@ counter-rotates.
 
 Everything is generated procedurally in the shader - there are no image assets.
 
+## Gallery
+
+![Theme](img/preview-01.webp)
+
+![Theme](img/preview-02.webp)
+
+![Theme](img/preview-03.webp)
+
+![Theme](img/preview-04.webp)
+
+![Theme](img/preview-05.webp)
+
+![Theme](img/preview-06.webp)
+
 ## Settings
 
 ### Layers
@@ -110,9 +124,3 @@ Drop a `.qml` theme file into
 `canopy`, `glow` and `mist` colours, an optional `stars` colour and `mode`
 tone (`light`/`dark`/`mixed`/`psychedelic`), plus a 6-colour `palette` that is wrapped around the
 tunnel to drive the colour flow.
-
-## Gallery
-
-Trippy Tunnel effect on the default *Spectrum* theme, with no additional filters applied.
-
-![Preview](img/preview-01.webp)

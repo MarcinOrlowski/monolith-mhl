@@ -155,7 +155,9 @@ Item {
     property real glowAmount: 0.60
     property real mistAmount: 0.75
     property real fog: 0.50
-    property real canopyOpacity: 1.0
+    // Starts fully transparent so the rings gently fade in on load: the first
+    // _applySettings sets the real target and the shader's Behavior eases 0 -> target.
+    property real canopyOpacity: 0.0
     property real vortexOpacity: 1.0
     property bool bloomShow: true
     property real bloomAmount: 0.70

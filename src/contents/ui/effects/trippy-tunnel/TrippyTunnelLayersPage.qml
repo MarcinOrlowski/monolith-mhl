@@ -39,6 +39,40 @@ Kirigami.ScrollablePage {
             textFromValue: function(value) { return value + "%" }
             valueFromText: function(text) { return parseInt(text) || 0 }
         }
+        RowLayout {
+            Kirigami.FormData.label: i18n("Density burst:")
+            QtControls2.CheckBox {
+                enabled: page.effectConfig._showCanopy
+                checked: page.effectConfig._densityBurst
+                onToggled: page.effectConfig._densityBurst = checked
+            }
+            QtControls2.SpinBox {
+                enabled: page.effectConfig._showCanopy && page.effectConfig._densityBurst
+                from: 0; to: 50; stepSize: 5
+                value: page.effectConfig._densityBurstMargin
+                onValueModified: page.effectConfig._densityBurstMargin = value
+                textFromValue: function(value) { return "±" + value + "%" }
+                valueFromText: function(text) { return parseInt(text) || 0 }
+            }
+            QtControls2.Label { text: i18n("every") }
+            QtControls2.SpinBox {
+                enabled: page.effectConfig._showCanopy && page.effectConfig._densityBurst
+                from: 1; to: 600; stepSize: 10
+                value: page.effectConfig._densityBurstInterval
+                onValueModified: page.effectConfig._densityBurstInterval = value
+                textFromValue: function(value) { return value + " s" }
+                valueFromText: function(text) { return parseInt(text) || 1 }
+            }
+            QtControls2.Label { text: i18n("prob.") }
+            QtControls2.SpinBox {
+                enabled: page.effectConfig._showCanopy && page.effectConfig._densityBurst
+                from: 0; to: 100; stepSize: 5
+                value: page.effectConfig._densityBurstChance
+                onValueModified: page.effectConfig._densityBurstChance = value
+                textFromValue: function(value) { return value + "%" }
+                valueFromText: function(text) { return parseInt(text) || 0 }
+            }
+        }
         QtControls2.SpinBox {
             // How fast rings recede toward the centre — higher = deeper tunnel.
             Kirigami.FormData.label: i18n("Depth:")
@@ -263,6 +297,40 @@ Kirigami.ScrollablePage {
             textFromValue: function(value) { return value + "%" }
             valueFromText: function(text) { return parseInt(text) || 0 }
         }
+        RowLayout {
+            Kirigami.FormData.label: i18n("Vortex swirl burst:")
+            QtControls2.CheckBox {
+                enabled: page.effectConfig._showVortex
+                checked: page.effectConfig._vortexBurst
+                onToggled: page.effectConfig._vortexBurst = checked
+            }
+            QtControls2.SpinBox {
+                enabled: page.effectConfig._showVortex && page.effectConfig._vortexBurst
+                from: 0; to: 50; stepSize: 5
+                value: page.effectConfig._vortexBurstMargin
+                onValueModified: page.effectConfig._vortexBurstMargin = value
+                textFromValue: function(value) { return "±" + value + "%" }
+                valueFromText: function(text) { return parseInt(text) || 0 }
+            }
+            QtControls2.Label { text: i18n("every") }
+            QtControls2.SpinBox {
+                enabled: page.effectConfig._showVortex && page.effectConfig._vortexBurst
+                from: 1; to: 600; stepSize: 10
+                value: page.effectConfig._vortexBurstInterval
+                onValueModified: page.effectConfig._vortexBurstInterval = value
+                textFromValue: function(value) { return value + " s" }
+                valueFromText: function(text) { return parseInt(text) || 1 }
+            }
+            QtControls2.Label { text: i18n("prob.") }
+            QtControls2.SpinBox {
+                enabled: page.effectConfig._showVortex && page.effectConfig._vortexBurst
+                from: 0; to: 100; stepSize: 5
+                value: page.effectConfig._vortexBurstChance
+                onValueModified: page.effectConfig._vortexBurstChance = value
+                textFromValue: function(value) { return value + "%" }
+                valueFromText: function(text) { return parseInt(text) || 0 }
+            }
+        }
         QtControls2.SpinBox {
             Kirigami.FormData.label: i18n("Opacity:")
             from: 0; to: 100; stepSize: 5
@@ -271,6 +339,40 @@ Kirigami.ScrollablePage {
             onValueModified: page.effectConfig._vortexOpacity = value
             textFromValue: function(value) { return value + "%" }
             valueFromText: function(text) { return parseInt(text) || 0 }
+        }
+        RowLayout {
+            Kirigami.FormData.label: i18n("Opacity burst:")
+            QtControls2.CheckBox {
+                enabled: page.effectConfig._showVortex
+                checked: page.effectConfig._vortexOpacityBurst
+                onToggled: page.effectConfig._vortexOpacityBurst = checked
+            }
+            QtControls2.SpinBox {
+                enabled: page.effectConfig._showVortex && page.effectConfig._vortexOpacityBurst
+                from: 0; to: 50; stepSize: 5
+                value: page.effectConfig._vortexOpacityBurstMargin
+                onValueModified: page.effectConfig._vortexOpacityBurstMargin = value
+                textFromValue: function(value) { return "±" + value + "%" }
+                valueFromText: function(text) { return parseInt(text) || 0 }
+            }
+            QtControls2.Label { text: i18n("every") }
+            QtControls2.SpinBox {
+                enabled: page.effectConfig._showVortex && page.effectConfig._vortexOpacityBurst
+                from: 1; to: 600; stepSize: 10
+                value: page.effectConfig._vortexOpacityBurstInterval
+                onValueModified: page.effectConfig._vortexOpacityBurstInterval = value
+                textFromValue: function(value) { return value + " s" }
+                valueFromText: function(text) { return parseInt(text) || 1 }
+            }
+            QtControls2.Label { text: i18n("prob.") }
+            QtControls2.SpinBox {
+                enabled: page.effectConfig._showVortex && page.effectConfig._vortexOpacityBurst
+                from: 0; to: 100; stepSize: 5
+                value: page.effectConfig._vortexOpacityBurstChance
+                onValueModified: page.effectConfig._vortexOpacityBurstChance = value
+                textFromValue: function(value) { return value + "%" }
+                valueFromText: function(text) { return parseInt(text) || 0 }
+            }
         }
         QtControls2.CheckBox {
             // Soft bright glow over the centre that hides where the swirl, stars

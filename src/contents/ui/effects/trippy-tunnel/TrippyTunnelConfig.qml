@@ -41,6 +41,10 @@ Item {
         whirlSpeed: -35,
         spiral: 45,
         vortexSwirl: 45,
+        vortexBurst: true,
+        vortexBurstMargin: 20,
+        vortexBurstInterval: 300,
+        vortexBurstChance: 20,
         tunnelWidth: 100,
         widthOsc: false,
         widthOscRange: 20,
@@ -61,17 +65,25 @@ Item {
         depth: 55,
         ringSpin: 5,
         density: 60,
+        densityBurst: true,
+        densityBurstMargin: 25,
+        densityBurstInterval: 240,
+        densityBurstChance: 50,
         glow: 60,
         mist: 75,
         fog: 50,
         canopyOpacity: 100,
         vortexOpacity: 100,
+        vortexOpacityBurst: true,
+        vortexOpacityBurstMargin: 20,
+        vortexOpacityBurstInterval: 300,
+        vortexOpacityBurstChance: 20,
         bloomShow: true,
         bloom: 70,
-        bloomOsc: false,
-        bloomOscRange: 20,
-        bloomOscInterval: 10,
-        bloomOscChance: 50,
+        bloomOsc: true,
+        bloomOscRange: 30,
+        bloomOscInterval: 30,
+        bloomOscChance: 20,
         bloomRadius: 40,
         bloomRadiusOsc: false,
         bloomRadiusOscRange: 20,
@@ -124,6 +136,10 @@ Item {
     property int _whirlSpeed: -35
     property int _spiral: 45
     property int _vortexSwirl: 45
+    property bool _vortexBurst: true
+    property int _vortexBurstMargin: 20
+    property int _vortexBurstInterval: 300
+    property int _vortexBurstChance: 20
     property int _tunnelWidth: 100
     property bool _widthOsc: false
     property int _widthOscRange: 20
@@ -144,17 +160,25 @@ Item {
     property int _depth: 55
     property int _ringSpin: 5
     property int _density: 60
+    property bool _densityBurst: true
+    property int _densityBurstMargin: 25
+    property int _densityBurstInterval: 240
+    property int _densityBurstChance: 50
     property int _glow: 60
     property int _mist: 75
     property int _fog: 50
     property int _canopyOpacity: 100
     property int _vortexOpacity: 100
+    property bool _vortexOpacityBurst: true
+    property int _vortexOpacityBurstMargin: 20
+    property int _vortexOpacityBurstInterval: 300
+    property int _vortexOpacityBurstChance: 20
     property bool _bloomShow: true
     property int _bloom: 70
-    property bool _bloomOsc: false
-    property int _bloomOscRange: 20
-    property int _bloomOscInterval: 10
-    property int _bloomOscChance: 50
+    property bool _bloomOsc: true
+    property int _bloomOscRange: 30
+    property int _bloomOscInterval: 30
+    property int _bloomOscChance: 20
     property int _bloomRadius: 40
     property bool _bloomRadiusOsc: false
     property int _bloomRadiusOscRange: 20
@@ -214,6 +238,10 @@ Item {
         _whirlSpeed = s.whirlSpeed
         _spiral = s.spiral
         _vortexSwirl = s.vortexSwirl
+        _vortexBurst = s.vortexBurst
+        _vortexBurstMargin = s.vortexBurstMargin
+        _vortexBurstInterval = s.vortexBurstInterval
+        _vortexBurstChance = s.vortexBurstChance
         _tunnelWidth = s.tunnelWidth
         _widthOsc = s.widthOsc
         _widthOscRange = s.widthOscRange
@@ -234,11 +262,19 @@ Item {
         _depth = s.depth
         _ringSpin = s.ringSpin
         _density = s.density
+        _densityBurst = s.densityBurst
+        _densityBurstMargin = s.densityBurstMargin
+        _densityBurstInterval = s.densityBurstInterval
+        _densityBurstChance = s.densityBurstChance
         _glow = s.glow
         _mist = s.mist
         _fog = s.fog
         _canopyOpacity = s.canopyOpacity
         _vortexOpacity = s.vortexOpacity
+        _vortexOpacityBurst = s.vortexOpacityBurst
+        _vortexOpacityBurstMargin = s.vortexOpacityBurstMargin
+        _vortexOpacityBurstInterval = s.vortexOpacityBurstInterval
+        _vortexOpacityBurstChance = s.vortexOpacityBurstChance
         _bloomShow = s.bloomShow
         _bloom = s.bloom
         _bloomOsc = s.bloomOsc
@@ -300,6 +336,10 @@ Item {
             whirlSpeed: _whirlSpeed,
             spiral: _spiral,
             vortexSwirl: _vortexSwirl,
+            vortexBurst: _vortexBurst,
+            vortexBurstMargin: _vortexBurstMargin,
+            vortexBurstInterval: _vortexBurstInterval,
+            vortexBurstChance: _vortexBurstChance,
             tunnelWidth: _tunnelWidth,
             widthOsc: _widthOsc,
             widthOscRange: _widthOscRange,
@@ -320,11 +360,19 @@ Item {
             depth: _depth,
             ringSpin: _ringSpin,
             density: _density,
+            densityBurst: _densityBurst,
+            densityBurstMargin: _densityBurstMargin,
+            densityBurstInterval: _densityBurstInterval,
+            densityBurstChance: _densityBurstChance,
             glow: _glow,
             mist: _mist,
             fog: _fog,
             canopyOpacity: _canopyOpacity,
             vortexOpacity: _vortexOpacity,
+            vortexOpacityBurst: _vortexOpacityBurst,
+            vortexOpacityBurstMargin: _vortexOpacityBurstMargin,
+            vortexOpacityBurstInterval: _vortexOpacityBurstInterval,
+            vortexOpacityBurstChance: _vortexOpacityBurstChance,
             bloomShow: _bloomShow,
             bloom: _bloom,
             bloomOsc: _bloomOsc,
@@ -383,6 +431,10 @@ Item {
     on_WhirlSpeedChanged: _save()
     on_SpiralChanged: _save()
     on_VortexSwirlChanged: _save()
+    on_VortexBurstChanged: _save()
+    on_VortexBurstMarginChanged: _save()
+    on_VortexBurstIntervalChanged: _save()
+    on_VortexBurstChanceChanged: _save()
     on_TunnelWidthChanged: _save()
     on_WidthOscChanged: _save()
     on_WidthOscRangeChanged: _save()
@@ -403,11 +455,19 @@ Item {
     on_DepthChanged: _save()
     on_RingSpinChanged: _save()
     on_DensityChanged: _save()
+    on_DensityBurstChanged: _save()
+    on_DensityBurstMarginChanged: _save()
+    on_DensityBurstIntervalChanged: _save()
+    on_DensityBurstChanceChanged: _save()
     on_GlowChanged: _save()
     on_MistChanged: _save()
     on_FogChanged: _save()
     on_CanopyOpacityChanged: _save()
     on_VortexOpacityChanged: _save()
+    on_VortexOpacityBurstChanged: _save()
+    on_VortexOpacityBurstMarginChanged: _save()
+    on_VortexOpacityBurstIntervalChanged: _save()
+    on_VortexOpacityBurstChanceChanged: _save()
     on_BloomShowChanged: _save()
     on_BloomChanged: _save()
     on_BloomOscChanged: _save()

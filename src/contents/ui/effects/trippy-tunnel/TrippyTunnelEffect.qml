@@ -42,6 +42,10 @@ Item {
         whirlSpeed: -35,
         spiral: 45,
         vortexSwirl: 45,
+        vortexBurst: true,
+        vortexBurstMargin: 20,
+        vortexBurstInterval: 300,
+        vortexBurstChance: 20,
         tunnelWidth: 100,
         widthOsc: false,
         widthOscRange: 20,
@@ -62,17 +66,25 @@ Item {
         depth: 55,
         ringSpin: 5,
         density: 60,
+        densityBurst: true,
+        densityBurstMargin: 25,
+        densityBurstInterval: 240,
+        densityBurstChance: 50,
         glow: 60,
         mist: 75,
         fog: 50,
         canopyOpacity: 100,
         vortexOpacity: 100,
+        vortexOpacityBurst: true,
+        vortexOpacityBurstMargin: 20,
+        vortexOpacityBurstInterval: 300,
+        vortexOpacityBurstChance: 20,
         bloomShow: true,
         bloom: 70,
-        bloomOsc: false,
-        bloomOscRange: 20,
-        bloomOscInterval: 10,
-        bloomOscChance: 50,
+        bloomOsc: true,
+        bloomOscRange: 30,
+        bloomOscInterval: 30,
+        bloomOscChance: 20,
         bloomRadius: 40,
         bloomRadiusOsc: false,
         bloomRadiusOscRange: 20,
@@ -129,7 +141,13 @@ Item {
     property real _spiralBasePrev: -999
     property real _widthBasePrev: -999
     property real _holeBasePrev: -999
-    property real vortexSwirl: 0.45
+    property real vortexSwirl: 0.45       // runtime value fed to the shader
+    property real vortexSwirlBase: 0.45   // initial value; burst random-walks off this
+    property real _vortexSwirlBasePrev: -999
+    property bool vortexBurst: false      // periodic vortex-swirl burst enable
+    property real vortexBurstMargin: 0.15 // burst size: fraction of the 0..1 swirl range
+    property int vortexBurstInterval: 8   // seconds between burst rolls
+    property int vortexBurstChance: 100   // percent chance each roll actually bursts
     property real tunnelWidth: 1.0        // runtime value fed to the shader
     property real tunnelWidthBase: 1.0    // initial value; oscillation ranges around THIS
     property bool widthOsc: false
@@ -151,24 +169,38 @@ Item {
     property int swirlVaryChance: 100     // percent chance each roll actually bursts
     property real depth: 0.56            // exponential ring recession rate
     property real ringSpinVary: 0.05     // per-ring rotation-speed randomisation
-    property real density: 0.60
+    property real density: 0.60           // runtime value fed to the shader
+    property real densityBase: 0.60       // initial value; burst random-walks off this
+    property real _densityBasePrev: -999
+    property bool densityBurst: false     // periodic canopy-density burst enable
+    property real densityBurstMargin: 0.15 // burst size: fraction of the 0..1 density range
+    property int densityBurstInterval: 8  // seconds between burst rolls
+    property int densityBurstChance: 100  // percent chance each roll actually bursts
     property real glowAmount: 0.60
     property real mistAmount: 0.75
     property real fog: 0.50
     // Starts fully transparent so the rings gently fade in on load: the first
     // _applySettings sets the real target and the shader's Behavior eases 0 -> target.
     property real canopyOpacity: 0.0
-    property real vortexOpacity: 1.0
+    // Starts fully transparent too, so the central whirl fades in on load alongside
+    // the canopy: first _applySettings sets the real target and the Behavior eases up.
+    property real vortexOpacity: 0.0        // runtime value fed to the shader
+    property real vortexOpacityBase: 1.0    // target the burst random-walks off
+    property real _vortexOpacityBasePrev: -999
+    property bool vortexOpacityBurst: false // periodic vortex-opacity burst enable
+    property real vortexOpacityBurstMargin: 0.15 // burst size: fraction of the 0..1 range
+    property int vortexOpacityBurstInterval: 8   // seconds between burst rolls
+    property int vortexOpacityBurstChance: 100   // percent chance each roll bursts
     property bool bloomShow: true
     property real bloomAmount: 0.70
     property real bloomRadius: 0.24
-    property real bloomOpacity: 1.0
+    property real bloomOpacity: 0.0   // starts transparent -> fades in on load
     property real bloomFade: 0.0
     // Centre mask: flat background-coloured disc that hides the convergence.
     property bool maskShow: false
     property real maskRadius: 0.18
     property real maskSoftness: 0.11
-    property real maskOpacity: 1.0
+    property real maskOpacity: 0.0    // starts transparent -> fades in on load
     // Bloom amount oscillation (bounded around its base, like the hole).
     property real bloomAmountBase: 0.70
     property real _bloomAmountBasePrev: -999
@@ -197,14 +229,14 @@ Item {
     property real starCount: 40
     property real starSpeed: 1.0
     property real starLength: 0.35
-    property real starOpacity: 1.0
+    property real starOpacity: 0.0    // starts transparent -> fades in on load
     property real beamCount: 220
     property real beamSpeed: 1.0
     property real beamLength: 0.45
-    property real beamOpacity: 1.0
+    property real beamOpacity: 0.0    // starts transparent -> fades in on load
     property real dotCount: 60
     property real dotSpeed: 1.0
-    property real dotOpacity: 1.0
+    property real dotOpacity: 0.0     // starts transparent -> fades in on load
 
     function togglePause() { paused = !paused }
 
@@ -283,7 +315,14 @@ Item {
             spiralTarget = sBase;
             if (!_swirlInit) { spiral = spiralTarget; spiralVel = 0.0; _swirlInit = true; }
         }
-        vortexSwirl = Math.min(1.0, Math.max(0.0, s.vortexSwirl / 100.0));
+        // Re-seed runtime vortexSwirl only when its BASE setting changes, so an
+        // unrelated edit doesn't reset an in-progress burst walk (like spiral).
+        vortexSwirlBase = Math.min(1.0, Math.max(0.0, s.vortexSwirl / 100.0));
+        if (vortexSwirlBase !== _vortexSwirlBasePrev) { _vortexSwirlBasePrev = vortexSwirlBase; vortexSwirl = vortexSwirlBase; }
+        vortexBurst = s.vortexBurst;
+        vortexBurstMargin = Math.max(0.0, s.vortexBurstMargin / 100.0);
+        vortexBurstInterval = Math.max(1, s.vortexBurstInterval);
+        vortexBurstChance = Math.max(0, Math.min(100, s.vortexBurstChance));
         tunnelWidthBase = Math.max(0.1, s.tunnelWidth / 100.0);
         if (tunnelWidthBase !== _widthBasePrev) { _widthBasePrev = tunnelWidthBase; tunnelWidth = tunnelWidthBase; }
         widthOsc = s.widthOsc;
@@ -302,12 +341,27 @@ Item {
         swirlVaryMargin = Math.max(0.0, s.swirlVaryMargin / 100.0);
         swirlVaryInterval = Math.max(1, s.swirlVaryInterval);
         swirlVaryChance = Math.max(0, Math.min(100, s.swirlVaryChance));
-        density = Math.min(1.0, Math.max(0.0, s.density / 100.0));
+        // Re-seed runtime density only when its BASE setting changes, so an
+        // unrelated edit doesn't reset an in-progress burst walk (like spiral).
+        densityBase = Math.min(1.0, Math.max(0.0, s.density / 100.0));
+        if (densityBase !== _densityBasePrev) { _densityBasePrev = densityBase; density = densityBase; }
+        densityBurst = s.densityBurst;
+        densityBurstMargin = Math.max(0.0, s.densityBurstMargin / 100.0);
+        densityBurstInterval = Math.max(1, s.densityBurstInterval);
+        densityBurstChance = Math.max(0, Math.min(100, s.densityBurstChance));
         glowAmount = Math.min(1.0, Math.max(0.0, s.glow / 100.0));
         mistAmount = Math.min(1.0, Math.max(0.0, s.mist / 100.0));
         fog = Math.min(1.0, Math.max(0.0, s.fog / 100.0));
         canopyOpacity = Math.min(1.0, Math.max(0.0, s.canopyOpacity / 100.0));
-        vortexOpacity = Math.min(1.0, Math.max(0.0, s.vortexOpacity / 100.0));
+        // Re-seed runtime vortexOpacity only when its BASE setting changes, so an
+        // unrelated edit doesn't reset an in-progress burst walk (and the init
+        // fade-in from 0 still happens on the first apply). Same guard as swirl.
+        vortexOpacityBase = Math.min(1.0, Math.max(0.0, s.vortexOpacity / 100.0));
+        if (vortexOpacityBase !== _vortexOpacityBasePrev) { _vortexOpacityBasePrev = vortexOpacityBase; vortexOpacity = vortexOpacityBase; }
+        vortexOpacityBurst = s.vortexOpacityBurst;
+        vortexOpacityBurstMargin = Math.max(0.0, s.vortexOpacityBurstMargin / 100.0);
+        vortexOpacityBurstInterval = Math.max(1, s.vortexOpacityBurstInterval);
+        vortexOpacityBurstChance = Math.max(0, Math.min(100, s.vortexOpacityBurstChance));
         // Map 0..100 % across the USABLE recession range: above ~0.85 the far
         // rings collapse into the hole and the tunnel reads emptier, so 100 %
         // stops at the deepest good value instead of the degrading zone.
@@ -704,6 +758,52 @@ Item {
             if (Math.random() * 100.0 >= effectRoot.swirlVaryChance) return   // probability gate
             var delta = (Math.random() * 2.0 - 1.0) * effectRoot.swirlVaryMargin
             effectRoot.spiralTarget = Math.min(1.0, Math.max(0.0, effectRoot.spiralTarget + delta))
+        }
+    }
+
+    // --- Vortex-swirl burst: same model as the tunnel swirl burst above, but for
+    // the central whirlpool. Random-walks the live vortexSwirl by ±margin every N
+    // secs; the ShaderEffect's Behavior on vortexSwirl eases each jump. Runtime
+    // only — the base setting is untouched.
+    Timer {
+        id: vortexBurstTimer
+        running: effectRoot.vortexBurst && !effectRoot.paused
+        repeat: true
+        interval: Math.max(1, effectRoot.vortexBurstInterval) * 1000
+        onTriggered: {
+            if (Math.random() * 100.0 >= effectRoot.vortexBurstChance) return   // probability gate
+            var delta = (Math.random() * 2.0 - 1.0) * effectRoot.vortexBurstMargin
+            effectRoot.vortexSwirl = Math.min(1.0, Math.max(0.0, effectRoot.vortexSwirl + delta))
+        }
+    }
+
+    // --- Canopy-density burst: same model as the swirl/vortex bursts. Random-walks
+    // the live density by ±margin every N secs; the ShaderEffect's Behavior on
+    // density eases each jump. Runtime only — the base setting is untouched.
+    Timer {
+        id: densityBurstTimer
+        running: effectRoot.densityBurst && !effectRoot.paused
+        repeat: true
+        interval: Math.max(1, effectRoot.densityBurstInterval) * 1000
+        onTriggered: {
+            if (Math.random() * 100.0 >= effectRoot.densityBurstChance) return   // probability gate
+            var delta = (Math.random() * 2.0 - 1.0) * effectRoot.densityBurstMargin
+            effectRoot.density = Math.min(1.0, Math.max(0.0, effectRoot.density + delta))
+        }
+    }
+
+    // --- Vortex-opacity burst: same model as the swirl/density bursts. Random-walks
+    // the live vortexOpacity by ±margin every N secs; the ShaderEffect's Behavior on
+    // vortexOpacity eases each jump. Runtime only — the base setting is untouched.
+    Timer {
+        id: vortexOpacityBurstTimer
+        running: effectRoot.vortexOpacityBurst && !effectRoot.paused
+        repeat: true
+        interval: Math.max(1, effectRoot.vortexOpacityBurstInterval) * 1000
+        onTriggered: {
+            if (Math.random() * 100.0 >= effectRoot.vortexOpacityBurstChance) return   // probability gate
+            var delta = (Math.random() * 2.0 - 1.0) * effectRoot.vortexOpacityBurstMargin
+            effectRoot.vortexOpacity = Math.min(1.0, Math.max(0.0, effectRoot.vortexOpacity + delta))
         }
     }
 

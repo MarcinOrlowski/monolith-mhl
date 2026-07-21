@@ -176,8 +176,8 @@ Item {
     property real densityBurstMargin: 0.15 // burst size: fraction of the 0..1 density range
     property int densityBurstInterval: 8  // seconds between burst rolls
     property int densityBurstChance: 100  // percent chance each roll actually bursts
-    property real glowAmount: 0.60
-    property real mistAmount: 0.75
+    property real glowAmount: 0.0    // glow spots start dark -> fade in on load
+    property real mistAmount: 0.0    // vortex brightness starts dark -> fades in on load
     property real fog: 0.50
     // Starts fully transparent so the rings gently fade in on load: the first
     // _applySettings sets the real target and the shader's Behavior eases 0 -> target.

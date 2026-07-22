@@ -16,7 +16,7 @@ Item {
     id: effectConfig
 
     // --- JSON blob bound from hub config.qml ---
-    property string cfg_EffectTrippyTunnelSettings
+    property string cfg_EffectVortexSettings
 
     property var hubConfiguration: null
 
@@ -213,12 +213,12 @@ Item {
     // --- Load / save plumbing ---
     property bool _loading: false
 
-    onCfg_EffectTrippyTunnelSettingsChanged: _load()
+    onCfg_EffectVortexSettingsChanged: _load()
     Component.onCompleted: _load()
 
     function _load() {
         _loading = true
-        var s = EffectSettings.load(cfg_EffectTrippyTunnelSettings, _defaults)
+        var s = EffectSettings.load(cfg_EffectVortexSettings, _defaults)
         _themeId = s.themeId
         _randomInitialTheme = s.randomInitialTheme
         _autoCycle = s.autoCycle
@@ -316,7 +316,7 @@ Item {
 
     function _save() {
         if (_loading) return
-        cfg_EffectTrippyTunnelSettings = EffectSettings.save({
+        cfg_EffectVortexSettings = EffectSettings.save({
             themeId: _themeId,
             randomInitialTheme: _randomInitialTheme,
             autoCycle: _autoCycle,
@@ -507,7 +507,7 @@ Item {
 
     // Restore all settings to their schema defaults
     function reset() {
-        cfg_EffectTrippyTunnelSettings = EffectSettings.save(_defaults)
+        cfg_EffectVortexSettings = EffectSettings.save(_defaults)
     }
 
     // --- External config sync (e.g. "Set Current Theme" context menu) ---
@@ -515,7 +515,7 @@ Item {
         target: effectConfig.hubConfiguration
         enabled: effectConfig.hubConfiguration !== null
         function onValueChanged(key, value) {
-            if (key === "EffectTrippyTunnelSettings") {
+            if (key === "EffectVortexSettings") {
                 effectConfig._load()
             }
         }
@@ -538,8 +538,8 @@ Item {
 
     // --- Page definitions for sidebar navigation ---
     readonly property var pages: [
-        { moduleId: "layers", text: qsTr("Layers"), icon: "view-visible", page: "TrippyTunnelLayersPage.qml" },
-        { moduleId: "theme", text: qsTr("Theme"), icon: "color-management", page: "TrippyTunnelThemePage.qml" },
-        { moduleId: "animation", text: qsTr("Animation"), icon: "media-playback-start", page: "TrippyTunnelAnimationPage.qml" }
+        { moduleId: "layers", text: qsTr("Layers"), icon: "view-visible", page: "VortexLayersPage.qml" },
+        { moduleId: "theme", text: qsTr("Theme"), icon: "color-management", page: "VortexThemePage.qml" },
+        { moduleId: "animation", text: qsTr("Animation"), icon: "media-playback-start", page: "VortexAnimationPage.qml" }
     ]
 }

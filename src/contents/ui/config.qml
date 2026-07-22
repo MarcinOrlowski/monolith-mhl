@@ -30,7 +30,7 @@ ColumnLayout {
     property string cfg_EffectRainbowWavesSettings
     property string cfg_EffectLavaLampSettings
     property string cfg_EffectDotWavesSettings
-    property string cfg_EffectTrippyTunnelSettings
+    property string cfg_EffectVortexSettings
 
     // --- Per-filter settings (JSON blobs, one cfg_ property per filter) ---
     property string cfg_FilterPixelateSettings
@@ -95,7 +95,7 @@ ColumnLayout {
         { effectId: "dot-waves", name: "Dot Waves", configUrl: Qt.resolvedUrl("effects/dot-waves/DotWavesConfig.qml") },
         { effectId: "lava-lamp", name: "Lava Lamp", configUrl: Qt.resolvedUrl("effects/lava-lamp/LavaLampConfig.qml") },
         { effectId: "rainbow-waves", name: "Rainbow Waves", configUrl: Qt.resolvedUrl("effects/rainbow-waves/RainbowWavesConfig.qml") },
-        { effectId: "trippy-tunnel", name: "Trippy Tunnel", configUrl: Qt.resolvedUrl("effects/trippy-tunnel/TrippyTunnelConfig.qml") }
+        { effectId: "vortex", name: "Vortex", configUrl: Qt.resolvedUrl("effects/vortex/VortexConfig.qml") }
     ]
 
     function findEffectIndex(effectId) {
@@ -124,7 +124,7 @@ ColumnLayout {
             cfg.EffectRainbowWavesSettings = cfg_EffectRainbowWavesSettings
             cfg.EffectLavaLampSettings = cfg_EffectLavaLampSettings
             cfg.EffectDotWavesSettings = cfg_EffectDotWavesSettings
-            cfg.EffectTrippyTunnelSettings = cfg_EffectTrippyTunnelSettings
+            cfg.EffectVortexSettings = cfg_EffectVortexSettings
             cfg.FilterOrder = cfg_FilterOrder
             cfg.FilterPixelateSettings = cfg_FilterPixelateSettings
             cfg.FilterScanlinesSettings = cfg_FilterScanlinesSettings
@@ -282,7 +282,7 @@ ColumnLayout {
                 "cfg_EffectRainbowWavesSettings": root.cfg_EffectRainbowWavesSettings,
                 "cfg_EffectLavaLampSettings": root.cfg_EffectLavaLampSettings,
                 "cfg_EffectDotWavesSettings": root.cfg_EffectDotWavesSettings,
-                "cfg_EffectTrippyTunnelSettings": root.cfg_EffectTrippyTunnelSettings
+                "cfg_EffectVortexSettings": root.cfg_EffectVortexSettings
             }
             _accepted = false
             visible = true
@@ -302,7 +302,7 @@ ColumnLayout {
                 "cfg_EffectRainbowWavesSettings": root.cfg_EffectRainbowWavesSettings,
                 "cfg_EffectLavaLampSettings": root.cfg_EffectLavaLampSettings,
                 "cfg_EffectDotWavesSettings": root.cfg_EffectDotWavesSettings,
-                "cfg_EffectTrippyTunnelSettings": root.cfg_EffectTrippyTunnelSettings
+                "cfg_EffectVortexSettings": root.cfg_EffectVortexSettings
             }
         }
 
@@ -340,8 +340,8 @@ ColumnLayout {
                 if ("cfg_EffectDotWavesSettings" in item) {
                     item.cfg_EffectDotWavesSettings = Qt.binding(function() { return root.cfg_EffectDotWavesSettings })
                 }
-                if ("cfg_EffectTrippyTunnelSettings" in item) {
-                    item.cfg_EffectTrippyTunnelSettings = Qt.binding(function() { return root.cfg_EffectTrippyTunnelSettings })
+                if ("cfg_EffectVortexSettings" in item) {
+                    item.cfg_EffectVortexSettings = Qt.binding(function() { return root.cfg_EffectVortexSettings })
                 }
                 try { item.hubConfiguration = wallpaper.configuration } catch(e) {}
                 effectSettingsWindow.pageCache = Object.create(null)
@@ -737,7 +737,7 @@ ColumnLayout {
         function onCfg_EffectRainbowWavesSettingsChanged() { root.cfg_EffectRainbowWavesSettings = effectConfigLoader.item.cfg_EffectRainbowWavesSettings }
         function onCfg_EffectLavaLampSettingsChanged() { root.cfg_EffectLavaLampSettings = effectConfigLoader.item.cfg_EffectLavaLampSettings }
         function onCfg_EffectDotWavesSettingsChanged() { root.cfg_EffectDotWavesSettings = effectConfigLoader.item.cfg_EffectDotWavesSettings }
-        function onCfg_EffectTrippyTunnelSettingsChanged() { root.cfg_EffectTrippyTunnelSettings = effectConfigLoader.item.cfg_EffectTrippyTunnelSettings }
+        function onCfg_EffectVortexSettingsChanged() { root.cfg_EffectVortexSettings = effectConfigLoader.item.cfg_EffectVortexSettings }
     }
 
     // Absorbs leftover vertical space so the filter list stays at its natural height

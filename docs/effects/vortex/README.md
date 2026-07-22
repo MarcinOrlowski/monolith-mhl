@@ -1,4 +1,4 @@
-# Trippy Tunnel
+# Vortex
 
 An endless zoom into a psychedelic forest tunnel. Layered canopies of leaves recede toward a
 glowing, swirling vortex at the centre while the camera flies forward at a constant pace - no
@@ -119,7 +119,7 @@ psychedelic, and so on) tints them; a psychedelic set fans the beams out into a 
 ## Custom themes
 
 Drop a `.qml` theme file into
-`~/.config/monolith/trippy-tunnel/themes.d/` and restart plasmashell. See
+`~/.config/monolith/vortex/themes.d/` and restart plasmashell. See
 `themes/example.qml` in the effect directory for the format - a theme provides
 `canopy`, `glow` and `mist` colours, an optional `stars` colour and `mode`
 tone (`light`/`dark`/`mixed`/`psychedelic`), plus a 6-colour `palette` that is wrapped around the

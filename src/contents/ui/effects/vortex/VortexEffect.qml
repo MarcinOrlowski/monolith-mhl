@@ -21,7 +21,7 @@ Item {
     // --- Input from hub ---
     property var configuration: null
 
-    // --- Schema (must match TrippyTunnelConfig.qml) ---
+    // --- Schema (must match VortexConfig.qml) ---
     readonly property var _defaults: ({
         themeId: "ttm-spectrum",
         randomInitialTheme: false,
@@ -288,7 +288,7 @@ Item {
     }
 
     function _readSettings() {
-        var json = configuration ? configuration.EffectTrippyTunnelSettings : "{}";
+        var json = configuration ? configuration.EffectVortexSettings : "{}";
         return EffectSettings.load(json, _defaults);
     }
 
@@ -297,7 +297,7 @@ Item {
         for (var key in patch) {
             s[key] = patch[key];
         }
-        configuration.EffectTrippyTunnelSettings = EffectSettings.save(s);
+        configuration.EffectVortexSettings = EffectSettings.save(s);
     }
 
     function _applySettings() {
@@ -448,8 +448,8 @@ Item {
     // --- Outputs for hub ---
     readonly property bool hasError: effect.status === ShaderEffect.Error
     readonly property string errorLog: effect.log || ""
-    readonly property string effectName: "Trippy Tunnel"
-    readonly property url configUrl: Qt.resolvedUrl("TrippyTunnelConfig.qml")
+    readonly property string effectName: "Vortex"
+    readonly property url configUrl: Qt.resolvedUrl("VortexConfig.qml")
 
     readonly property list<PlasmaCore.Action> effectActions: [
         PlasmaCore.Action {
@@ -529,7 +529,7 @@ Item {
     Connections {
         target: effectRoot.configuration
         function onValueChanged(key, value) {
-            if (key === "EffectTrippyTunnelSettings") {
+            if (key === "EffectVortexSettings") {
                 effectRoot._applySettings();
             }
         }
@@ -884,7 +884,7 @@ Item {
     Component.onCompleted: _applySettings()
 
     // --- Shader effect ---
-    // CRITICAL: Property order must match the std140 uniform block in trippy-tunnel.frag
+    // CRITICAL: Property order must match the std140 uniform block in vortex.frag
     ShaderEffect {
         id: effect
         anchors.fill: parent
@@ -1026,7 +1026,7 @@ Item {
             }
         }
 
-        vertexShader: "shaders/trippy-tunnel.vert.qsb"
-        fragmentShader: "shaders/trippy-tunnel.frag.qsb"
+        vertexShader: "shaders/vortex.vert.qsb"
+        fragmentShader: "shaders/vortex.frag.qsb"
     }
 }

@@ -1,9 +1,9 @@
 /***********************************************************************
  *
- * Monolith MHL — Example Trippy Tunnel theme template
+ * Monolith MHL — Example Vortex theme template
  *
  * How to use:
- *   1. Copy this file to ~/.config/monolith/trippy-tunnel/themes.d/
+ *   1. Copy this file to ~/.config/monolith/vortex/themes.d/
  *      (create the directory if it does not exist)
  *   2. Rename the copy to something like "my-theme.qml"
  *   3. Set enabled to true

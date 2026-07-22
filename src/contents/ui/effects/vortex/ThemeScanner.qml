@@ -21,7 +21,7 @@ Item {
     height: 0
 
     readonly property url builtinPath: Qt.resolvedUrl("themes")
-    readonly property url userPath: Platform.StandardPaths.writableLocation(Platform.StandardPaths.ConfigLocation) + "/monolith/trippy-tunnel/themes.d"
+    readonly property url userPath: Platform.StandardPaths.writableLocation(Platform.StandardPaths.ConfigLocation) + "/monolith/vortex/themes.d"
 
     property ListModel themeList: ListModel {}
     property bool ready: false
@@ -68,18 +68,18 @@ Item {
     function loadThemeFile(fileUrl) {
         var component = Qt.createComponent(fileUrl);
         if (component.status !== Component.Ready) {
-            console.warn("Trippy Tunnel: failed to load theme " + fileUrl
+            console.warn("Vortex: failed to load theme " + fileUrl
                 + ": " + component.errorString());
             return null;
         }
         var obj = component.createObject(null);
         if (!obj) {
-            console.warn("Trippy Tunnel: failed to instantiate theme " + fileUrl);
+            console.warn("Vortex: failed to instantiate theme " + fileUrl);
             return null;
         }
         var error = ThemeLoader.validateTheme(obj);
         if (error) {
-            console.warn("Trippy Tunnel: invalid theme " + fileUrl + ": " + error);
+            console.warn("Vortex: invalid theme " + fileUrl + ": " + error);
             obj.destroy();
             return null;
         }
@@ -115,13 +115,13 @@ Item {
             var uObj = loadThemeFile(uUrl);
             if (!uObj) continue;
             if (builtinIds[uObj.themeId]) {
-                console.warn("Trippy Tunnel: skipping user theme '" + uFile
+                console.warn("Vortex: skipping user theme '" + uFile
                     + "' — id '" + uObj.themeId + "' conflicts with a built-in theme");
                 uObj.destroy();
                 continue;
             }
             if (map[uObj.themeId]) {
-                console.warn("Trippy Tunnel: skipping duplicate user theme '" + uFile
+                console.warn("Vortex: skipping duplicate user theme '" + uFile
                     + "' — id '" + uObj.themeId + "' already loaded");
                 uObj.destroy();
                 continue;

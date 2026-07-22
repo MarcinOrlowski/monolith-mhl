@@ -2,7 +2,7 @@
 
 ## v1.3.0 (TBD)
 
-- New "Trippy Tunnel" effect: an endless, constant-pace zoom into a psychedelic
+- New "Vortex" effect: an endless, constant-pace zoom into a psychedelic
   forest tunnel with a swirling central vortex, an independently rotating tunnel
   and vortex, toggleable scene layers, and 9 tone-grouped colour themes (light /
   dark / mixed) with auto-cycling and cross-fades.

@@ -38,6 +38,7 @@ Item {
         dustAmount: 55,
         dustSize: 22,
         speedIndex: 3,
+        rotation: 20,
         fpsCap: true,
         fpsLimit: 30,
         dimCap: false,
@@ -49,6 +50,8 @@ Item {
 
     // --- Parsed settings (reactive properties for bindings) ---
     property real speedMult: 1.0
+    // Radians of scene spin per second of iTime; sign sets direction, 0 = off.
+    property real rotationSpeed: 0.06
     property bool fpsCap: true
     property int fpsLimit: 30
     property bool paused: false
@@ -80,6 +83,7 @@ Item {
     function _applySettings() {
         var s = _readSettings();
         speedMult = [0.25, 0.5, 0.75, 1.0, 1.25, 1.5, 1.75][s.speedIndex] ?? 1.0;
+        rotationSpeed = (s.rotation / 100.0) * 0.30;   // -100..100 -> ∓0.30 rad/s
         fpsCap = s.fpsCap;
         fpsLimit = s.fpsLimit;
         dimLevel = s.dimCap ? s.dimLevel / 100.0 : 1.0;
@@ -420,19 +424,30 @@ Item {
         property real showVignette: effectRoot.showVignette ? 1.0 : 0.0
         property real particleCount: effectRoot.dustCount
         property real particleSize: effectRoot.dustRadius
+        // Accumulated scene-spin angle (radians). Advanced with iTime so a speed
+        // change never makes the angle jump — only its future rate changes.
+        property real rotationAngle: 0
 
         // iTime is accumulated in seconds; the forward-motion constants in the
         // shader are tuned for it. speedMult scales the zoom pace.
         FrameAnimation {
             running: effect.visible && !effectRoot.fpsCap && !effectRoot.paused
-            onTriggered: effect.iTime += frameTime * effectRoot.speedMult
+            onTriggered: {
+                var dt = frameTime * effectRoot.speedMult;
+                effect.iTime += dt;
+                effect.rotationAngle += dt * effectRoot.rotationSpeed;
+            }
         }
 
         Timer {
             running: effect.visible && effectRoot.fpsCap && !effectRoot.paused
             repeat: true
             interval: Math.ceil(1000 / Math.min(240, Math.max(1, effectRoot.fpsLimit)))
-            onTriggered: effect.iTime += (interval / 1000.0) * effectRoot.speedMult
+            onTriggered: {
+                var dt = (interval / 1000.0) * effectRoot.speedMult;
+                effect.iTime += dt;
+                effect.rotationAngle += dt * effectRoot.rotationSpeed;
+            }
         }
 
         vertexShader: "shaders/microscope-zoom.vert.qsb"

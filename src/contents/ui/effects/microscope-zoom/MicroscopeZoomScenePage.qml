@@ -29,6 +29,18 @@ Kirigami.ScrollablePage {
             valueFromText: function(text) { return parseInt(text) || 0 }
         }
 
+        QtControls2.SpinBox {
+            Kirigami.FormData.label: i18n("Rotation speed:")
+            from: -100
+            to: 100
+            stepSize: 5
+            value: page.effectConfig._rotation
+            onValueModified: page.effectConfig._rotation = value
+            // Magnitude = spin speed, sign = direction (- = counter-clockwise), 0 = off.
+            textFromValue: function(value) { return value + "%" }
+            valueFromText: function(text) { return parseInt(text) || 0 }
+        }
+
         Kirigami.Separator { Kirigami.FormData.isSection: true }
 
         QtControls2.CheckBox {

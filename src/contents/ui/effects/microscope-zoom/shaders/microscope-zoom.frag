@@ -37,6 +37,7 @@ layout(std140, binding = 0) uniform buf {
     float showVignette;
     float particleCount;
     float particleSize;
+    float rotationAngle;
 };
 
 // ---------------------------------------------------------------------------
@@ -95,6 +96,11 @@ void main() {
     float aspect = iWidth / max(iHeight, 1.0);
     vec2 p = (coord - 0.5) * vec2(aspect, 1.0);      // centered, focal point at 0
 
+    // Spin the whole scene around the focal point (0 = no rotation).
+    float cr = cos(rotationAngle);
+    float sr = sin(rotationAngle);
+    p = vec2(cr * p.x - sr * p.y, sr * p.x + cr * p.y);
+
     vec3 fog   = vec3(mediumColorR, mediumColorG, mediumColorB);
     vec3 leafC = vec3(cellColorR, cellColorG, cellColorB);
     vec3 light = vec3(illumColorR, illumColorG, illumColorB);
@@ -133,7 +139,9 @@ void main() {
         lc *= 0.7 + 0.3 * cov;                           // brighter blob centers
         lc = mix(lc, light, 0.15 * glow);                // catch the central light
         lc = mix(lc * 0.35, lc, smoothstep(0.0, 0.6, 1.0 - z)); // near sheets darker
-        lc = mix(fog, lc, smoothstep(0.0, 0.35, z));     // far sheets sink into fog
+        if (showFog > 0.5) {
+            lc = mix(fog, lc, smoothstep(0.0, 0.35, z)); // far sheets sink into fog
+        }
         col = mix(col, lc, a);
     }
 

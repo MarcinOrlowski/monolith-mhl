@@ -14,6 +14,8 @@ shape position and shade is randomized, so the sample never repeats.
   Dark Field, Cyanotype, Amber) with optional auto-cycling and smooth cross-fades.
 - Drop-in custom themes.
 - Adjustable density.
+- Living microbes with adjustable idle motion (wander, squirm, breathe).
+- Optional slow scene rotation, either direction.
 - Floating dust with independent amount and size controls.
 - Scene toggles: depth fog, floating dust, and an edge vignette.
 - Animation speed controls and FPS capping.
@@ -57,6 +59,11 @@ Wallpaper Theme, Set Current Theme).
 ### Scene
 
 - **Density** — how busy/full each looming sheet of cells is.
+- **Microbe motion** — how lively the microbes are: the strength of their idle
+  wander, squirm and breathing. 0% freezes them; higher is more active.
+- **Rotation speed** — slowly spins the whole scene around the focal point. The
+  magnitude sets the speed and the sign sets the direction (negative =
+  counter-clockwise); 0 turns rotation off.
 - **Depth fog** — hazes distant shapes into the background light for added depth.
 - **Floating dust** — motes streaming past the lens.
   - **Dust amount** — how many motes are in the frame.

@@ -16,7 +16,7 @@ Item {
     id: effectConfig
 
     // --- JSON blob bound from hub config.qml ---
-    property string cfg_EffectMicroscopeZoomSettings
+    property string cfg_EffectMicroscopeSettings
 
     property var hubConfiguration: null
 
@@ -31,12 +31,13 @@ Item {
         cycleInRandomOrder: true,
         density: 60,
         showFog: true,
-        showRays: true,
         showParticles: true,
         showVignette: true,
         dustAmount: 55,
         dustSize: 22,
         speedIndex: 3,
+        rotation: 20,
+        microbeMotion: 50,
         fpsCap: true,
         fpsLimit: 30,
         dimCap: false,
@@ -53,12 +54,13 @@ Item {
     property bool _cycleInRandomOrder: true
     property int _density: 60
     property bool _showFog: true
-    property bool _showRays: true
     property bool _showParticles: true
     property bool _showVignette: true
     property int _dustAmount: 55
     property int _dustSize: 22
     property int _speedIndex: 3
+    property int _rotation: 20
+    property int _microbeMotion: 50
     property bool _fpsCap: true
     property int _fpsLimit: 30
     property bool _dimCap: false
@@ -67,12 +69,12 @@ Item {
     // --- Load / save plumbing ---
     property bool _loading: false
 
-    onCfg_EffectMicroscopeZoomSettingsChanged: _load()
+    onCfg_EffectMicroscopeSettingsChanged: _load()
     Component.onCompleted: _load()
 
     function _load() {
         _loading = true
-        var s = EffectSettings.load(cfg_EffectMicroscopeZoomSettings, _defaults)
+        var s = EffectSettings.load(cfg_EffectMicroscopeSettings, _defaults)
         _themeId = s.themeId
         _randomInitialTheme = s.randomInitialTheme
         _autoCycle = s.autoCycle
@@ -82,12 +84,13 @@ Item {
         _cycleInRandomOrder = s.cycleInRandomOrder
         _density = s.density
         _showFog = s.showFog
-        _showRays = s.showRays
         _showParticles = s.showParticles
         _showVignette = s.showVignette
         _dustAmount = s.dustAmount
         _dustSize = s.dustSize
         _speedIndex = s.speedIndex
+        _rotation = s.rotation
+        _microbeMotion = s.microbeMotion
         _fpsCap = s.fpsCap
         _fpsLimit = s.fpsLimit
         _dimCap = s.dimCap
@@ -97,7 +100,7 @@ Item {
 
     function _save() {
         if (_loading) return
-        cfg_EffectMicroscopeZoomSettings = EffectSettings.save({
+        cfg_EffectMicroscopeSettings = EffectSettings.save({
             themeId: _themeId,
             randomInitialTheme: _randomInitialTheme,
             autoCycle: _autoCycle,
@@ -107,12 +110,13 @@ Item {
             cycleInRandomOrder: _cycleInRandomOrder,
             density: _density,
             showFog: _showFog,
-            showRays: _showRays,
             showParticles: _showParticles,
             showVignette: _showVignette,
             dustAmount: _dustAmount,
             dustSize: _dustSize,
             speedIndex: _speedIndex,
+            rotation: _rotation,
+            microbeMotion: _microbeMotion,
             fpsCap: _fpsCap,
             fpsLimit: _fpsLimit,
             dimCap: _dimCap,
@@ -129,12 +133,13 @@ Item {
     on_CycleInRandomOrderChanged: _save()
     on_DensityChanged: _save()
     on_ShowFogChanged: _save()
-    on_ShowRaysChanged: _save()
     on_ShowParticlesChanged: _save()
     on_ShowVignetteChanged: _save()
     on_DustAmountChanged: _save()
     on_DustSizeChanged: _save()
     on_SpeedIndexChanged: _save()
+    on_RotationChanged: _save()
+    on_MicrobeMotionChanged: _save()
     on_FpsCapChanged: _save()
     on_FpsLimitChanged: _save()
     on_DimCapChanged: _save()
@@ -142,7 +147,7 @@ Item {
 
     // Restore all settings to their schema defaults
     function reset() {
-        cfg_EffectMicroscopeZoomSettings = EffectSettings.save(_defaults)
+        cfg_EffectMicroscopeSettings = EffectSettings.save(_defaults)
     }
 
     // --- External config sync (e.g. "Set Current Theme" context menu) ---
@@ -150,7 +155,7 @@ Item {
         target: effectConfig.hubConfiguration
         enabled: effectConfig.hubConfiguration !== null
         function onValueChanged(key, value) {
-            if (key === "EffectMicroscopeZoomSettings") {
+            if (key === "EffectMicroscopeSettings") {
                 effectConfig._load()
             }
         }
@@ -173,8 +178,8 @@ Item {
 
     // --- Page definitions for sidebar navigation ---
     readonly property var pages: [
-        { moduleId: "theme", text: qsTr("Theme"), icon: "preferences-desktop-color", page: "MicroscopeZoomThemePage.qml" },
-        { moduleId: "scene", text: qsTr("Scene"), icon: "view-visible", page: "MicroscopeZoomScenePage.qml" },
-        { moduleId: "animation", text: qsTr("Animation"), icon: "media-playback-start", page: "MicroscopeZoomAnimationPage.qml" }
+        { moduleId: "theme", text: qsTr("Theme"), icon: "preferences-desktop-color", page: "MicroscopeThemePage.qml" },
+        { moduleId: "scene", text: qsTr("Scene"), icon: "view-visible", page: "MicroscopeScenePage.qml" },
+        { moduleId: "animation", text: qsTr("Animation"), icon: "media-playback-start", page: "MicroscopeAnimationPage.qml" }
     ]
 }

@@ -29,6 +29,28 @@ Kirigami.ScrollablePage {
             valueFromText: function(text) { return parseInt(text) || 0 }
         }
 
+        QtControls2.SpinBox {
+            Kirigami.FormData.label: i18n("Microbe motion:")
+            from: 0; to: 100; stepSize: 5
+            value: page.effectConfig._microbeMotion
+            onValueModified: page.effectConfig._microbeMotion = value
+            // Idle wander/squirm/breathe of the microbes; 0 = frozen.
+            textFromValue: function(value) { return value + "%" }
+            valueFromText: function(text) { return parseInt(text) || 0 }
+        }
+
+        QtControls2.SpinBox {
+            Kirigami.FormData.label: i18n("Rotation speed:")
+            from: -100
+            to: 100
+            stepSize: 5
+            value: page.effectConfig._rotation
+            onValueModified: page.effectConfig._rotation = value
+            // Magnitude = spin speed, sign = direction (- = counter-clockwise), 0 = off.
+            textFromValue: function(value) { return value + "%" }
+            valueFromText: function(text) { return parseInt(text) || 0 }
+        }
+
         Kirigami.Separator { Kirigami.FormData.isSection: true }
 
         QtControls2.CheckBox {
@@ -36,13 +58,6 @@ Kirigami.ScrollablePage {
             text: i18n("Haze the distant shapes into the background light")
             checked: page.effectConfig._showFog
             onToggled: page.effectConfig._showFog = checked
-        }
-
-        QtControls2.CheckBox {
-            Kirigami.FormData.label: i18n("Light rays:")
-            text: i18n("Beams fanning out from the focal point")
-            checked: page.effectConfig._showRays
-            onToggled: page.effectConfig._showRays = checked
         }
 
         Kirigami.Separator { Kirigami.FormData.isSection: true }

@@ -32,11 +32,12 @@ layout(std140, binding = 0) uniform buf {
     float illumColorG;
     float illumColorB;
     float showFog;
-    float showRays;
     float showParticles;
     float showVignette;
     float particleCount;
     float particleSize;
+    float rotationAngle;
+    float microbeMotion;
 };
 
 layout(location = 0) out vec2 coord;

@@ -21,7 +21,7 @@ Item {
     // --- Input from hub ---
     property var configuration: null
 
-    // --- Schema (must match MicroscopeZoomConfig.qml) ---
+    // --- Schema (must match MicroscopeConfig.qml) ---
     readonly property var _defaults: ({
         themeId: "mzm-chlorophyll",
         randomInitialTheme: true,
@@ -32,31 +32,36 @@ Item {
         cycleInRandomOrder: true,
         density: 60,
         showFog: true,
-        showRays: true,
         showParticles: true,
         showVignette: true,
         dustAmount: 55,
         dustSize: 22,
         speedIndex: 3,
+        rotation: 20,
+        microbeMotion: 50,
         fpsCap: true,
         fpsLimit: 30,
         dimCap: false,
         dimLevel: 100
     })
 
-    // Hard cap on dust motes; mirrors PMAX in microscope-zoom.frag.
+    // Hard cap on dust motes; mirrors PMAX in microscope.frag.
     readonly property int _dustMax: 96
 
     // --- Parsed settings (reactive properties for bindings) ---
     property real speedMult: 1.0
+    // Radians of scene spin per second of iTime; sign sets direction, 0 = off.
+    property real rotationSpeed: 0.06
+    // Strength of the microbes' idle wander/squirm/breathe (0 = frozen, 1 = full).
+    property real microbeMotion: 1.0
     property bool fpsCap: true
     property int fpsLimit: 30
     property bool paused: false
-    property real dimLevel: 1.0
+    // Starts dark and fades up to the target on launch (Behavior eases 0 -> target).
+    property real dimLevel: 0.0
 
     property real density: 0.6
     property bool showFog: true
-    property bool showRays: true
     property bool showParticles: true
     property bool showVignette: true
     property real dustCount: 53      // number of motes passed to the shader
@@ -65,7 +70,7 @@ Item {
     function togglePause() { paused = !paused }
 
     function _readSettings() {
-        var json = configuration ? configuration.EffectMicroscopeZoomSettings : "{}";
+        var json = configuration ? configuration.EffectMicroscopeSettings : "{}";
         return EffectSettings.load(json, _defaults);
     }
 
@@ -74,19 +79,20 @@ Item {
         for (var key in patch) {
             s[key] = patch[key];
         }
-        configuration.EffectMicroscopeZoomSettings = EffectSettings.save(s);
+        configuration.EffectMicroscopeSettings = EffectSettings.save(s);
     }
 
     function _applySettings() {
         var s = _readSettings();
         speedMult = [0.25, 0.5, 0.75, 1.0, 1.25, 1.5, 1.75][s.speedIndex] ?? 1.0;
+        rotationSpeed = (s.rotation / 100.0) * 0.15;   // -100..100 -> ∓0.15 rad/s
+        microbeMotion = Math.min(100, Math.max(0, s.microbeMotion)) / 100.0;
         fpsCap = s.fpsCap;
         fpsLimit = s.fpsLimit;
         dimLevel = s.dimCap ? s.dimLevel / 100.0 : 1.0;
 
         density = Math.min(1.0, Math.max(0.0, s.density / 100.0));
         showFog = s.showFog;
-        showRays = s.showRays;
         showParticles = s.showParticles;
         showVignette = s.showVignette;
 
@@ -109,8 +115,8 @@ Item {
     // --- Outputs for hub ---
     readonly property bool hasError: effect.status === ShaderEffect.Error
     readonly property string errorLog: effect.log || ""
-    readonly property string effectName: "Microscope Zoom"
-    readonly property url configUrl: Qt.resolvedUrl("MicroscopeZoomConfig.qml")
+    readonly property string effectName: "Microscope"
+    readonly property url configUrl: Qt.resolvedUrl("MicroscopeConfig.qml")
 
     readonly property list<PlasmaCore.Action> effectActions: [
         PlasmaCore.Action {
@@ -183,7 +189,7 @@ Item {
     Connections {
         target: effectRoot.configuration
         function onValueChanged(key, value) {
-            if (key === "EffectMicroscopeZoomSettings") {
+            if (key === "EffectMicroscopeSettings") {
                 effectRoot._applySettings();
             }
         }
@@ -379,7 +385,7 @@ Item {
     }
 
     // --- Shader effect ---
-    // CRITICAL: Property order must match the std140 uniform block in microscope-zoom.frag
+    // CRITICAL: Property order must match the std140 uniform block in microscope.frag
     ShaderEffect {
         id: effect
         anchors.fill: parent
@@ -415,27 +421,38 @@ Item {
         Behavior on illumColorB { NumberAnimation { duration: effectRoot.transitionMs } }
 
         property real showFog: effectRoot.showFog ? 1.0 : 0.0
-        property real showRays: effectRoot.showRays ? 1.0 : 0.0
         property real showParticles: effectRoot.showParticles ? 1.0 : 0.0
         property real showVignette: effectRoot.showVignette ? 1.0 : 0.0
         property real particleCount: effectRoot.dustCount
         property real particleSize: effectRoot.dustRadius
+        // Accumulated scene-spin angle (radians). Advanced with iTime so a speed
+        // change never makes the angle jump — only its future rate changes.
+        property real rotationAngle: 0
+        property real microbeMotion: effectRoot.microbeMotion
 
         // iTime is accumulated in seconds; the forward-motion constants in the
         // shader are tuned for it. speedMult scales the zoom pace.
         FrameAnimation {
             running: effect.visible && !effectRoot.fpsCap && !effectRoot.paused
-            onTriggered: effect.iTime += frameTime * effectRoot.speedMult
+            onTriggered: {
+                var dt = frameTime * effectRoot.speedMult;
+                effect.iTime += dt;
+                effect.rotationAngle += dt * effectRoot.rotationSpeed;
+            }
         }
 
         Timer {
             running: effect.visible && effectRoot.fpsCap && !effectRoot.paused
             repeat: true
             interval: Math.ceil(1000 / Math.min(240, Math.max(1, effectRoot.fpsLimit)))
-            onTriggered: effect.iTime += (interval / 1000.0) * effectRoot.speedMult
+            onTriggered: {
+                var dt = (interval / 1000.0) * effectRoot.speedMult;
+                effect.iTime += dt;
+                effect.rotationAngle += dt * effectRoot.rotationSpeed;
+            }
         }
 
-        vertexShader: "shaders/microscope-zoom.vert.qsb"
-        fragmentShader: "shaders/microscope-zoom.frag.qsb"
+        vertexShader: "shaders/microscope.vert.qsb"
+        fragmentShader: "shaders/microscope.frag.qsb"
     }
 }

@@ -1,4 +1,4 @@
-# Microscope Zoom
+# Microscope
 
 An endless, constant-speed forward zoom into a microscopic world. The "camera"
 pushes straight in at a fixed rate — no drift or shake — while soft organic
@@ -14,25 +14,26 @@ shape position and shade is randomized, so the sample never repeats.
   Dark Field, Cyanotype, Amber) with optional auto-cycling and smooth cross-fades.
 - Drop-in custom themes.
 - Adjustable density.
+- Living microbes with adjustable idle motion (wander, squirm, breathe).
+- Optional slow scene rotation, either direction.
 - Floating dust with independent amount and size controls.
-- Scene toggles: depth fog, light rays fanning from the focal point, floating
-  dust, and an edge vignette.
+- Scene toggles: depth fog, floating dust, and an edge vignette.
 - Animation speed controls and FPS capping.
 - Dimming control.
 - Works with all post-processing filters.
 
 ## Gallery
 
-Microscope Zoom effect on default settings, with no additional filters applied.
+Microscope effect on default settings, with no additional filters applied.
 
 ![Preview](img/preview.webp)
 
-Microscope Zoom effect on default settings, with filters:
+Microscope effect on default settings, with filters:
 HUE Shift, Blur and Scanlines enabled.
 
 ![Preview 1](img/preview-filters-01.webp)
 
-Microscope Zoom effect on default settings, with filters:
+Microscope effect on default settings, with filters:
 RGB Offset and Scanlines enabled.
 
 ![Preview 2](img/preview-filters-02.webp)
@@ -58,8 +59,12 @@ Wallpaper Theme, Set Current Theme).
 ### Scene
 
 - **Density** — how busy/full each looming sheet of cells is.
+- **Microbe motion** — how lively the microbes are: the strength of their idle
+  wander, squirm and breathing. 0% freezes them; higher is more active.
+- **Rotation speed** — slowly spins the whole scene around the focal point. The
+  magnitude sets the speed and the sign sets the direction (negative =
+  counter-clockwise); 0 turns rotation off.
 - **Depth fog** — hazes distant shapes into the background light for added depth.
-- **Light rays** — beams fanning out from the focal point.
 - **Floating dust** — motes streaming past the lens.
   - **Dust amount** — how many motes are in the frame.
   - **Dust size** — how fine or coarse each mote is (lower = finer dust).

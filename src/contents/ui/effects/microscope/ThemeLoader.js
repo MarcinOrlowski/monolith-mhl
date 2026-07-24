@@ -25,7 +25,7 @@ function parseHexColor(str) {
 }
 
 // Validate a theme object loaded from a QML component.
-// A Microscope Zoom theme defines three colors: the specimen (cell), the
+// A Microscope theme defines three colors: the specimen (cell), the
 // background medium, and the backlight illumination.
 function validateTheme(obj) {
     if (!obj.themeId || typeof obj.themeId !== "string") {

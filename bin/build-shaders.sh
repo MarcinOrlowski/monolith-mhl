@@ -20,7 +20,7 @@ SHADER_DIRS=(
     "src/contents/ui/effects/rainbow-waves/shaders"
     "src/contents/ui/effects/lava-lamp/shaders"
     "src/contents/ui/effects/dot-waves/shaders"
-    "src/contents/ui/effects/microscope-zoom/shaders"
+    "src/contents/ui/effects/microscope/shaders"
     "src/contents/ui/filters/shaders"
 )
 

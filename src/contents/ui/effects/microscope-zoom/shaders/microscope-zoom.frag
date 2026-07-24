@@ -38,6 +38,7 @@ layout(std140, binding = 0) uniform buf {
     float particleCount;
     float particleSize;
     float rotationAngle;
+    float microbeMotion;
 };
 
 // ---------------------------------------------------------------------------
@@ -76,15 +77,24 @@ float leafField(vec2 uv, float seed, float lush, out float tone) {
             vec2 g = vec2(float(i), float(j));
             vec2 cid = id + g;
             vec2 rnd = hash22(cid + seed * 17.0);
-            vec2 center = g + 0.15 + 0.7 * rnd;      // blob anchor inside cell
+            // Per-microbe phase so each one moves independently.
+            float ph = 6.2831853 * hash21(cid + seed * 5.7);
+            // Lazy swim around the anchor — visible but unhurried (screen-blanker
+            // safe): each microbe drifts in the fluid on its own little path.
+            vec2 center = g + 0.15 + 0.7 * rnd
+                          + microbeMotion * 0.1125 * vec2(sin(iTime * 3.2 + ph),
+                                                          cos(iTime * 4.0 + ph * 1.3));
             vec2 d = f - center;
-            float ang = (hash21(cid + seed * 3.1) - 0.5) * 3.14159;
+            // Orientation squirm on top of the fixed random tilt.
+            float ang = (hash21(cid + seed * 3.1) - 0.5) * 3.14159
+                        + microbeMotion * 0.4375 * sin(iTime * 2.8 + ph);
             float ca = cos(ang);
             float sa = sin(ang);
             d = vec2(ca * d.x - sa * d.y, sa * d.x + ca * d.y);
             d.x *= 1.9;                               // narrow -> blade-like
             float r = length(d);
             float rad = (0.32 + 0.16 * hash21(cid + seed * 7.3)) * (0.55 + lush);
+            rad *= 1.0 + microbeMotion * 0.15 * sin(iTime * 3.6 + ph * 1.7);  // breathing
             float c = smoothstep(rad, rad * 0.55, r); // filled blob, soft edge
             if (c > cov) { cov = c; tone = rnd.x; }
         }
@@ -124,7 +134,7 @@ void main() {
     const int N = 9;
     for (int i = 0; i < N; i++) {
         float fi = float(i);
-        float z = fract(iTime * 0.06 + fi / float(N));   // 0 = far, 1 = near
+        float z = fract(iTime * 0.042 + fi / float(N));  // 0 = far, 1 = near
         float dist = mix(6.0, 0.35, z);
         float scale = 1.0 / dist;
         vec2 luv = p / scale * 2.2 + vec2(fi * 13.7, fi * 7.3);

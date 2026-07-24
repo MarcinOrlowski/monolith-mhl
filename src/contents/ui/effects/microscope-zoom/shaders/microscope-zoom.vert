@@ -37,6 +37,8 @@ layout(std140, binding = 0) uniform buf {
     float showVignette;
     float particleCount;
     float particleSize;
+    float rotationAngle;
+    float microbeMotion;
 };
 
 layout(location = 0) out vec2 coord;

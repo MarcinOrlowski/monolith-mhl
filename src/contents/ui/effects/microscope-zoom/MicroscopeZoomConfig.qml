@@ -38,6 +38,7 @@ Item {
         dustSize: 22,
         speedIndex: 3,
         rotation: 20,
+        microbeMotion: 50,
         fpsCap: true,
         fpsLimit: 30,
         dimCap: false,
@@ -61,6 +62,7 @@ Item {
     property int _dustSize: 22
     property int _speedIndex: 3
     property int _rotation: 20
+    property int _microbeMotion: 50
     property bool _fpsCap: true
     property int _fpsLimit: 30
     property bool _dimCap: false
@@ -91,6 +93,7 @@ Item {
         _dustSize = s.dustSize
         _speedIndex = s.speedIndex
         _rotation = s.rotation
+        _microbeMotion = s.microbeMotion
         _fpsCap = s.fpsCap
         _fpsLimit = s.fpsLimit
         _dimCap = s.dimCap
@@ -117,6 +120,7 @@ Item {
             dustSize: _dustSize,
             speedIndex: _speedIndex,
             rotation: _rotation,
+            microbeMotion: _microbeMotion,
             fpsCap: _fpsCap,
             fpsLimit: _fpsLimit,
             dimCap: _dimCap,
@@ -140,6 +144,7 @@ Item {
     on_DustSizeChanged: _save()
     on_SpeedIndexChanged: _save()
     on_RotationChanged: _save()
+    on_MicrobeMotionChanged: _save()
     on_FpsCapChanged: _save()
     on_FpsLimitChanged: _save()
     on_DimCapChanged: _save()

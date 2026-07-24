@@ -39,6 +39,7 @@ Item {
         dustSize: 22,
         speedIndex: 3,
         rotation: 20,
+        microbeMotion: 50,
         fpsCap: true,
         fpsLimit: 30,
         dimCap: false,
@@ -52,10 +53,13 @@ Item {
     property real speedMult: 1.0
     // Radians of scene spin per second of iTime; sign sets direction, 0 = off.
     property real rotationSpeed: 0.06
+    // Strength of the microbes' idle wander/squirm/breathe (0 = frozen, 1 = full).
+    property real microbeMotion: 1.0
     property bool fpsCap: true
     property int fpsLimit: 30
     property bool paused: false
-    property real dimLevel: 1.0
+    // Starts dark and fades up to the target on launch (Behavior eases 0 -> target).
+    property real dimLevel: 0.0
 
     property real density: 0.6
     property bool showFog: true
@@ -83,7 +87,8 @@ Item {
     function _applySettings() {
         var s = _readSettings();
         speedMult = [0.25, 0.5, 0.75, 1.0, 1.25, 1.5, 1.75][s.speedIndex] ?? 1.0;
-        rotationSpeed = (s.rotation / 100.0) * 0.30;   // -100..100 -> ∓0.30 rad/s
+        rotationSpeed = (s.rotation / 100.0) * 0.15;   // -100..100 -> ∓0.15 rad/s
+        microbeMotion = Math.min(100, Math.max(0, s.microbeMotion)) / 100.0;
         fpsCap = s.fpsCap;
         fpsLimit = s.fpsLimit;
         dimLevel = s.dimCap ? s.dimLevel / 100.0 : 1.0;
@@ -427,6 +432,7 @@ Item {
         // Accumulated scene-spin angle (radians). Advanced with iTime so a speed
         // change never makes the angle jump — only its future rate changes.
         property real rotationAngle: 0
+        property real microbeMotion: effectRoot.microbeMotion
 
         // iTime is accumulated in seconds; the forward-motion constants in the
         // shader are tuned for it. speedMult scales the zoom pace.

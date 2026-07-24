@@ -30,6 +30,16 @@ Kirigami.ScrollablePage {
         }
 
         QtControls2.SpinBox {
+            Kirigami.FormData.label: i18n("Microbe motion:")
+            from: 0; to: 100; stepSize: 5
+            value: page.effectConfig._microbeMotion
+            onValueModified: page.effectConfig._microbeMotion = value
+            // Idle wander/squirm/breathe of the microbes; 0 = frozen.
+            textFromValue: function(value) { return value + "%" }
+            valueFromText: function(text) { return parseInt(text) || 0 }
+        }
+
+        QtControls2.SpinBox {
             Kirigami.FormData.label: i18n("Rotation speed:")
             from: -100
             to: 100

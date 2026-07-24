@@ -31,7 +31,6 @@ Item {
         cycleInRandomOrder: true,
         density: 60,
         showFog: true,
-        showRays: true,
         showParticles: true,
         showVignette: true,
         dustAmount: 55,
@@ -55,7 +54,6 @@ Item {
     property bool _cycleInRandomOrder: true
     property int _density: 60
     property bool _showFog: true
-    property bool _showRays: true
     property bool _showParticles: true
     property bool _showVignette: true
     property int _dustAmount: 55
@@ -86,7 +84,6 @@ Item {
         _cycleInRandomOrder = s.cycleInRandomOrder
         _density = s.density
         _showFog = s.showFog
-        _showRays = s.showRays
         _showParticles = s.showParticles
         _showVignette = s.showVignette
         _dustAmount = s.dustAmount
@@ -113,7 +110,6 @@ Item {
             cycleInRandomOrder: _cycleInRandomOrder,
             density: _density,
             showFog: _showFog,
-            showRays: _showRays,
             showParticles: _showParticles,
             showVignette: _showVignette,
             dustAmount: _dustAmount,
@@ -137,7 +133,6 @@ Item {
     on_CycleInRandomOrderChanged: _save()
     on_DensityChanged: _save()
     on_ShowFogChanged: _save()
-    on_ShowRaysChanged: _save()
     on_ShowParticlesChanged: _save()
     on_ShowVignetteChanged: _save()
     on_DustAmountChanged: _save()

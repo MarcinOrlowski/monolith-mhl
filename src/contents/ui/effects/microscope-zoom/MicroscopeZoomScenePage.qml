@@ -60,13 +60,6 @@ Kirigami.ScrollablePage {
             onToggled: page.effectConfig._showFog = checked
         }
 
-        QtControls2.CheckBox {
-            Kirigami.FormData.label: i18n("Light rays:")
-            text: i18n("Beams fanning out from the focal point")
-            checked: page.effectConfig._showRays
-            onToggled: page.effectConfig._showRays = checked
-        }
-
         Kirigami.Separator { Kirigami.FormData.isSection: true }
 
         QtControls2.CheckBox {

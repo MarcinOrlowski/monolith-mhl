@@ -32,7 +32,6 @@ layout(std140, binding = 0) uniform buf {
     float illumColorG;
     float illumColorB;
     float showFog;
-    float showRays;
     float showParticles;
     float showVignette;
     float particleCount;
@@ -120,14 +119,6 @@ void main() {
     float glow = exp(-dot(p, p) * 3.0);
     float glowAmt = (showFog > 0.5) ? 0.9 : 0.65;
     col = mix(col, light, glow * glowAmt);
-
-    // --- Light rays fanning out from the focal point ---
-    if (showRays > 0.5) {
-        float ang = atan(p.y, p.x);
-        float rays = 0.5 + 0.5 * sin(ang * 14.0 + sin(ang * 3.0 + iTime * 0.2) * 2.0);
-        rays *= smoothstep(1.0, 0.0, length(p));
-        col += light * rays * 0.12;
-    }
 
     // --- Organic sheets looming toward the lens ---
     float lush = clamp(density, 0.0, 1.0);

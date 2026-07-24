@@ -32,7 +32,6 @@ Item {
         cycleInRandomOrder: true,
         density: 60,
         showFog: true,
-        showRays: true,
         showParticles: true,
         showVignette: true,
         dustAmount: 55,
@@ -63,7 +62,6 @@ Item {
 
     property real density: 0.6
     property bool showFog: true
-    property bool showRays: true
     property bool showParticles: true
     property bool showVignette: true
     property real dustCount: 53      // number of motes passed to the shader
@@ -95,7 +93,6 @@ Item {
 
         density = Math.min(1.0, Math.max(0.0, s.density / 100.0));
         showFog = s.showFog;
-        showRays = s.showRays;
         showParticles = s.showParticles;
         showVignette = s.showVignette;
 
@@ -424,7 +421,6 @@ Item {
         Behavior on illumColorB { NumberAnimation { duration: effectRoot.transitionMs } }
 
         property real showFog: effectRoot.showFog ? 1.0 : 0.0
-        property real showRays: effectRoot.showRays ? 1.0 : 0.0
         property real showParticles: effectRoot.showParticles ? 1.0 : 0.0
         property real showVignette: effectRoot.showVignette ? 1.0 : 0.0
         property real particleCount: effectRoot.dustCount

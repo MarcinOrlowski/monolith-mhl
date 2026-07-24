@@ -1,4 +1,4 @@
-# Microscope Zoom
+# Microscope
 
 An endless, constant-speed forward zoom into a microscopic world. The "camera"
 pushes straight in at a fixed rate — no drift or shake — while soft organic
@@ -24,16 +24,16 @@ shape position and shade is randomized, so the sample never repeats.
 
 ## Gallery
 
-Microscope Zoom effect on default settings, with no additional filters applied.
+Microscope effect on default settings, with no additional filters applied.
 
 ![Preview](img/preview.webp)
 
-Microscope Zoom effect on default settings, with filters:
+Microscope effect on default settings, with filters:
 HUE Shift, Blur and Scanlines enabled.
 
 ![Preview 1](img/preview-filters-01.webp)
 
-Microscope Zoom effect on default settings, with filters:
+Microscope effect on default settings, with filters:
 RGB Offset and Scanlines enabled.
 
 ![Preview 2](img/preview-filters-02.webp)

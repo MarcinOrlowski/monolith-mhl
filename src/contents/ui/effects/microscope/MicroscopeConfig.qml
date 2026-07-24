@@ -16,7 +16,7 @@ Item {
     id: effectConfig
 
     // --- JSON blob bound from hub config.qml ---
-    property string cfg_EffectMicroscopeZoomSettings
+    property string cfg_EffectMicroscopeSettings
 
     property var hubConfiguration: null
 
@@ -69,12 +69,12 @@ Item {
     // --- Load / save plumbing ---
     property bool _loading: false
 
-    onCfg_EffectMicroscopeZoomSettingsChanged: _load()
+    onCfg_EffectMicroscopeSettingsChanged: _load()
     Component.onCompleted: _load()
 
     function _load() {
         _loading = true
-        var s = EffectSettings.load(cfg_EffectMicroscopeZoomSettings, _defaults)
+        var s = EffectSettings.load(cfg_EffectMicroscopeSettings, _defaults)
         _themeId = s.themeId
         _randomInitialTheme = s.randomInitialTheme
         _autoCycle = s.autoCycle
@@ -100,7 +100,7 @@ Item {
 
     function _save() {
         if (_loading) return
-        cfg_EffectMicroscopeZoomSettings = EffectSettings.save({
+        cfg_EffectMicroscopeSettings = EffectSettings.save({
             themeId: _themeId,
             randomInitialTheme: _randomInitialTheme,
             autoCycle: _autoCycle,
@@ -147,7 +147,7 @@ Item {
 
     // Restore all settings to their schema defaults
     function reset() {
-        cfg_EffectMicroscopeZoomSettings = EffectSettings.save(_defaults)
+        cfg_EffectMicroscopeSettings = EffectSettings.save(_defaults)
     }
 
     // --- External config sync (e.g. "Set Current Theme" context menu) ---
@@ -155,7 +155,7 @@ Item {
         target: effectConfig.hubConfiguration
         enabled: effectConfig.hubConfiguration !== null
         function onValueChanged(key, value) {
-            if (key === "EffectMicroscopeZoomSettings") {
+            if (key === "EffectMicroscopeSettings") {
                 effectConfig._load()
             }
         }
@@ -178,8 +178,8 @@ Item {
 
     // --- Page definitions for sidebar navigation ---
     readonly property var pages: [
-        { moduleId: "theme", text: qsTr("Theme"), icon: "preferences-desktop-color", page: "MicroscopeZoomThemePage.qml" },
-        { moduleId: "scene", text: qsTr("Scene"), icon: "view-visible", page: "MicroscopeZoomScenePage.qml" },
-        { moduleId: "animation", text: qsTr("Animation"), icon: "media-playback-start", page: "MicroscopeZoomAnimationPage.qml" }
+        { moduleId: "theme", text: qsTr("Theme"), icon: "preferences-desktop-color", page: "MicroscopeThemePage.qml" },
+        { moduleId: "scene", text: qsTr("Scene"), icon: "view-visible", page: "MicroscopeScenePage.qml" },
+        { moduleId: "animation", text: qsTr("Animation"), icon: "media-playback-start", page: "MicroscopeAnimationPage.qml" }
     ]
 }

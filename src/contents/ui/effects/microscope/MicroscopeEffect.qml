@@ -21,7 +21,7 @@ Item {
     // --- Input from hub ---
     property var configuration: null
 
-    // --- Schema (must match MicroscopeZoomConfig.qml) ---
+    // --- Schema (must match MicroscopeConfig.qml) ---
     readonly property var _defaults: ({
         themeId: "mzm-chlorophyll",
         randomInitialTheme: true,
@@ -45,7 +45,7 @@ Item {
         dimLevel: 100
     })
 
-    // Hard cap on dust motes; mirrors PMAX in microscope-zoom.frag.
+    // Hard cap on dust motes; mirrors PMAX in microscope.frag.
     readonly property int _dustMax: 96
 
     // --- Parsed settings (reactive properties for bindings) ---
@@ -70,7 +70,7 @@ Item {
     function togglePause() { paused = !paused }
 
     function _readSettings() {
-        var json = configuration ? configuration.EffectMicroscopeZoomSettings : "{}";
+        var json = configuration ? configuration.EffectMicroscopeSettings : "{}";
         return EffectSettings.load(json, _defaults);
     }
 
@@ -79,7 +79,7 @@ Item {
         for (var key in patch) {
             s[key] = patch[key];
         }
-        configuration.EffectMicroscopeZoomSettings = EffectSettings.save(s);
+        configuration.EffectMicroscopeSettings = EffectSettings.save(s);
     }
 
     function _applySettings() {
@@ -115,8 +115,8 @@ Item {
     // --- Outputs for hub ---
     readonly property bool hasError: effect.status === ShaderEffect.Error
     readonly property string errorLog: effect.log || ""
-    readonly property string effectName: "Microscope Zoom"
-    readonly property url configUrl: Qt.resolvedUrl("MicroscopeZoomConfig.qml")
+    readonly property string effectName: "Microscope"
+    readonly property url configUrl: Qt.resolvedUrl("MicroscopeConfig.qml")
 
     readonly property list<PlasmaCore.Action> effectActions: [
         PlasmaCore.Action {
@@ -189,7 +189,7 @@ Item {
     Connections {
         target: effectRoot.configuration
         function onValueChanged(key, value) {
-            if (key === "EffectMicroscopeZoomSettings") {
+            if (key === "EffectMicroscopeSettings") {
                 effectRoot._applySettings();
             }
         }
@@ -385,7 +385,7 @@ Item {
     }
 
     // --- Shader effect ---
-    // CRITICAL: Property order must match the std140 uniform block in microscope-zoom.frag
+    // CRITICAL: Property order must match the std140 uniform block in microscope.frag
     ShaderEffect {
         id: effect
         anchors.fill: parent
@@ -452,7 +452,7 @@ Item {
             }
         }
 
-        vertexShader: "shaders/microscope-zoom.vert.qsb"
-        fragmentShader: "shaders/microscope-zoom.frag.qsb"
+        vertexShader: "shaders/microscope.vert.qsb"
+        fragmentShader: "shaders/microscope.frag.qsb"
     }
 }

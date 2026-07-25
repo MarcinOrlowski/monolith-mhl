@@ -23,6 +23,14 @@ import "../js/meta.js" as Meta
 ColumnLayout {
     id: root
 
+    // --- Injected by Plasma when this config page is created ---
+    // ConfigurationContainmentAppearance.qml passes both as initial properties;
+    // they must be declared here or the injection is dropped. The legacy Plasma 5
+    // `wallpaper` context object is null in Plasma 6, so wallpaperConfiguration is
+    // the only handle on the live wallpaper's config (needed by applyLive()).
+    property var configDialog
+    property var wallpaperConfiguration
+
     // --- Hub-level config ---
     property string cfg_ActiveEffect
 
@@ -118,7 +126,7 @@ ColumnLayout {
     // unchanged values is a no-op.
     function applyLive() {
         try {
-            var cfg = wallpaper.configuration
+            var cfg = wallpaperConfiguration
             if (!cfg) return
             cfg.ActiveEffect = cfg_ActiveEffect
             cfg.EffectRainbowWavesSettings = cfg_EffectRainbowWavesSettings
@@ -343,7 +351,13 @@ ColumnLayout {
                 if ("cfg_EffectVortexSettings" in item) {
                     item.cfg_EffectVortexSettings = Qt.binding(function() { return root.cfg_EffectVortexSettings })
                 }
-                try { item.hubConfiguration = wallpaper.configuration } catch(e) {}
+                // Bound, not assigned: Plasma may hand us wallpaperConfiguration
+                // only after this page is built (it is null until the wallpaper
+                // itself is loaded), and the effect config enables its external
+                // sync on hubConfiguration !== null.
+                if ("hubConfiguration" in item) {
+                    item.hubConfiguration = Qt.binding(function() { return root.wallpaperConfiguration })
+                }
                 effectSettingsWindow.pageCache = Object.create(null)
                 if (effectSettingsWindow.visible) {
                     effectSettingsWindow.loadInitialPage()

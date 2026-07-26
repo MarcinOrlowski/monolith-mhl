@@ -18,6 +18,7 @@ import org.kde.kirigami as Kirigami
 import org.kde.kirigamiaddons.delegates as Delegates
 import "EffectSettings.js" as EffectSettings
 import "filters/FilterRegistry.js" as FilterRegistry
+import "../js/meta.js" as Meta
 
 ColumnLayout {
     id: root
@@ -29,6 +30,7 @@ ColumnLayout {
     property string cfg_EffectRainbowWavesSettings
     property string cfg_EffectLavaLampSettings
     property string cfg_EffectDotWavesSettings
+    property string cfg_EffectMicroscopeSettings
 
     // --- Per-filter settings (JSON blobs, one cfg_ property per filter) ---
     property string cfg_FilterPixelateSettings
@@ -91,6 +93,7 @@ ColumnLayout {
     // Effect registry: id, name, configUrl
     readonly property var effectRegistry: [
         { effectId: "dot-waves", name: "Dot Waves", configUrl: Qt.resolvedUrl("effects/dot-waves/DotWavesConfig.qml") },
+        { effectId: "microscope", name: "Microscope", configUrl: Qt.resolvedUrl("effects/microscope/MicroscopeConfig.qml") },
         { effectId: "lava-lamp", name: "Lava Lamp", configUrl: Qt.resolvedUrl("effects/lava-lamp/LavaLampConfig.qml") },
         { effectId: "rainbow-waves", name: "Rainbow Waves", configUrl: Qt.resolvedUrl("effects/rainbow-waves/RainbowWavesConfig.qml") }
     ]
@@ -100,6 +103,41 @@ ColumnLayout {
             if (effectRegistry[i].effectId === effectId) { return i }
         }
         return 0
+    }
+
+    function resetActiveEffect() {
+        if (effectConfigLoader.item && typeof effectConfigLoader.item.reset === "function") {
+            effectConfigLoader.item.reset()
+        }
+    }
+
+    // Push the current KCM values into the live wallpaper configuration so the
+    // running wallpaper updates immediately, without closing this settings
+    // window and clicking "Apply" in the main wallpaper dialog. ConfigPropertyMap
+    // only emits valueChanged for keys that actually differ, so re-writing
+    // unchanged values is a no-op.
+    function applyLive() {
+        try {
+            var cfg = wallpaper.configuration
+            if (!cfg) return
+            cfg.ActiveEffect = cfg_ActiveEffect
+            cfg.EffectRainbowWavesSettings = cfg_EffectRainbowWavesSettings
+            cfg.EffectLavaLampSettings = cfg_EffectLavaLampSettings
+            cfg.EffectDotWavesSettings = cfg_EffectDotWavesSettings
+            cfg.EffectMicroscopeSettings = cfg_EffectMicroscopeSettings
+            cfg.FilterOrder = cfg_FilterOrder
+            cfg.FilterPixelateSettings = cfg_FilterPixelateSettings
+            cfg.FilterScanlinesSettings = cfg_FilterScanlinesSettings
+            cfg.FilterChromaticSettings = cfg_FilterChromaticSettings
+            cfg.FilterColorGradingSettings = cfg_FilterColorGradingSettings
+            cfg.FilterHueShiftSettings = cfg_FilterHueShiftSettings
+            cfg.FilterRgbOffsetSettings = cfg_FilterRgbOffsetSettings
+            cfg.FilterCrtSettings = cfg_FilterCrtSettings
+            cfg.FilterBlurSettings = cfg_FilterBlurSettings
+            cfg.FilterMaskSettings = cfg_FilterMaskSettings
+        } catch (e) {
+            console.warn("applyLive failed:", e)
+        }
     }
 
     Kirigami.Separator {
@@ -124,11 +162,16 @@ ColumnLayout {
         ColumnLayout {
             Layout.fillWidth: true
             QtControls2.Label {
-                text: i18n("Monolith MHL v1.1.0")
+                text: i18n("%1 v%2", Meta.title, Meta.version)
                 font.bold: true
             }
             QtControls2.Label {
-                text: i18n("©2026 Marcin Orlowski")
+                text: {
+                    const start = Meta.firstReleaseYear
+                    const now = new Date().getFullYear()
+                    const years = now > start ? (start + "-" + now) : start
+                    return i18n("©%1 %2", years, Meta.authorName)
+                }
                 font.pixelSize: Kirigami.Theme.smallFont.pixelSize
                 opacity: 0.7
             }
@@ -142,14 +185,20 @@ ColumnLayout {
             QtControls2.Button {
                 icon.name: "globe"
                 onClicked: Qt.openUrlExternally("https://github.com/MarcinOrlowski/monolith-mhl")
+                QtControls2.ToolTip.text: i18n("Project homepage")
+                QtControls2.ToolTip.visible: hovered
             }
             QtControls2.Button {
                 icon.name: "tools-report-bug"
                 onClicked: Qt.openUrlExternally("https://github.com/MarcinOrlowski/monolith-mhl/issues")
+                QtControls2.ToolTip.text: i18n("Report a bug")
+                QtControls2.ToolTip.visible: hovered
             }
             QtControls2.Button {
                 text: i18n("More…")
                 onClicked: Qt.openUrlExternally("https://store.kde.org/u/marcinorlowski")
+                QtControls2.ToolTip.text: i18n("My projects in KDE Store…")
+                QtControls2.ToolTip.visible: hovered
             }
         }
     } // RowLayout
@@ -166,12 +215,6 @@ ColumnLayout {
 
         QtControls2.Label {
             text: i18n("Effect:")
-        }
-
-        QtControls2.Button {
-            icon.name: "go-previous"
-            enabled: effectCombo.currentIndex > 0
-            onClicked: effectCombo.currentIndex = effectCombo.currentIndex - 1
         }
 
         QtControls2.ComboBox {
@@ -193,9 +236,19 @@ ColumnLayout {
         }
 
         QtControls2.Button {
+            icon.name: "go-previous"
+            enabled: effectCombo.currentIndex > 0
+            onClicked: effectCombo.currentIndex = effectCombo.currentIndex - 1
+            QtControls2.ToolTip.text: i18n("Previous effect")
+            QtControls2.ToolTip.visible: hovered
+        }
+
+        QtControls2.Button {
             icon.name: "go-next"
             enabled: effectCombo.currentIndex < effectCombo.count - 1
             onClicked: effectCombo.currentIndex = effectCombo.currentIndex + 1
+            QtControls2.ToolTip.text: i18n("Next effect")
+            QtControls2.ToolTip.visible: hovered
         }
 
         QtControls2.Button {
@@ -228,7 +281,8 @@ ColumnLayout {
             _snapshot = {
                 "cfg_EffectRainbowWavesSettings": root.cfg_EffectRainbowWavesSettings,
                 "cfg_EffectLavaLampSettings": root.cfg_EffectLavaLampSettings,
-                "cfg_EffectDotWavesSettings": root.cfg_EffectDotWavesSettings
+                "cfg_EffectDotWavesSettings": root.cfg_EffectDotWavesSettings,
+                "cfg_EffectMicroscopeSettings": root.cfg_EffectMicroscopeSettings
             }
             _accepted = false
             visible = true
@@ -237,6 +291,19 @@ ColumnLayout {
         function accept() {
             _accepted = true
             visible = false
+        }
+
+        // Live-preview the current settings, then re-baseline the snapshot so a
+        // later Cancel reverts only edits made after this Apply (keeping the form
+        // and the running wallpaper in sync).
+        function apply() {
+            root.applyLive()
+            _snapshot = {
+                "cfg_EffectRainbowWavesSettings": root.cfg_EffectRainbowWavesSettings,
+                "cfg_EffectLavaLampSettings": root.cfg_EffectLavaLampSettings,
+                "cfg_EffectDotWavesSettings": root.cfg_EffectDotWavesSettings,
+                "cfg_EffectMicroscopeSettings": root.cfg_EffectMicroscopeSettings
+            }
         }
 
         function _restoreSnapshot() {
@@ -272,6 +339,9 @@ ColumnLayout {
                 }
                 if ("cfg_EffectDotWavesSettings" in item) {
                     item.cfg_EffectDotWavesSettings = Qt.binding(function() { return root.cfg_EffectDotWavesSettings })
+                }
+                if ("cfg_EffectMicroscopeSettings" in item) {
+                    item.cfg_EffectMicroscopeSettings = Qt.binding(function() { return root.cfg_EffectMicroscopeSettings })
                 }
                 try { item.hubConfiguration = wallpaper.configuration } catch(e) {}
                 effectSettingsWindow.pageCache = Object.create(null)
@@ -401,11 +471,26 @@ ColumnLayout {
 
         footer: QtControls2.ToolBar {
             contentItem: RowLayout {
+                // Left edge is covered by the always-open globalDrawer sidebar,
+                // so footer buttons must live on the right side.
                 Item { Layout.fillWidth: true }
+                QtControls2.Button {
+                    text: i18n("Reset to Defaults")
+                    icon.name: "edit-reset"
+                    onClicked: root.resetActiveEffect()
+                }
+                Item { Layout.preferredWidth: Kirigami.Units.largeSpacing * 2 }
                 QtControls2.Button {
                     text: i18n("Ok")
                     highlighted: true
                     onClicked: effectSettingsWindow.accept()
+                }
+                QtControls2.Button {
+                    text: i18n("Apply")
+                    icon.name: "dialog-ok-apply"
+                    onClicked: effectSettingsWindow.apply()
+                    QtControls2.ToolTip.text: i18n("Preview these settings on the live wallpaper")
+                    QtControls2.ToolTip.visible: hovered
                 }
                 QtControls2.Button {
                     text: i18n("Cancel")
@@ -418,24 +503,25 @@ ColumnLayout {
     } // ApplicationWindow
 
     // --- Filter processing order ---
-    Kirigami.FormLayout {
-        twinFormLayouts: parentLayout
+    Kirigami.Heading {
         Layout.fillWidth: true
-
-        Kirigami.Separator {
-            Kirigami.FormData.isSection: true
-            Kirigami.FormData.label: i18n("Post Processin Filters")
-         }
-
-        QtControls2.Label {
-            Layout.fillWidth: true
-            Kirigami.FormData.isSection: true
-            horizontalAlignment: Text.AlignHCenter
-            text: i18n("Enabled filters are executed in top-to-bottom order.")
-            wrapMode: Text.WordWrap
-            font.pixelSize: Kirigami.Theme.smallFont.pixelSize
-            opacity: 0.7
-        }
+        Layout.topMargin: Kirigami.Units.smallSpacing
+        horizontalAlignment: Text.AlignHCenter
+        level: 3
+        text: i18n("Post Processing Filters")
+    }
+    Kirigami.Separator {
+        Layout.fillWidth: true
+        Layout.leftMargin: 15
+        Layout.rightMargin: 15
+    }
+    QtControls2.Label {
+        Layout.fillWidth: true
+        horizontalAlignment: Text.AlignHCenter
+        text: i18n("Enabled filters are executed in top-to-bottom order.")
+        wrapMode: Text.WordWrap
+        font.pixelSize: Kirigami.Theme.smallFont.pixelSize
+        opacity: 0.7
     }
 
     ColumnLayout {
@@ -491,6 +577,8 @@ ColumnLayout {
                         implicitHeight: Kirigami.Units.gridUnit * 2
                         opacity: root.isFilterEnabled(filterId) ? 1.0 : 0.4
                         onClicked: root.toggleFilter(filterId)
+                        QtControls2.ToolTip.text: root.isFilterEnabled(filterId) ? i18n("Disable filter") : i18n("Enable filter")
+                        QtControls2.ToolTip.visible: hovered
                     }
                     QtControls2.Label {
                         text: root.filterName(filterId)
@@ -516,6 +604,8 @@ ColumnLayout {
                             filterOrderModel.move(index, index - 1, 1)
                             filterOrderContainer.syncOrderToConfig()
                         }
+                        QtControls2.ToolTip.text: i18n("Move up")
+                        QtControls2.ToolTip.visible: hovered
                     }
                     QtControls2.Button {
                         icon.name: "go-down"
@@ -527,6 +617,8 @@ ColumnLayout {
                             filterOrderModel.move(index, index + 1, 1)
                             filterOrderContainer.syncOrderToConfig()
                         }
+                        QtControls2.ToolTip.text: i18n("Move down")
+                        QtControls2.ToolTip.visible: hovered
                     }
                 }
             }
@@ -558,6 +650,14 @@ ColumnLayout {
         function accept() {
             _accepted = true
             visible = false
+        }
+
+        // Live-preview the current settings, then re-baseline the snapshot so a
+        // later Cancel reverts only edits made after this Apply.
+        function apply() {
+            root.applyLive()
+            var fc = root.filterConfig(activeFilterId)
+            _snapshot = fc ? fc.settingsBlob : "{}"
         }
 
         function cancel() {
@@ -616,6 +716,13 @@ ColumnLayout {
                     onClicked: filterSettingsDialog.accept()
                 }
                 QtControls2.Button {
+                    text: i18n("Apply")
+                    icon.name: "dialog-ok-apply"
+                    onClicked: filterSettingsDialog.apply()
+                    QtControls2.ToolTip.text: i18n("Preview these settings on the live wallpaper")
+                    QtControls2.ToolTip.visible: hovered
+                }
+                QtControls2.Button {
                     text: i18n("Cancel")
                     onClicked: filterSettingsDialog.cancel()
                 }
@@ -630,6 +737,10 @@ ColumnLayout {
         function onCfg_EffectRainbowWavesSettingsChanged() { root.cfg_EffectRainbowWavesSettings = effectConfigLoader.item.cfg_EffectRainbowWavesSettings }
         function onCfg_EffectLavaLampSettingsChanged() { root.cfg_EffectLavaLampSettings = effectConfigLoader.item.cfg_EffectLavaLampSettings }
         function onCfg_EffectDotWavesSettingsChanged() { root.cfg_EffectDotWavesSettings = effectConfigLoader.item.cfg_EffectDotWavesSettings }
+        function onCfg_EffectMicroscopeSettingsChanged() { root.cfg_EffectMicroscopeSettings = effectConfigLoader.item.cfg_EffectMicroscopeSettings }
     }
 
+    // Absorbs leftover vertical space so the filter list stays at its natural height
+    // instead of having the gap distributed mid-column.
+    Item { Layout.fillHeight: true }
 }

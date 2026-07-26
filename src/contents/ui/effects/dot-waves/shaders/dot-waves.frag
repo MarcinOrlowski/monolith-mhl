@@ -32,6 +32,15 @@ layout(std140, binding = 0) uniform buf {
     float bgColorR;
     float bgColorG;
     float bgColorB;
+    float shineEnabled;
+    float shineMode;
+    float shineChannel;
+    float shineIntensity;
+    float iShineTime;
+    float shineColorR;
+    float shineColorG;
+    float shineColorB;
+    float shineWidth;
 };
 
 // Two slow sin/cos waves -> organic moving brightness field, indexed by grid
@@ -70,8 +79,49 @@ void main() {
     float alpha = maxAlpha * v * coverage;
 
     vec3 bg = vec3(bgColorR, bgColorG, bgColorB);
-    vec3 dot = vec3(dotColorR, dotColorG, dotColorB);
-    vec3 col = mix(bg, dot, alpha) * dimLevel;
+    vec3 dotCol = vec3(dotColorR, dotColorG, dotColorB);
+    vec3 col = mix(bg, dotCol, alpha) * dimLevel;
+
+    // Optional independent "shine" highlight layer applied post-render so it has
+    // visual punch regardless of the (low) dot alpha. Gated by base v and per-pixel
+    // coverage so shine never reveals dots below the density cutoff and never
+    // paints outside the dot disks.
+    if (shineEnabled > 0.5) {
+        float s = 0.0;
+        if (shineMode < 0.5) {
+            // Wave field with own constants and time scalar.
+            float sw1 = sin(ix * 0.21 + iShineTime * 0.7)
+                      * cos(iy * 0.18 - iShineTime * 0.5);
+            float sw2 = sin((ix - iy) * 0.11 + iShineTime * 0.9);
+            s = ((sw1 + sw2) * 0.5 + 1.0) * 0.5;
+        } else {
+            // Spotlight: Gaussian moving along a Lissajous path.
+            vec2 centerNorm = vec2(0.5 + 0.45 * sin(iShineTime * 0.27),
+                                   0.5 + 0.40 * cos(iShineTime * 0.31));
+            vec2 spotPx = centerNorm * vec2(iWidth, iHeight);
+            float dotToSpot = distance(center, spotPx);
+            float spotRadius = 0.30 * iHeight;
+            s = exp(- (dotToSpot * dotToSpot) / (spotRadius * spotRadius));
+        }
+        // Width window: only the brightest `shineWidth` fraction of the shine
+        // field passes through, so the highlight covers a narrow sweeping band
+        // rather than every visible dot. Mirrors how `density` shapes the base
+        // dot field.
+        float sThr = 1.0 - shineWidth;
+        s = (s > sThr) ? (s - sThr) / max(1.0 - sThr, 1e-3) : 0.0;
+        // Push the average inside the window up so the visible band stays bright.
+        s = pow(s, 0.6);
+        float gate = s * v * coverage * shineIntensity;
+        vec3 shineCol = vec3(shineColorR, shineColorG, shineColorB);
+        if (shineChannel < 0.5 || shineChannel > 1.5) {
+            // Color push (channel 0 or 2): blend output toward shine color.
+            col = mix(col, shineCol * dimLevel, clamp(gate, 0.0, 1.0));
+        }
+        if (shineChannel > 0.5) {
+            // Additive emission (channel 1 or 2): explicit extra brightness.
+            col = clamp(col + shineCol * dimLevel * gate, 0.0, 1.0);
+        }
+    }
 
     fragColor = vec4(col, 1.0) * qt_Opacity;
 }

@@ -50,27 +50,6 @@ QtObject {
     //
     property bool enabled: false
 
-    // ── Layer visibility ─────────────────────────────────────────────
-    //
-    // Optional booleans that control which visual layers are rendered.
-    // When a theme is loaded, these values override the global layer
-    // toggles in the wallpaper settings UI. The user can still change
-    // them manually via the checkboxes after the theme is applied.
-    //
-    // All default to true (visible). Set any to false to hide that
-    // layer by default when this theme is active. Omitted properties
-    // are treated as true, so you only need to list the ones you want
-    // to disable.
-    //
-    // property bool showBackground: true
-    // property bool showStars: true
-    // property bool showGhosts: true
-    // property bool showWaves: true
-    // property bool showGlow: true
-    // property bool showHalo: true
-    // property bool showShine: true
-    // property bool showSpotlights: true
-
     // ── Background ────────────────────────────────────────────────────
     //
     // Exactly 5 colors forming a diagonal gradient across the screen:

@@ -4,7 +4,7 @@
     "Id": "com.marcinorlowski.monolithmhl",
     "Name": "Monolith MHL",
     "Description": "Hub for beautiful animated wallpapers for Plasma 6",
-    "Version": "1.2.0",
+    "Version": "1.3.0",
     "Authors": [
       {
         "Name": "Marcin Orlowski",
@@ -23,5 +23,8 @@
     "mhl"
   ],
   "X-Plasma-API-Minimum-Version": "6.0",
-  "X-KDE-ParentApp": "org.kde.plasmashell"
+  "X-KDE-ParentApp": "org.kde.plasmashell",
+  "X-MHL-Author-Url": "https://marcinorlowski.com",
+  "X-MHL-UpdateChecker-Url": "https://raw.githubusercontent.com/MarcinOrlowski/monolith-mhl/master/src/metadata.json",
+  "X-MHL-FirstReleaseYear": 2025
 }

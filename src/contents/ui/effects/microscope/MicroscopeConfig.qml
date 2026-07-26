@@ -16,28 +16,28 @@ Item {
     id: effectConfig
 
     // --- JSON blob bound from hub config.qml ---
-    property string cfg_EffectRainbowWavesSettings
+    property string cfg_EffectMicroscopeSettings
 
     property var hubConfiguration: null
 
     // --- Schema: key → default value (single source of truth) ---
     readonly property var _defaults: ({
-        themeId: "rwm-sunset",
+        themeId: "mzm-chlorophyll",
         randomInitialTheme: true,
         autoCycle: true,
         cycleInterval: 15,
         cycleIntervalUnit: 1,
         transitionDuration: 3,
         cycleInRandomOrder: true,
-        showBackground: true,
-        showStars: true,
-        showGhosts: true,
-        showWaves: true,
-        showGlow: true,
-        showHalo: true,
-        showShine: true,
-        showSpotlights: true,
-        speedIndex: 2,
+        density: 60,
+        showFog: true,
+        showParticles: true,
+        showVignette: true,
+        dustAmount: 55,
+        dustSize: 22,
+        speedIndex: 3,
+        rotation: 20,
+        microbeMotion: 50,
         fpsCap: true,
         fpsLimit: 30,
         dimCap: false,
@@ -45,22 +45,22 @@ Item {
     })
 
     // --- Backing properties ---
-    property string _themeId: "rwm-sunset"
+    property string _themeId: "mzm-chlorophyll"
     property bool _randomInitialTheme: true
     property bool _autoCycle: true
     property int _cycleInterval: 15
     property int _cycleIntervalUnit: 1
     property int _transitionDuration: 3
     property bool _cycleInRandomOrder: true
-    property bool _showBackground: true
-    property bool _showStars: true
-    property bool _showGhosts: true
-    property bool _showWaves: true
-    property bool _showGlow: true
-    property bool _showHalo: true
-    property bool _showShine: true
-    property bool _showSpotlights: true
-    property int _speedIndex: 2
+    property int _density: 60
+    property bool _showFog: true
+    property bool _showParticles: true
+    property bool _showVignette: true
+    property int _dustAmount: 55
+    property int _dustSize: 22
+    property int _speedIndex: 3
+    property int _rotation: 20
+    property int _microbeMotion: 50
     property bool _fpsCap: true
     property int _fpsLimit: 30
     property bool _dimCap: false
@@ -69,12 +69,12 @@ Item {
     // --- Load / save plumbing ---
     property bool _loading: false
 
-    onCfg_EffectRainbowWavesSettingsChanged: _load()
+    onCfg_EffectMicroscopeSettingsChanged: _load()
     Component.onCompleted: _load()
 
     function _load() {
         _loading = true
-        var s = EffectSettings.load(cfg_EffectRainbowWavesSettings, _defaults)
+        var s = EffectSettings.load(cfg_EffectMicroscopeSettings, _defaults)
         _themeId = s.themeId
         _randomInitialTheme = s.randomInitialTheme
         _autoCycle = s.autoCycle
@@ -82,15 +82,15 @@ Item {
         _cycleIntervalUnit = s.cycleIntervalUnit
         _transitionDuration = s.transitionDuration
         _cycleInRandomOrder = s.cycleInRandomOrder
-        _showBackground = s.showBackground
-        _showStars = s.showStars
-        _showGhosts = s.showGhosts
-        _showWaves = s.showWaves
-        _showGlow = s.showGlow
-        _showHalo = s.showHalo
-        _showShine = s.showShine
-        _showSpotlights = s.showSpotlights
+        _density = s.density
+        _showFog = s.showFog
+        _showParticles = s.showParticles
+        _showVignette = s.showVignette
+        _dustAmount = s.dustAmount
+        _dustSize = s.dustSize
         _speedIndex = s.speedIndex
+        _rotation = s.rotation
+        _microbeMotion = s.microbeMotion
         _fpsCap = s.fpsCap
         _fpsLimit = s.fpsLimit
         _dimCap = s.dimCap
@@ -100,7 +100,7 @@ Item {
 
     function _save() {
         if (_loading) return
-        cfg_EffectRainbowWavesSettings = EffectSettings.save({
+        cfg_EffectMicroscopeSettings = EffectSettings.save({
             themeId: _themeId,
             randomInitialTheme: _randomInitialTheme,
             autoCycle: _autoCycle,
@@ -108,15 +108,15 @@ Item {
             cycleIntervalUnit: _cycleIntervalUnit,
             transitionDuration: _transitionDuration,
             cycleInRandomOrder: _cycleInRandomOrder,
-            showBackground: _showBackground,
-            showStars: _showStars,
-            showGhosts: _showGhosts,
-            showWaves: _showWaves,
-            showGlow: _showGlow,
-            showHalo: _showHalo,
-            showShine: _showShine,
-            showSpotlights: _showSpotlights,
+            density: _density,
+            showFog: _showFog,
+            showParticles: _showParticles,
+            showVignette: _showVignette,
+            dustAmount: _dustAmount,
+            dustSize: _dustSize,
             speedIndex: _speedIndex,
+            rotation: _rotation,
+            microbeMotion: _microbeMotion,
             fpsCap: _fpsCap,
             fpsLimit: _fpsLimit,
             dimCap: _dimCap,
@@ -131,15 +131,15 @@ Item {
     on_CycleIntervalUnitChanged: _save()
     on_TransitionDurationChanged: _save()
     on_CycleInRandomOrderChanged: _save()
-    on_ShowBackgroundChanged: _save()
-    on_ShowStarsChanged: _save()
-    on_ShowGhostsChanged: _save()
-    on_ShowWavesChanged: _save()
-    on_ShowGlowChanged: _save()
-    on_ShowHaloChanged: _save()
-    on_ShowShineChanged: _save()
-    on_ShowSpotlightsChanged: _save()
+    on_DensityChanged: _save()
+    on_ShowFogChanged: _save()
+    on_ShowParticlesChanged: _save()
+    on_ShowVignetteChanged: _save()
+    on_DustAmountChanged: _save()
+    on_DustSizeChanged: _save()
     on_SpeedIndexChanged: _save()
+    on_RotationChanged: _save()
+    on_MicrobeMotionChanged: _save()
     on_FpsCapChanged: _save()
     on_FpsLimitChanged: _save()
     on_DimCapChanged: _save()
@@ -147,7 +147,7 @@ Item {
 
     // Restore all settings to their schema defaults
     function reset() {
-        cfg_EffectRainbowWavesSettings = EffectSettings.save(_defaults)
+        cfg_EffectMicroscopeSettings = EffectSettings.save(_defaults)
     }
 
     // --- External config sync (e.g. "Set Current Theme" context menu) ---
@@ -155,7 +155,7 @@ Item {
         target: effectConfig.hubConfiguration
         enabled: effectConfig.hubConfiguration !== null
         function onValueChanged(key, value) {
-            if (key === "EffectRainbowWavesSettings") {
+            if (key === "EffectMicroscopeSettings") {
                 effectConfig._load()
             }
         }
@@ -178,8 +178,8 @@ Item {
 
     // --- Page definitions for sidebar navigation ---
     readonly property var pages: [
-        { moduleId: "animation", text: qsTr("Animation"), icon: "media-playback-start", page: "RainbowWavesAnimationPage.qml" },
-        { moduleId: "theme", text: qsTr("Theme"), icon: "preferences-desktop-color", page: "RainbowWavesThemePage.qml" },
-        { moduleId: "layers", text: qsTr("Layers"), icon: "view-visible", page: "RainbowWavesLayersPage.qml" }
+        { moduleId: "theme", text: qsTr("Theme"), icon: "preferences-desktop-color", page: "MicroscopeThemePage.qml" },
+        { moduleId: "scene", text: qsTr("Scene"), icon: "view-visible", page: "MicroscopeScenePage.qml" },
+        { moduleId: "animation", text: qsTr("Animation"), icon: "media-playback-start", page: "MicroscopeAnimationPage.qml" }
     ]
 }

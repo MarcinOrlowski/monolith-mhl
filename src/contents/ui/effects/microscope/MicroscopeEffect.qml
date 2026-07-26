@@ -21,41 +21,56 @@ Item {
     // --- Input from hub ---
     property var configuration: null
 
-    // --- Schema (must match RainbowWavesConfig.qml) ---
+    // --- Schema (must match MicroscopeConfig.qml) ---
     readonly property var _defaults: ({
-        themeId: "rwm-sunset",
+        themeId: "mzm-chlorophyll",
         randomInitialTheme: true,
         autoCycle: true,
         cycleInterval: 15,
         cycleIntervalUnit: 1,
         transitionDuration: 3,
         cycleInRandomOrder: true,
-        showBackground: true,
-        showStars: true,
-        showGhosts: true,
-        showWaves: true,
-        showGlow: true,
-        showHalo: true,
-        showShine: true,
-        showSpotlights: true,
-        speedIndex: 2,
+        density: 60,
+        showFog: true,
+        showParticles: true,
+        showVignette: true,
+        dustAmount: 55,
+        dustSize: 22,
+        speedIndex: 3,
+        rotation: 20,
+        microbeMotion: 50,
         fpsCap: true,
         fpsLimit: 30,
         dimCap: false,
         dimLevel: 100
     })
 
+    // Hard cap on dust motes; mirrors PMAX in microscope.frag.
+    readonly property int _dustMax: 96
+
     // --- Parsed settings (reactive properties for bindings) ---
     property real speedMult: 1.0
-    property real dimLevel: 1.0
+    // Radians of scene spin per second of iTime; sign sets direction, 0 = off.
+    property real rotationSpeed: 0.06
+    // Strength of the microbes' idle wander/squirm/breathe (0 = frozen, 1 = full).
+    property real microbeMotion: 1.0
     property bool fpsCap: true
     property int fpsLimit: 30
     property bool paused: false
+    // Starts dark and fades up to the target on launch (Behavior eases 0 -> target).
+    property real dimLevel: 0.0
+
+    property real density: 0.6
+    property bool showFog: true
+    property bool showParticles: true
+    property bool showVignette: true
+    property real dustCount: 53      // number of motes passed to the shader
+    property real dustRadius: 0.015  // base mote radius passed to the shader
 
     function togglePause() { paused = !paused }
 
     function _readSettings() {
-        var json = configuration ? configuration.EffectRainbowWavesSettings : "{}";
+        var json = configuration ? configuration.EffectMicroscopeSettings : "{}";
         return EffectSettings.load(json, _defaults);
     }
 
@@ -64,47 +79,44 @@ Item {
         for (var key in patch) {
             s[key] = patch[key];
         }
-        configuration.EffectRainbowWavesSettings = EffectSettings.save(s);
+        configuration.EffectMicroscopeSettings = EffectSettings.save(s);
     }
 
     function _applySettings() {
         var s = _readSettings();
-
-        // Speed
         speedMult = [0.25, 0.5, 0.75, 1.0, 1.25, 1.5, 1.75][s.speedIndex] ?? 1.0;
+        rotationSpeed = (s.rotation / 100.0) * 0.15;   // -100..100 -> ∓0.15 rad/s
+        microbeMotion = Math.min(100, Math.max(0, s.microbeMotion)) / 100.0;
+        fpsCap = s.fpsCap;
+        fpsLimit = s.fpsLimit;
+        dimLevel = s.dimCap ? s.dimLevel / 100.0 : 1.0;
 
-        // Theme ID — detect changes
+        density = Math.min(1.0, Math.max(0.0, s.density / 100.0));
+        showFog = s.showFog;
+        showParticles = s.showParticles;
+        showVignette = s.showVignette;
+
+        // Dust amount -> mote count; dust size -> mote radius (smaller = finer dust).
+        dustCount = Math.round(Math.min(100, Math.max(0, s.dustAmount)) / 100.0 * _dustMax);
+        dustRadius = 0.006 + Math.min(100, Math.max(1, s.dustSize)) / 100.0 * 0.039;
+
+        // Theme / cycling
         var newThemeId = s.themeId;
         if (newThemeId !== currentThemeId) {
             currentThemeId = newThemeId;
         }
-
-        // Cycle settings
         autoCycleEnabled = s.autoCycle;
         transitionMs = s.transitionDuration * 1000;
         cycleInRandomOrder = s.cycleInRandomOrder;
         _cycleInterval = s.cycleInterval;
         _cycleIntervalUnit = s.cycleIntervalUnit;
-
-        // FPS / brightness
-        fpsCap = s.fpsCap;
-        fpsLimit = s.fpsLimit;
-        dimLevel = s.dimCap ? s.dimLevel / 100.0 : 1.0;
-
-        // Layer visibility
-        for (var i = 0; i < layerKeys.length; i++) {
-            var key = layerKeys[i];
-            var val = s[key];
-            if (val === undefined) val = true;
-            effect[key] = val ? 1.0 : 0.0;
-        }
     }
 
     // --- Outputs for hub ---
     readonly property bool hasError: effect.status === ShaderEffect.Error
     readonly property string errorLog: effect.log || ""
-    readonly property string effectName: "Rainbow Waves"
-    readonly property url configUrl: Qt.resolvedUrl("RainbowWavesConfig.qml")
+    readonly property string effectName: "Microscope"
+    readonly property url configUrl: Qt.resolvedUrl("MicroscopeConfig.qml")
 
     readonly property list<PlasmaCore.Action> effectActions: [
         PlasmaCore.Action {
@@ -173,21 +185,17 @@ Item {
     property int _cycleInterval: 15
     property int _cycleIntervalUnit: 1
 
-    // --- Layer visibility ---
-    property var layerKeys: [
-        "showBackground", "showStars", "showGhosts", "showWaves",
-        "showGlow", "showHalo", "showShine", "showSpotlights"
-    ]
-
-    // React to any config change (JSON blob or hub-level)
+    // React to config changes (JSON blob)
     Connections {
         target: effectRoot.configuration
         function onValueChanged(key, value) {
-            if (key === "EffectRainbowWavesSettings") {
+            if (key === "EffectMicroscopeSettings") {
                 effectRoot._applySettings();
             }
         }
     }
+
+    Component.onCompleted: _applySettings()
 
     // --- Theme functions ---
     function setCurrentTheme() {
@@ -241,7 +249,6 @@ Item {
     }
 
     function loadCurrentTheme() {
-        console.warn("Rainbow Waves [effect]: loadCurrentTheme() id=" + currentThemeId);
         if (!themeScanner.ready) {
             return;
         }
@@ -257,7 +264,6 @@ Item {
         if (!themeScanner.ready) {
             return;
         }
-
         var entry = themeScanner.themeList.get(themeIndex);
         var theme = themeScanner.loadThemeFile(entry.fileUrl);
         if (theme) {
@@ -290,10 +296,10 @@ Item {
             order.push(i);
         }
         // Fisher-Yates shuffle
-        for (var i = count - 1; i > 0; i--) {
-            var j = Math.floor(Math.random() * (i + 1));
-            var tmp = order[i];
-            order[i] = order[j];
+        for (var f = count - 1; f > 0; f--) {
+            var j = Math.floor(Math.random() * (f + 1));
+            var tmp = order[f];
+            order[f] = order[j];
             order[j] = tmp;
         }
         // Avoid back-to-back duplicate with last theme in history
@@ -301,9 +307,9 @@ Item {
             ? shuffledOrder[shuffledOrder.length - 1] : -1;
         if (lastIdx >= 0 && order.length > 1 && order[0] === lastIdx) {
             var swap = 1 + Math.floor(Math.random() * (order.length - 1));
-            var tmp = order[0];
+            var tmp2 = order[0];
             order[0] = order[swap];
-            order[swap] = tmp;
+            order[swap] = tmp2;
         }
         // Append new cycle to existing history so "prev" still works
         var combined = shuffledOrder.slice();
@@ -379,6 +385,7 @@ Item {
     }
 
     // --- Shader effect ---
+    // CRITICAL: Property order must match the std140 uniform block in microscope.frag
     ShaderEffect {
         id: effect
         anchors.fill: parent
@@ -387,102 +394,65 @@ Item {
         property real iTime: 0
         property real iWidth: width
         property real iHeight: height
-
-        property real showBackground: 1.0
-        property real showStars:      1.0
-        property real showGhosts:     1.0
-        property real showWaves:      1.0
-        property real showGlow:       1.0
-        property real showHalo:       1.0
-        property real showShine:      1.0
-        property real showSpotlights: 1.0
-
-        // Theme colors — order must match shader uniform block layout
-        property color bg0: "#000000"
-        Behavior on bg0 { ColorAnimation { duration: effectRoot.transitionMs } }
-        property color bg1: "#000000"
-        Behavior on bg1 { ColorAnimation { duration: effectRoot.transitionMs } }
-        property color bg2: "#000000"
-        Behavior on bg2 { ColorAnimation { duration: effectRoot.transitionMs } }
-        property color bg3: "#000000"
-        Behavior on bg3 { ColorAnimation { duration: effectRoot.transitionMs } }
-        property color bg4: "#000000"
-        Behavior on bg4 { ColorAnimation { duration: effectRoot.transitionMs } }
-        property color effectColor: "#000000"
-        Behavior on effectColor { ColorAnimation { duration: effectRoot.transitionMs } }
-        property color ghost0: "#000000"
-        Behavior on ghost0 { ColorAnimation { duration: effectRoot.transitionMs } }
-        property color ghost1: "#000000"
-        Behavior on ghost1 { ColorAnimation { duration: effectRoot.transitionMs } }
-        property color ghost2: "#000000"
-        Behavior on ghost2 { ColorAnimation { duration: effectRoot.transitionMs } }
-        property color ghost3: "#000000"
-        Behavior on ghost3 { ColorAnimation { duration: effectRoot.transitionMs } }
-        property color wMain0: "#000000"
-        Behavior on wMain0 { ColorAnimation { duration: effectRoot.transitionMs } }
-        property color wMain1: "#000000"
-        Behavior on wMain1 { ColorAnimation { duration: effectRoot.transitionMs } }
-        property color wMain2: "#000000"
-        Behavior on wMain2 { ColorAnimation { duration: effectRoot.transitionMs } }
-        property color wMain3: "#000000"
-        Behavior on wMain3 { ColorAnimation { duration: effectRoot.transitionMs } }
-        property color wMain4: "#000000"
-        Behavior on wMain4 { ColorAnimation { duration: effectRoot.transitionMs } }
-        property color wMain5: "#000000"
-        Behavior on wMain5 { ColorAnimation { duration: effectRoot.transitionMs } }
-        property color wMain6: "#000000"
-        Behavior on wMain6 { ColorAnimation { duration: effectRoot.transitionMs } }
-        property color wMain7: "#000000"
-        Behavior on wMain7 { ColorAnimation { duration: effectRoot.transitionMs } }
-        property color wMain8: "#000000"
-        Behavior on wMain8 { ColorAnimation { duration: effectRoot.transitionMs } }
-        property color wMain9: "#000000"
-        Behavior on wMain9 { ColorAnimation { duration: effectRoot.transitionMs } }
-        property color wHl0: "#000000"
-        Behavior on wHl0 { ColorAnimation { duration: effectRoot.transitionMs } }
-        property color wHl1: "#000000"
-        Behavior on wHl1 { ColorAnimation { duration: effectRoot.transitionMs } }
-        property color wHl2: "#000000"
-        Behavior on wHl2 { ColorAnimation { duration: effectRoot.transitionMs } }
-        property color wHl3: "#000000"
-        Behavior on wHl3 { ColorAnimation { duration: effectRoot.transitionMs } }
-        property color wHl4: "#000000"
-        Behavior on wHl4 { ColorAnimation { duration: effectRoot.transitionMs } }
-        property color wHl5: "#000000"
-        Behavior on wHl5 { ColorAnimation { duration: effectRoot.transitionMs } }
-        property color wHl6: "#000000"
-        Behavior on wHl6 { ColorAnimation { duration: effectRoot.transitionMs } }
-        property color wHl7: "#000000"
-        Behavior on wHl7 { ColorAnimation { duration: effectRoot.transitionMs } }
-        property color wHl8: "#000000"
-        Behavior on wHl8 { ColorAnimation { duration: effectRoot.transitionMs } }
-        property color wHl9: "#000000"
-        Behavior on wHl9 { ColorAnimation { duration: effectRoot.transitionMs } }
-        property color glowCore: "#000000"
-        Behavior on glowCore { ColorAnimation { duration: effectRoot.transitionMs } }
-        property color spotColor: "#000000"
-        Behavior on spotColor { ColorAnimation { duration: effectRoot.transitionMs } }
-        property color starColor: "#000000"
-        Behavior on starColor { ColorAnimation { duration: effectRoot.transitionMs } }
-
+        property real density: effectRoot.density
         property real dimLevel: effectRoot.dimLevel
         Behavior on dimLevel { NumberAnimation { duration: effectRoot.transitionMs } }
 
-        property real speedMult: effectRoot.speedMult
+        // Colors are set imperatively by ThemeLoader.applyTheme(); Behaviors make
+        // theme switches cross-fade. Defaults match the Chlorophyll theme so the
+        // first frame (before the scanner is ready) looks right.
+        property real cellColorR: 0.227
+        Behavior on cellColorR { NumberAnimation { duration: effectRoot.transitionMs } }
+        property real cellColorG: 0.541
+        Behavior on cellColorG { NumberAnimation { duration: effectRoot.transitionMs } }
+        property real cellColorB: 0.180
+        Behavior on cellColorB { NumberAnimation { duration: effectRoot.transitionMs } }
+        property real mediumColorR: 0.043
+        Behavior on mediumColorR { NumberAnimation { duration: effectRoot.transitionMs } }
+        property real mediumColorG: 0.141
+        Behavior on mediumColorG { NumberAnimation { duration: effectRoot.transitionMs } }
+        property real mediumColorB: 0.102
+        Behavior on mediumColorB { NumberAnimation { duration: effectRoot.transitionMs } }
+        property real illumColorR: 0.824
+        Behavior on illumColorR { NumberAnimation { duration: effectRoot.transitionMs } }
+        property real illumColorG: 0.925
+        Behavior on illumColorG { NumberAnimation { duration: effectRoot.transitionMs } }
+        property real illumColorB: 0.627
+        Behavior on illumColorB { NumberAnimation { duration: effectRoot.transitionMs } }
 
+        property real showFog: effectRoot.showFog ? 1.0 : 0.0
+        property real showParticles: effectRoot.showParticles ? 1.0 : 0.0
+        property real showVignette: effectRoot.showVignette ? 1.0 : 0.0
+        property real particleCount: effectRoot.dustCount
+        property real particleSize: effectRoot.dustRadius
+        // Accumulated scene-spin angle (radians). Advanced with iTime so a speed
+        // change never makes the angle jump — only its future rate changes.
+        property real rotationAngle: 0
+        property real microbeMotion: effectRoot.microbeMotion
+
+        // iTime is accumulated in seconds; the forward-motion constants in the
+        // shader are tuned for it. speedMult scales the zoom pace.
         FrameAnimation {
             running: effect.visible && !effectRoot.fpsCap && !effectRoot.paused
-            onTriggered: effect.iTime += frameTime * 60.0 * effect.speedMult
+            onTriggered: {
+                var dt = frameTime * effectRoot.speedMult;
+                effect.iTime += dt;
+                effect.rotationAngle += dt * effectRoot.rotationSpeed;
+            }
         }
 
         Timer {
             running: effect.visible && effectRoot.fpsCap && !effectRoot.paused
             repeat: true
             interval: Math.ceil(1000 / Math.min(240, Math.max(1, effectRoot.fpsLimit)))
-            onTriggered: effect.iTime += interval / 1000.0 * 60.0 * effect.speedMult
+            onTriggered: {
+                var dt = (interval / 1000.0) * effectRoot.speedMult;
+                effect.iTime += dt;
+                effect.rotationAngle += dt * effectRoot.rotationSpeed;
+            }
         }
 
-        vertexShader: "shaders/rainbow-waves.vert.qsb"
-        fragmentShader: "shaders/rainbow-waves.frag.qsb"
+        vertexShader: "shaders/microscope.vert.qsb"
+        fragmentShader: "shaders/microscope.frag.qsb"
     }
 }

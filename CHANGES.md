@@ -1,18 +1,17 @@
 # Changelog
 
-## v1.3.0 (TBD)
+## v1.3.0 (2026-07-26)
 
-- New "Microscope" effect: an endless zoom into a microscopic world, with cycling microscopy-stain color themes and adjustable floating dust.
-- Extended Dot Waves effect with additional "Shine" highlight layer.
-- Fixed Rainbow Waves effect resetting layer visibility on every theme transition.
-- Fixed Mask filter in Invert mode filling the whole screen when padding ≥ half the tile size.
+- New "Microscope" effect: an endless zoom into a microscopic world
+- Extended "Dot Waves" effect with additional "Shine" highlight layer.
+- Fixed "Rainbow Waves" effect resetting layer visibility on every theme transition.
+- Fixed "Mask" filter in Invert mode filling the whole screen when padding ≥ half the tile size.
 - Fixed unnecessary vertical spacing around the post-processing filter list and a typo in its header.
 - Effect switching arrow buttons grouped together to the right of the effect dropdown.
 - Added "Reset to Defaults" button to every effect's settings, matching filters.
 - Added "Apply" button to effect and filter settings windows to simplify testing the settings.
-- Added missing tooltips to settings buttons.
 - Settings window now shows the correct version, and the copyright year updates automatically.
-- Corrected version number shown in settings not being updated.
+- Added missing tooltips to settings buttons.
 
 ## v1.2.0 (2026-05-25)
 

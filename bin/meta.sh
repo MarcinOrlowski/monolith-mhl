@@ -4,7 +4,7 @@
 # Monolith MHL: Beautiful animated wallpapers for Plasma 6
 #
 # @author    Marcin Orlowski <mail (#) marcinOrlowski (.) com>
-# @copyright 2020-2023 Marcin Orlowski
+# @copyright 2020-2026 Marcin Orlowski
 # @license   http://www.opensource.org/licenses/mit-license.php MIT
 # @link      https://github.com/MarcinOrlowski/plasmoid-tools
 #

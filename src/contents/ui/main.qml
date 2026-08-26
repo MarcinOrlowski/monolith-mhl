@@ -203,7 +203,8 @@ WallpaperItem {
         "rainbow-waves": Qt.resolvedUrl("effects/rainbow-waves/RainbowWavesEffect.qml"),
         "lava-lamp": Qt.resolvedUrl("effects/lava-lamp/LavaLampEffect.qml"),
         "dot-waves": Qt.resolvedUrl("effects/dot-waves/DotWavesEffect.qml"),
-        "vortex": Qt.resolvedUrl("effects/vortex/VortexEffect.qml")
+        "vortex": Qt.resolvedUrl("effects/vortex/VortexEffect.qml"),
+        "microscope": Qt.resolvedUrl("effects/microscope/MicroscopeEffect.qml")
     })
 
     Loader {
@@ -442,7 +443,7 @@ WallpaperItem {
         var reg = root.effectRegistry
         var url = reg[root.configuration.ActiveEffect] || ""
         if (url.toString().length === 0) {
-            // Stale/unknown effect id (e.g. after an effect was renamed) — fall
+            // Stale/unknown effect id (e.g. after an effect was renamed): fall
             // back to any registered effect so the wallpaper never goes black.
             for (var k in reg) { url = reg[k]; break }
         }

@@ -14,6 +14,7 @@
     <entry name="EffectLavaLampSettings" type="String"><default>{}</default></entry>
     <entry name="EffectDotWavesSettings" type="String"><default>{}</default></entry>
     <entry name="EffectVortexSettings" type="String"><default>{}</default></entry>
+    <entry name="EffectMicroscopeSettings" type="String"><default>{}</default></entry>
 
     <!-- Post-filter processing order: comma-separated filter IDs -->
     <!-- Filter processing order: comma-separated string IDs -->

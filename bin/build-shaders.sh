@@ -21,6 +21,7 @@ SHADER_DIRS=(
     "src/contents/ui/effects/lava-lamp/shaders"
     "src/contents/ui/effects/dot-waves/shaders"
     "src/contents/ui/effects/vortex/shaders"
+    "src/contents/ui/effects/microscope/shaders"
     "src/contents/ui/filters/shaders"
 )
 

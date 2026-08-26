@@ -52,8 +52,7 @@ function validateTheme(obj) {
     return null; // valid
 }
 
-// Apply a loaded theme object to a ShaderEffect target (colours only — layer
-// visibility is controlled by the user settings, not the theme).
+// Apply a loaded theme object to a ShaderEffect target (colours only).
 function applyTheme(obj, target) {
     target["canopyCol"] = obj.canopy;
     target["glowCol"] = obj.glow;

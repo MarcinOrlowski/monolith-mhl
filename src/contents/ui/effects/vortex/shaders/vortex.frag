@@ -73,14 +73,6 @@ layout(std140, binding = 0) uniform buf {
     vec4 pal5;
 };
 
-// Endless zoom into a vortex tunnel. Rings of leafy silhouettes recede toward a
-// glowing, swirling vortex at the centre. Three optional space layers fly
-// outward toward the viewer above the vortex and behind the canopy: point stars
-// (short motion streaks), hyperspace beams (many thin radial lines) and plain
-// twinkling dots. Each has its own flight accumulator so changing speed never
-// retroactively rescales time. Colours come from the active theme's palette.
-// Everything is procedural (no textures).
-
 const int LAYERS = 9;         // depth slices composited per pixel
 const float ZOOM = 0.22;      // rings advanced per time unit
 const float RINGSCALE = 0.55; // projected radius = RINGSCALE / distance
@@ -138,9 +130,8 @@ vec3 scene(vec2 uv) {
     float baseZ = fract(scroll);
     float ringBase = floor(scroll);
 
-    // --- central mist / counter-swirling vortex glow (deepest layer) ---
+    // central mist / counter-swirling vortex glow (deepest layer)
     // `vortexSwirl` sets how tightly the vortex arms wind (log-radius frequency),
-    // independent of the tunnel's `spiral` twist.
     float cg = smoothstep(1.0, 0.0, r);
     float swirl = 0.5 + 0.5 * sin(ARMS * a + log(r) * (2.0 + vortexSwirl * 14.0) + whirlTime * 1.5);
     swirl = pow(swirl, 2.0);
@@ -153,9 +144,7 @@ vec3 scene(vec2 uv) {
     // single bright point.
     float centerHole = smoothstep(0.03, 0.12, r);
 
-    // --- point starfield: sparse dots with short motion streaks, flying outward ---
-    // Colour comes from the theme palette (tinted toward the theme's star colour),
-    // so every set — spectrum, gruvbox, psychedelic … — drives it.
+    // point starfield: sparse dots with short motion streaks, flying outward
     if (showStars > 0.5) {
         float st = starTime * 0.16;
         float tail = 2.0 + starLength * 22.0;
@@ -164,7 +153,7 @@ vec3 scene(vec2 uv) {
             if (float(s) >= starCount) break;
             vec2 h = hash2(float(s) * 1.7 + 3.1);
             float sang = h.x * 6.2831 + rotTime * 0.15;
-            float z = fract(h.y - st);                       // 1 -> 0: centre -> edge (outward)
+            float z = fract(h.y - st);    // 1 (centre) -> 0 (edge - outward)
             vec2 rdir = vec2(cos(sang), sin(sang));
             vec2 sp = rdir * (1.15 * pow(1.0 - z, 1.6));   // reach past the corners before recycling
             vec2 dv = uv - sp;
@@ -179,9 +168,7 @@ vec3 scene(vec2 uv) {
         col += clamp(sAcc, 0.0, 1.0) * centerHole * starOpacity;
     }
 
-    // --- hyperspace beams: many thin radial streaks flying outward to the edge ---
-    // Each angular sector hosts one streak, so beamCount is a real line count and
-    // the pass is O(1) per pixel regardless of how many are requested.
+    // hyperspace beams: many thin radial streaks flying outward to the edge
     if (showBeams > 0.5) {
         float N = max(4.0, beamCount);
         float sa = (a / 6.2831 + 0.5) * N;        // angle -> line-index space
@@ -199,7 +186,7 @@ vec3 scene(vec2 uv) {
             if (thin < 0.003) continue;
             // head grows outward over the cycle. It runs past the screen corners
             // (~1.02) so a beam stays lit until it truly leaves the frame, then
-            // fades off-screen before recycling — no early on-screen vanishing.
+            // fades off-screen before recycling.
             float t = fract(h2.x + beamTime * 0.16 * (0.5 + h.y));
             float head = pow(t, 0.7) * 1.35;
             float tailLen = (0.04 + beamLength * 0.7) * (0.5 + h2.y);  // per-line length
@@ -212,7 +199,7 @@ vec3 scene(vec2 uv) {
         col += bcol * clamp(beams, 0.0, 1.4) * centerHole * beamOpacity;
     }
 
-    // --- dot starfield: plain round twinkling stars flying forward ---
+    // dot starfield: plain round twinkling stars flying forward
     if (showDots > 0.5) {
         float dt2 = dotTime * 0.16;
         vec3 dAcc = vec3(0.0);
@@ -220,10 +207,10 @@ vec3 scene(vec2 uv) {
             if (float(s) >= dotCount) break;
             vec2 h = hash2(float(s) * 4.3 + 1.9);
             float dang = h.x * 6.2831;
-            float z = fract(h.y - dt2);                      // 1 -> 0: centre -> edge (outward)
+            float z = fract(h.y - dt2);      // 1 -> 0: centre -> edge (outward)
             vec2 pos = vec2(cos(dang), sin(dang)) * (0.98 * pow(1.0 - z, 1.7));
             float d = length(uv - pos);
-            float size = mix(0.0015, 0.010, 1.0 - z);        // grows as it approaches
+            float size = mix(0.0015, 0.010, 1.0 - z);   // grows as it approaches
             float dotv = smoothstep(size, 0.0, d);
             float twinkle = 0.6 + 0.4 * sin(dotTime * 3.0 + h.x * 30.0);
             vec3 dc = mix(starsCol.rgb, palette(fract(h.x + dotTime * 0.04)), 0.5);
@@ -232,35 +219,32 @@ vec3 scene(vec2 uv) {
         col += clamp(dAcc, 0.0, 1.0) * centerHole * dotOpacity;
     }
 
-    // --- canopy rings, far to near (painter's order) ---
+    // canopy rings, far to near (painter's order)
     for (int i = LAYERS - 1; i >= 0; i--) {
         float fi = float(i);
         float zc = fi + 1.0 - baseZ;            // distance from camera (> 0)
         float ringId = ringBase + fi + 1.0;     // stable per-ring seed
         // Exponential recession: each ring is a constant ratio smaller than the
-        // previous one, so the tunnel reads as genuinely deep rather than a few
-        // bunched rings. `depth` sets how fast rings shrink toward the vanishing
+        // previous one. `depth` sets how fast rings shrink toward the vanishing
         // hole; tunnelWidth scales the overall mouth.
         float proj = RINGSCALE * tunnelWidth * exp(-(zc - 1.0) * depth);
 
         // angular twist grows with distance -> nested mouths form a spiral; the
         // whole tunnel rotates with rotTime, plus a per-ring differential drift
-        // (spinVaryTime accumulates the extra rotation) so rings don't spin in
-        // lockstep — and changing the variance never jerks the rotation.
+        // (spinVaryTime accumulates the extra rotation)
         float ringOff = (hash2(ringId * 7.7).x - 0.5) * 2.0 * spinVaryTime;
         float aa = a + spiral * zc * 1.1 + rotTime + ringOff;
         vec2 pc = vec2(cos(aa), sin(aa));       // periodic (no seam) around the ring
         float rNorm = (r - holeRadius) / proj;  // radial position within this ring
 
         // ragged tunnel mouth + outer extent, scaled by projection and pushed out
-        // by holeRadius so the tunnel converges to a real central hole, not a point.
+        // by holeRadius so the tunnel converges to a real central hole.
         float op = 0.50 + 0.14 * fbm(pc * 3.0 + ringId * 1.7)
                         + 0.09 * fbm(pc * 9.0 + ringId * 4.0);
         float opening = holeRadius + proj * op;
         float outer = holeRadius + proj * 1.8;
 
-        // leafy canopy: noise indexed by BOTH angle and radius so clumps read as
-        // leaves rather than radial streaks.
+        // leafy canopy: noise indexed by BOTH angle and radius
         vec2 nco = pc * 5.0 + vec2(rNorm * 4.0, rNorm * 2.0);
         float leaf = fbm(nco + ringId * 3.1);
         float gap = mix(0.60, 0.30, clamp(density, 0.0, 1.0));
@@ -269,7 +253,7 @@ vec3 scene(vec2 uv) {
         float inner = smoothstep(opening, opening * 1.04, r);
         float edge = 1.0 - smoothstep(outer * 0.9, outer, r);
         // fade newly spawned far rings in, and fade the nearest ring out before
-        // it recycles — it can't always grow fully off-screen first, so without
+        // it recycles. As it can't always grow fully off-screen first, so without
         // this it lingers at the edge and pops (visible when depth changes).
         float appear = smoothstep(float(LAYERS), float(LAYERS) - 1.2, zc);
         float exitFade = smoothstep(0.0, 0.45, zc);
@@ -287,7 +271,7 @@ vec3 scene(vec2 uv) {
         float rim = inner * (1.0 - smoothstep(opening * 1.02, opening * 1.10, r)) * edge;
         fol += mix(mistCol.rgb * mistAmount, tint, 0.6) * rim * (0.35 + 0.5 * far) * appear;
 
-        // sparse emissive spots (mushrooms / flowers) on the canopy
+        // sparse emissive spots
         float spotN = vnoise(pc * 10.0 + vec2(rNorm * 12.0, ringId * 5.0));
         float spot = smoothstep(0.80, 0.90, spotN) * cov;
         vec3 spotCol = mix(glowCol.rgb, tint, 0.5);
@@ -307,10 +291,7 @@ void main() {
     float alpha = 1.0;
 
     // Centre mask: a flat disc of the background (mist) colour that simply paints
-    // over the point where the swirl, stars and beams converge, hiding them. Fully
-    // opaque in the middle, fading to transparent over `maskSoftness` at the rim
-    // (the soft gradient edge). Unlike bloom this adds no brightness — it just
-    // covers.
+    // over the point where the swirl, stars and beams converge, hiding them.
     if (maskShow > 0.5 && maskOpacity > 0.001) {
         float rm = length(uv);
         float m = smoothstep(maskRadius, maskRadius - max(maskSoftness, 1e-3), rm);
@@ -319,9 +300,6 @@ void main() {
     }
 
     // Centre bloom: covers the middle where the swirl, stars and beams converge.
-    // A solid inner core + amount-scaled soft halo, sized by bloomRadius, gated by
-    // bloomOpacity. bloomFade blends between a bright theme-coloured glow (0) and
-    // fading the covered area out to transparency (1).
     if (bloomOpacity > 0.001) {
         float r = length(uv);
         float t = smoothstep(bloomRadius, 0.0, r);          // 0 at edge, 1 at centre

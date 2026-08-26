@@ -63,7 +63,7 @@ Kirigami.ScrollablePage {
                     }
                     return page.effectConfig.findThemeIndex(page.effectConfig._themeId) + themesOffset;
                 })
-                // Write the setting only on a deliberate user pick — NOT on the
+                // Write the setting only on a deliberate user pick, NOT on the
                 // programmatic index changes that happen while the theme model
                 // populates (those would otherwise save the wrong theme).
                 function selectThemeIndex(idx) {
@@ -153,9 +153,6 @@ Kirigami.ScrollablePage {
             property bool _ready: false
             model: [i18n("All"), i18n("Light"), i18n("Dark"), i18n("Mixed"), i18n("Psychedelic")]
             currentIndex: -1
-            // Set the index imperatively (a bound currentIndex can be clobbered by
-            // the control) and only write the setting on a deliberate user pick —
-            // some combos emit activated() once during construction.
             Component.onCompleted: {
                 currentIndex = Math.max(0, _modes.indexOf(page.effectConfig._cycleMode))
                 _ready = true

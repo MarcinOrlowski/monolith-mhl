@@ -76,7 +76,16 @@ repos:
   # Markdown linting with markdownlint-cli
   # https://github.com/igorshubovych/markdownlint-cli
   - repo: https://github.com/igorshubovych/markdownlint-cli
-    rev: v0.48.0
+    rev: v0.49.1
     hooks:
       - id: markdownlint
         args: ["--config", ".markdownlint.yaml"]
+
+  - repo: https://github.com/MarcinOrlowski/pre-commit-hooks
+    rev: 1.8.0
+    hooks:
+      - id: no-ai-slop
+      - id: commit-msg
+      - id: branch-name
+        stages: [ pre-push ]
+        args: [ '--config=.pre-commit-branch-name.yaml' ]

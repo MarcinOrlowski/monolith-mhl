@@ -18,10 +18,10 @@ Item {
     id: effectRoot
     anchors.fill: parent
 
-    // --- Input from hub ---
+    // Input from hub ---
     property var configuration: null
 
-    // --- Schema (must match VortexConfig.qml) ---
+    // Schema (must match VortexConfig.qml) ---
     readonly property var _defaults: ({
         themeId: "ttm-spectrum",
         randomInitialTheme: false,
@@ -121,7 +121,7 @@ Item {
     readonly property real _rotBase: 0.5
     readonly property real _whirlBase: 0.5
 
-    // --- Parsed settings (reactive properties for bindings) ---
+    // Parsed settings (reactive properties for bindings) ---
     property real speedMult: 1.0
     property real rotSpeedMult: 0.125
     property real whirlSpeedMult: -0.175
@@ -252,7 +252,7 @@ Item {
 
     // Critically-damped spring: ease `spiral` toward `spiralTarget`. Its velocity
     // ramps smoothly in and out (no sharp onset), so the rotation that ANY swirl
-    // change induces — manual edit, continuous drift, or a burst — speeds up /
+    // change induces (manual edit, continuous drift, or a burst) speeds up /
     // slows down gently instead of snapping. dt is clamped so the explicit
     // integrator stays stable at low frame rates.
     function _springSwirl(dt) {
@@ -275,7 +275,7 @@ Item {
         var k = 1.0 - Math.exp(-h / tc)
         bloomRadiusSmooth += (bloomRadiusOscTarget - bloomRadiusSmooth) * k
         // Burst envelope: a quick (rapid) attack ramps the offset up to its peak,
-        // then a long decay eases it back to zero — like a star flaring and fading.
+        // then a long decay eases it back to zero, like a star flaring and fading.
         if (_bloomBurstRising) {
             var ka = 1.0 - Math.exp(-h / 0.09)                 // ~90ms attack
             bloomRadiusBurstOff += (bloomRadiusBurstPeak - bloomRadiusBurstOff) * ka
@@ -416,7 +416,7 @@ Item {
         dotSpeed = Math.max(0.0, s.dotSpeed / 100.0);
         dotOpacity = Math.min(1.0, Math.max(0.0, s.dotOpacity / 100.0));
 
-        // Theme ID — detect changes
+        // Theme ID: detect changes
         var newThemeId = s.themeId;
         if (newThemeId !== currentThemeId) {
             currentThemeId = newThemeId;
@@ -445,7 +445,7 @@ Item {
         }
     }
 
-    // --- Outputs for hub ---
+    // Outputs for hub ---
     readonly property bool hasError: effect.status === ShaderEffect.Error
     readonly property string errorLog: effect.log || ""
     readonly property string effectName: "Vortex"
@@ -474,7 +474,7 @@ Item {
         }
     ]
 
-    // --- Theme scanner ---
+    // Theme scanner ---
     ThemeScanner {
         id: themeScanner
         onReadyChanged: {
@@ -485,7 +485,7 @@ Item {
         }
     }
 
-    // --- Theme state ---
+    // Theme state ---
     property bool initialized: false
     property string displayedThemeId: ""
     property string currentThemeId: ""
@@ -520,7 +520,7 @@ Item {
     property int _cycleInterval: 20
     property int _cycleIntervalUnit: 1
 
-    // --- Layer visibility ---
+    // Layer visibility ---
     property var layerKeys: [
         "showCanopy", "showGlow", "showVortex", "showStars", "showBeams", "showDots"
     ]
@@ -535,7 +535,7 @@ Item {
         }
     }
 
-    // --- Theme functions ---
+    // Theme functions ---
     function setCurrentTheme() {
         if (!displayedThemeId) {
             return;
@@ -732,7 +732,7 @@ Item {
         cycleToTheme(themeIndex);
     }
 
-    // --- Auto-cycle timer ---
+    // Auto-cycle timer ---
     Timer {
         id: cycleTimer
         running: effectRoot.autoCycleEnabled
@@ -745,9 +745,9 @@ Item {
         onTriggered: effectRoot.cycleInRandomOrder ? effectRoot.cycleToRandomTheme() : effectRoot.cycleToNextTheme()
     }
 
-    // --- Tunnel-swirl auto-vary: random-walk the live swirl value every N secs,
+    // Tunnel-swirl auto-vary: random-walk the live swirl value every N secs,
     // stepping up to ±margin from the current value. The ShaderEffect's Behavior
-    // the spring eases each jump smoothly. Runtime only — the base setting is
+    // the spring eases each jump smoothly. Runtime only; the base setting is
     // untouched.
     Timer {
         id: swirlVaryTimer
@@ -761,10 +761,10 @@ Item {
         }
     }
 
-    // --- Vortex-swirl burst: same model as the tunnel swirl burst above, but for
+    // Vortex-swirl burst: same model as the tunnel swirl burst above, but for
     // the central whirlpool. Random-walks the live vortexSwirl by ±margin every N
     // secs; the ShaderEffect's Behavior on vortexSwirl eases each jump. Runtime
-    // only — the base setting is untouched.
+    // only; the base setting is untouched.
     Timer {
         id: vortexBurstTimer
         running: effectRoot.vortexBurst && !effectRoot.paused
@@ -777,9 +777,9 @@ Item {
         }
     }
 
-    // --- Canopy-density burst: same model as the swirl/vortex bursts. Random-walks
+    // Canopy-density burst: same model as the swirl/vortex bursts. Random-walks
     // the live density by ±margin every N secs; the ShaderEffect's Behavior on
-    // density eases each jump. Runtime only — the base setting is untouched.
+    // density eases each jump. Runtime only; the base setting is untouched.
     Timer {
         id: densityBurstTimer
         running: effectRoot.densityBurst && !effectRoot.paused
@@ -792,9 +792,9 @@ Item {
         }
     }
 
-    // --- Vortex-opacity burst: same model as the swirl/density bursts. Random-walks
+    // Vortex-opacity burst: same model as the swirl/density bursts. Random-walks
     // the live vortexOpacity by ±margin every N secs; the ShaderEffect's Behavior on
-    // vortexOpacity eases each jump. Runtime only — the base setting is untouched.
+    // vortexOpacity eases each jump. Runtime only; the base setting is untouched.
     Timer {
         id: vortexOpacityBurstTimer
         running: effectRoot.vortexOpacityBurst && !effectRoot.paused
@@ -883,7 +883,7 @@ Item {
 
     Component.onCompleted: _applySettings()
 
-    // --- Shader effect ---
+    // Shader effect ---
     // CRITICAL: Property order must match the std140 uniform block in vortex.frag
     ShaderEffect {
         id: effect
@@ -934,7 +934,7 @@ Item {
         property real bloomAmount: effectRoot.bloomAmount
         Behavior on bloomAmount { NumberAnimation { duration: effectRoot.paramTransitionMs; easing.type: Easing.InOutQuad } }
         // bloomRadius is smoothed per-frame in the effect root (oscillation ease +
-        // decaying burst), so no Behavior here — it would fight the frame updates.
+        // decaying burst), so no Behavior here; it would fight the frame updates.
         property real bloomRadius: effectRoot.bloomRadius
         // Master bloom toggle folds into opacity: off -> 0 -> shader skips bloom.
         property real bloomOpacity: effectRoot.bloomShow ? effectRoot.bloomOpacity : 0.0
@@ -964,7 +964,7 @@ Item {
         property real dimLevel: effectRoot.dimLevel
         Behavior on dimLevel { NumberAnimation { duration: effectRoot.transitionMs } }
 
-        // Theme colors — order must match shader uniform block layout. Behaviors
+        // Theme colors: order must match shader uniform block layout. Behaviors
         // cross-fade the whole scene when the theme changes.
         property color canopyCol: "#0e3d1e"
         Behavior on canopyCol { ColorAnimation { duration: effectRoot.transitionMs } }

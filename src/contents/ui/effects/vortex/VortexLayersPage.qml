@@ -22,7 +22,7 @@ Kirigami.ScrollablePage {
 
     Kirigami.FormLayout {
 
-        // ── Canopy ────────────────────────────────────────────────────
+        // Canopy
         Kirigami.Separator { Kirigami.FormData.label: i18n("Canopy"); Kirigami.FormData.isSection: true }
 
         QtControls2.CheckBox {
@@ -74,7 +74,7 @@ Kirigami.ScrollablePage {
             }
         }
         QtControls2.SpinBox {
-            // How fast rings recede toward the centre — higher = deeper tunnel.
+            // How fast rings recede toward the centre; higher = deeper tunnel.
             Kirigami.FormData.label: i18n("Depth:")
             from: 0; to: 100; stepSize: 5
             enabled: page.effectConfig._showCanopy
@@ -251,7 +251,7 @@ Kirigami.ScrollablePage {
             valueFromText: function(text) { return parseInt(text) || 0 }
         }
 
-        // ── Glow spots ────────────────────────────────────────────────
+        // Glow spots
         Kirigami.Separator { Kirigami.FormData.label: i18n("Glow spots"); Kirigami.FormData.isSection: true }
 
         QtControls2.CheckBox {
@@ -271,7 +271,7 @@ Kirigami.ScrollablePage {
             valueFromText: function(text) { return parseInt(text) || 0 }
         }
 
-        // ── Centre glow (vortex) ──────────────────────────────────────
+        // Centre glow (vortex)
         Kirigami.Separator { Kirigami.FormData.label: i18n("Centre glow (vortex)"); Kirigami.FormData.isSection: true }
 
         QtControls2.CheckBox {
@@ -525,12 +525,12 @@ Kirigami.ScrollablePage {
             valueFromText: function(text) { return parseInt(text) || 0 }
         }
 
-        // ── Centre mask ───────────────────────────────────────────────
+        // Centre mask
         Kirigami.Separator { Kirigami.FormData.label: i18n("Centre mask"); Kirigami.FormData.isSection: true }
 
         QtControls2.CheckBox {
             // Flat disc of the background colour that simply covers (hides) the
-            // convergence point — no brightness added, unlike bloom. Opaque in the
+            // convergence point; no brightness added, unlike bloom. Opaque in the
             // middle, fading to transparent at the rim.
             Kirigami.FormData.label: i18n("Visible:")
             checked: page.effectConfig._maskShow
@@ -565,7 +565,7 @@ Kirigami.ScrollablePage {
             valueFromText: function(text) { return parseInt(text) || 0 }
         }
 
-        // ── Stars (points) ────────────────────────────────────────────
+        // Stars (points)
         Kirigami.Separator { Kirigami.FormData.label: i18n("Stars (points)"); Kirigami.FormData.isSection: true }
 
         QtControls2.CheckBox {
@@ -608,7 +608,7 @@ Kirigami.ScrollablePage {
             valueFromText: function(text) { return parseInt(text) || 0 }
         }
 
-        // ── Beams (hyperspace) ────────────────────────────────────────
+        // Beams (hyperspace)
         Kirigami.Separator { Kirigami.FormData.label: i18n("Beams (hyperspace)"); Kirigami.FormData.isSection: true }
 
         QtControls2.CheckBox {
@@ -651,7 +651,7 @@ Kirigami.ScrollablePage {
             valueFromText: function(text) { return parseInt(text) || 0 }
         }
 
-        // ── Dots (twinkling stars) ────────────────────────────────────
+        // Dots (twinkling stars)
         Kirigami.Separator { Kirigami.FormData.label: i18n("Dots (twinkling stars)"); Kirigami.FormData.isSection: true }
 
         QtControls2.CheckBox {

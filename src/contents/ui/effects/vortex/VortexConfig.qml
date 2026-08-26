@@ -15,12 +15,12 @@ import "../../EffectSettings.js" as EffectSettings
 Item {
     id: effectConfig
 
-    // --- JSON blob bound from hub config.qml ---
+    // JSON blob bound from hub config.qml ---
     property string cfg_EffectVortexSettings
 
     property var hubConfiguration: null
 
-    // --- Schema: key → default value (single source of truth) ---
+    // Schema: key → default value (single source of truth) ---
     readonly property var _defaults: ({
         themeId: "ttm-spectrum",
         randomInitialTheme: false,
@@ -116,7 +116,7 @@ Item {
         dimLevel: 100
     })
 
-    // --- Backing properties ---
+    // Backing properties ---
     property string _themeId: "ttm-spectrum"
     property bool _randomInitialTheme: false
     property bool _autoCycle: true
@@ -210,7 +210,7 @@ Item {
     property bool _dimCap: false
     property int _dimLevel: 100
 
-    // --- Load / save plumbing ---
+    // Load / save plumbing ---
     property bool _loading: false
 
     onCfg_EffectVortexSettingsChanged: _load()
@@ -510,7 +510,7 @@ Item {
         cfg_EffectVortexSettings = EffectSettings.save(_defaults)
     }
 
-    // --- External config sync (e.g. "Set Current Theme" context menu) ---
+    // External config sync (e.g. "Set Current Theme" context menu) ---
     Connections {
         target: effectConfig.hubConfiguration
         enabled: effectConfig.hubConfiguration !== null
@@ -521,7 +521,7 @@ Item {
         }
     }
 
-    // --- Theme scanner (shared by pages) ---
+    // Theme scanner (shared by pages) ---
     readonly property alias themeScanner: themeScanner
     ThemeScanner {
         id: themeScanner
@@ -536,7 +536,7 @@ Item {
         return 0
     }
 
-    // --- Page definitions for sidebar navigation ---
+    // Page definitions for sidebar navigation ---
     readonly property var pages: [
         { moduleId: "layers", text: qsTr("Layers"), icon: "view-visible", page: "VortexLayersPage.qml" },
         { moduleId: "theme", text: qsTr("Theme"), icon: "color-management", page: "VortexThemePage.qml" },

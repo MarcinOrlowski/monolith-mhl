@@ -1,12 +1,12 @@
 # Changelog
 
+## v1.4.0 (TBD)
+
+- New "Vortex" effect: an endless zoom into a twirling psychedelic tunnel.
+
 ## v1.3.0 (2026-07-26)
 
-- New "Vortex" effect: an endless, constant-pace zoom into a psychedelic
-  forest tunnel with a swirling central vortex, an independently rotating tunnel
-  and vortex, toggleable scene layers, and 9 tone-grouped colour themes (light /
-  dark / mixed) with auto-cycling and cross-fades.
-- New "Microscope" effect: an endless zoom into a microscopic world
+- New "Microscope" effect: an endless zoom into a microscopic world.
 - Extended "Dot Waves" effect with additional "Shine" highlight layer.
 - Fixed "Rainbow Waves" effect resetting layer visibility on every theme transition.
 - Fixed "Mask" filter in Invert mode filling the whole screen when padding ≥ half the tile size.
@@ -19,7 +19,7 @@
 
 ## v1.2.0 (2026-05-25)
 
-- New "Dot Waves" effect: animated dot grid driven by a drifting sine/cosine
+- New "Dot Waves" effect: animated dot grid driven by a drifting sine/cosine.
 - New post-filter "Mask", with per-region opacity controls for blending the
   mask color over the cut and gap regions.
 - Added extensive documentation for built-in filters.

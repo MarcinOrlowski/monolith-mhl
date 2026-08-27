@@ -1,6 +1,6 @@
 # Changelog
 
-## v1.4.0 (TBD)
+## v1.4.0 (2026-08-27)
 
 - New "Vortex" effect: an endless zoom into a twirling psychedelic tunnel.
 - Release ZIP archive also includes `CHANGES.md` now.

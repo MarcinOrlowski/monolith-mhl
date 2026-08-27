@@ -73,7 +73,7 @@ rm -rf "${BUILD_DIR}"
 mkdir -p "${THEME_INSTALL_DIR}"
 
 echo "Copying project files…"
-cp -r "${SOURCE_DIR}"/* ./LICENSE.md ./README.md "${THEME_INSTALL_DIR}/"
+cp -r "${SOURCE_DIR}"/* ./LICENSE.md ./CHANGES.md ./README.md "${THEME_INSTALL_DIR}/"
 
 cd "${BUILD_DIR}" || exit
 

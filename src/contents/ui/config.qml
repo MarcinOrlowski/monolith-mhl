@@ -23,6 +23,14 @@ import "../js/meta.js" as Meta
 ColumnLayout {
     id: root
 
+    // --- Injected by Plasma when this config page is created ---
+    // ConfigurationContainmentAppearance.qml passes both as initial properties;
+    // they must be declared here or the injection is dropped. The legacy Plasma 5
+    // `wallpaper` context object is null in Plasma 6, so wallpaperConfiguration is
+    // the only handle on the live wallpaper's config (needed by applyLive()).
+    property var configDialog
+    property var wallpaperConfiguration
+
     // --- Hub-level config ---
     property string cfg_ActiveEffect
 
@@ -30,6 +38,7 @@ ColumnLayout {
     property string cfg_EffectRainbowWavesSettings
     property string cfg_EffectLavaLampSettings
     property string cfg_EffectDotWavesSettings
+    property string cfg_EffectVortexSettings
     property string cfg_EffectMicroscopeSettings
 
     // --- Per-filter settings (JSON blobs, one cfg_ property per filter) ---
@@ -95,7 +104,8 @@ ColumnLayout {
         { effectId: "dot-waves", name: "Dot Waves", configUrl: Qt.resolvedUrl("effects/dot-waves/DotWavesConfig.qml") },
         { effectId: "microscope", name: "Microscope", configUrl: Qt.resolvedUrl("effects/microscope/MicroscopeConfig.qml") },
         { effectId: "lava-lamp", name: "Lava Lamp", configUrl: Qt.resolvedUrl("effects/lava-lamp/LavaLampConfig.qml") },
-        { effectId: "rainbow-waves", name: "Rainbow Waves", configUrl: Qt.resolvedUrl("effects/rainbow-waves/RainbowWavesConfig.qml") }
+        { effectId: "rainbow-waves", name: "Rainbow Waves", configUrl: Qt.resolvedUrl("effects/rainbow-waves/RainbowWavesConfig.qml") },
+        { effectId: "vortex", name: "Vortex", configUrl: Qt.resolvedUrl("effects/vortex/VortexConfig.qml") }
     ]
 
     function findEffectIndex(effectId) {
@@ -118,12 +128,13 @@ ColumnLayout {
     // unchanged values is a no-op.
     function applyLive() {
         try {
-            var cfg = wallpaper.configuration
+            var cfg = wallpaperConfiguration
             if (!cfg) return
             cfg.ActiveEffect = cfg_ActiveEffect
             cfg.EffectRainbowWavesSettings = cfg_EffectRainbowWavesSettings
             cfg.EffectLavaLampSettings = cfg_EffectLavaLampSettings
             cfg.EffectDotWavesSettings = cfg_EffectDotWavesSettings
+            cfg.EffectVortexSettings = cfg_EffectVortexSettings
             cfg.EffectMicroscopeSettings = cfg_EffectMicroscopeSettings
             cfg.FilterOrder = cfg_FilterOrder
             cfg.FilterPixelateSettings = cfg_FilterPixelateSettings
@@ -282,6 +293,7 @@ ColumnLayout {
                 "cfg_EffectRainbowWavesSettings": root.cfg_EffectRainbowWavesSettings,
                 "cfg_EffectLavaLampSettings": root.cfg_EffectLavaLampSettings,
                 "cfg_EffectDotWavesSettings": root.cfg_EffectDotWavesSettings,
+                "cfg_EffectVortexSettings": root.cfg_EffectVortexSettings,
                 "cfg_EffectMicroscopeSettings": root.cfg_EffectMicroscopeSettings
             }
             _accepted = false
@@ -302,6 +314,7 @@ ColumnLayout {
                 "cfg_EffectRainbowWavesSettings": root.cfg_EffectRainbowWavesSettings,
                 "cfg_EffectLavaLampSettings": root.cfg_EffectLavaLampSettings,
                 "cfg_EffectDotWavesSettings": root.cfg_EffectDotWavesSettings,
+                "cfg_EffectVortexSettings": root.cfg_EffectVortexSettings,
                 "cfg_EffectMicroscopeSettings": root.cfg_EffectMicroscopeSettings
             }
         }
@@ -340,10 +353,19 @@ ColumnLayout {
                 if ("cfg_EffectDotWavesSettings" in item) {
                     item.cfg_EffectDotWavesSettings = Qt.binding(function() { return root.cfg_EffectDotWavesSettings })
                 }
+                if ("cfg_EffectVortexSettings" in item) {
+                    item.cfg_EffectVortexSettings = Qt.binding(function() { return root.cfg_EffectVortexSettings })
+                }
                 if ("cfg_EffectMicroscopeSettings" in item) {
                     item.cfg_EffectMicroscopeSettings = Qt.binding(function() { return root.cfg_EffectMicroscopeSettings })
                 }
-                try { item.hubConfiguration = wallpaper.configuration } catch(e) {}
+                // Bound, not assigned: Plasma may hand us wallpaperConfiguration
+                // only after this page is built (it is null until the wallpaper
+                // itself is loaded), and the effect config enables its external
+                // sync on hubConfiguration !== null.
+                if ("hubConfiguration" in item) {
+                    item.hubConfiguration = Qt.binding(function() { return root.wallpaperConfiguration })
+                }
                 effectSettingsWindow.pageCache = Object.create(null)
                 if (effectSettingsWindow.visible) {
                     effectSettingsWindow.loadInitialPage()
@@ -737,6 +759,7 @@ ColumnLayout {
         function onCfg_EffectRainbowWavesSettingsChanged() { root.cfg_EffectRainbowWavesSettings = effectConfigLoader.item.cfg_EffectRainbowWavesSettings }
         function onCfg_EffectLavaLampSettingsChanged() { root.cfg_EffectLavaLampSettings = effectConfigLoader.item.cfg_EffectLavaLampSettings }
         function onCfg_EffectDotWavesSettingsChanged() { root.cfg_EffectDotWavesSettings = effectConfigLoader.item.cfg_EffectDotWavesSettings }
+        function onCfg_EffectVortexSettingsChanged() { root.cfg_EffectVortexSettings = effectConfigLoader.item.cfg_EffectVortexSettings }
         function onCfg_EffectMicroscopeSettingsChanged() { root.cfg_EffectMicroscopeSettings = effectConfigLoader.item.cfg_EffectMicroscopeSettings }
     }
 

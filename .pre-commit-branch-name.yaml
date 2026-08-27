@@ -1,0 +1,7 @@
+# Regular expression the branch name must fully match (re.fullmatch).
+# Required unless --pattern is passed on the command line.
+pattern: '\d+-[a-z0-9-]+'
+
+# List of branch names that bypass the pattern check.
+allow:
+  - dev

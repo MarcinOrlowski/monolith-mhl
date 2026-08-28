@@ -24,21 +24,9 @@ shape position and shade is randomized, so the sample never repeats.
 
 ## Gallery
 
-Microscope effect on default settings, with no additional filters applied.
+![Theme](img/preview.webp)
 
-![Preview](img/preview-01.webp)
-
-![Preview](img/preview-02.webp)
-
-Microscope effect on default settings, with filters:
-HUE Shift, Blur and Scanlines enabled.
-
-![Preview 1](img/preview-filters-01.webp)
-
-Microscope effect on default settings, with filters:
-RGB Offset and Scanlines enabled.
-
-![Preview 2](img/preview-filters-02.webp)
+See [images in higher resolution](img/).
 
 ## Settings
 

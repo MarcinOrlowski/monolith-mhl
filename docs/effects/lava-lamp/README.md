@@ -14,4 +14,6 @@
 
 Lava Lamp effect with Chromatic Abberation, Color Grading, RBG Offset, Blur and Scanlines post-processing filters enabled.
 
-![Theme](img/preview-01.webp)
+![Theme](img/preview.webp)
+
+See [images in higher resolution](img/).

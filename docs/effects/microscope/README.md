@@ -1,7 +1,7 @@
 # Microscope
 
 An endless, constant-speed forward zoom into a microscopic world. The "camera"
-pushes straight in at a fixed rate — no drift or shake — while soft organic
+pushes straight in at a fixed rate - no drift or shake - while soft organic
 shapes loom out of the central focal point, sweep past the edges and recycle, so
 the motion never visibly resets. Floating dust motes drift past the lens. Every
 shape position and shade is randomized, so the sample never repeats.
@@ -26,7 +26,9 @@ shape position and shade is randomized, so the sample never repeats.
 
 Microscope effect on default settings, with no additional filters applied.
 
-![Preview](img/preview.webp)
+![Preview](img/preview-01.webp)
+
+![Preview](img/preview-02.webp)
 
 Microscope effect on default settings, with filters:
 HUE Shift, Blur and Scanlines enabled.
@@ -46,32 +48,32 @@ Colors come from themes (like the other effects) rather than manual pickers.
 Each theme sets three colors: the specimen (cell), the background medium, and
 the backlight illumination.
 
-- **Initial theme** — pick a bundled theme, or **Random** to start on a random
+- **Initial theme** - pick a bundled theme, or **Random** to start on a random
   one each session.
-- **Auto-cycle themes** — automatically switch themes on an interval (seconds or
+- **Auto-cycle themes** - automatically switch themes on an interval (seconds or
   minutes).
-- **Cycle in random order** — shuffle rather than cycling in list order.
-- **Transition duration** — how long the color cross-fade between themes takes.
+- **Cycle in random order** - shuffle rather than cycling in list order.
+- **Transition duration** - how long the color cross-fade between themes takes.
 
 Themes can also be cycled from the desktop context menu (Next / Previous
 Wallpaper Theme, Set Current Theme).
 
 ### Scene
 
-- **Density** — how busy/full each looming sheet of cells is.
-- **Microbe motion** — how lively the microbes are: the strength of their idle
+- **Density** - how busy/full each looming sheet of cells is.
+- **Microbe motion** - how lively the microbes are: the strength of their idle
   wander, squirm and breathing. 0% freezes them; higher is more active.
-- **Rotation speed** — slowly spins the whole scene around the focal point. The
+- **Rotation speed** - slowly spins the whole scene around the focal point. The
   magnitude sets the speed and the sign sets the direction (negative =
   counter-clockwise); 0 turns rotation off.
-- **Depth fog** — hazes distant shapes into the background light for added depth.
-- **Floating dust** — motes streaming past the lens.
-  - **Dust amount** — how many motes are in the frame.
-  - **Dust size** — how fine or coarse each mote is (lower = finer dust).
-- **Vignette** — darkens the frame edges.
+- **Depth fog** - hazes distant shapes into the background light for added depth.
+- **Floating dust** - motes streaming past the lens.
+  - **Dust amount** - how many motes are in the frame.
+  - **Dust size** - how fine or coarse each mote is (lower = finer dust).
+- **Vignette** - darkens the frame edges.
 
 ### Animation
 
-- **Zoom speed** — forward push pace.
-- **FPS cap** — limits the frame rate to save power.
-- **Dim** — caps overall brightness.
+- **Zoom speed** - forward push pace.
+- **FPS cap** - limits the frame rate to save power.
+- **Dim** - caps overall brightness.

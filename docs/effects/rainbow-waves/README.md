@@ -16,4 +16,6 @@
 
 ## Gallery
 
-![Theme](img/themes.webp)
+![Theme](img/preview.webp)
+
+See [images in higher resolution](img/).

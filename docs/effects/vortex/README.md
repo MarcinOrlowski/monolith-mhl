@@ -36,17 +36,9 @@ Everything is generated procedurally in the shader - there are no image assets.
 
 ## Gallery
 
-![Theme](img/preview-01.webp)
+![Theme](img/preview.webp)
 
-![Theme](img/preview-02.webp)
-
-![Theme](img/preview-03.webp)
-
-![Theme](img/preview-04.webp)
-
-![Theme](img/preview-05.webp)
-
-![Theme](img/preview-06.webp)
+See [images in higher resolution](img/).
 
 ## Settings
 
@@ -69,7 +61,7 @@ depend on another (glow spots sit on the canopy) are disabled when their parent 
     bursts only occasionally.
   - **Oscillate hole** - same roll (**±range every** N s at a **probability**)
     applied to the **centre hole**, but the range is measured from the *initial*
-    Centre hole value (clamped 0–100 %), so it stays bounded and never creeps down to zero.
+    Centre hole value (clamped 0-100 %), so it stays bounded and never creeps down to zero.
   - **Oscillate width** - the same bounded roll applied to the **tunnel width**.
 
   Each burst/oscillation picks a *uniform random* value in ±range (so it can land anywhere in that

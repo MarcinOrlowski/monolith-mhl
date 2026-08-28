@@ -13,30 +13,40 @@
 #
 # ==============================================================================
 
-set -e
+set -euo pipefail
 
 QSB="${QSB:-/usr/lib/qt6/bin/qsb}"
-SHADER_DIRS=(
-    "src/contents/ui/effects/rainbow-waves/shaders"
-    "src/contents/ui/effects/lava-lamp/shaders"
-    "src/contents/ui/effects/dot-waves/shaders"
-    "src/contents/ui/effects/vortex/shaders"
-    "src/contents/ui/effects/microscope/shaders"
-    "src/contents/ui/filters/shaders"
-)
 
-ROOT_DIR="$(dirname "$0")/.."
+ROOT_DIR="$(cd "$(dirname "$0")/.." && pwd)"
+
+# Every effect keeps its shaders in <effect>/shaders/, so discover them by glob
+# rather than listing each one: adding an effect that follows the layout needs
+# no edit here. The shared filter shaders live outside that tree, so they are
+# appended explicitly.
+SHADER_DIRS=()
+for dir in "${ROOT_DIR}"/src/contents/ui/effects/*/shaders; do
+    [ -d "${dir}" ] && SHADER_DIRS+=("${dir}")
+done
+[ -d "${ROOT_DIR}/src/contents/ui/filters/shaders" ] \
+    && SHADER_DIRS+=("${ROOT_DIR}/src/contents/ui/filters/shaders")
+
+if [ "${#SHADER_DIRS[@]}" -eq 0 ]; then
+    echo "No shader directories found under ${ROOT_DIR}/src/contents/ui" >&2
+    exit 1
+fi
+
+if [ ! -x "${QSB}" ]; then
+    echo "qsb not found or not executable: ${QSB}" >&2
+    echo "Install qt6-shader-baker, or set QSB=/path/to/qsb" >&2
+    exit 1
+fi
 
 for SHADER_DIR in "${SHADER_DIRS[@]}"; do
-    echo "Compiling ${SHADER_DIR}…"
-    SHADER_DIR_FULL_PATH="${ROOT_DIR}/${SHADER_DIR}"
-    [ -d "${SHADER_DIR_FULL_PATH}" ] || continue
-    for src in "${SHADER_DIR_FULL_PATH}"/*.vert "${SHADER_DIR_FULL_PATH}"/*.frag; do
+    echo "Compiling ${SHADER_DIR#"${ROOT_DIR}/"}…"
+    for src in "${SHADER_DIR}"/*.vert "${SHADER_DIR}"/*.frag; do
         [ -f "${src}" ] || continue
-        BASE_FILE_NAME="$(basename "${src}")"
-        out="${src}.qsb"
-        echo "  ${BASE_FILE_NAME}…"
-        "${QSB}" --glsl "150,310 es" -o "${out}" "${src}"
+        echo "  $(basename "${src}")…"
+        "${QSB}" --glsl "150,310 es" -o "${src}.qsb" "${src}"
     done
 done
 
